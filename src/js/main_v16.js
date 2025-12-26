@@ -385,7 +385,7 @@ function playDocent(artworkId) {
         playBtn.textContent = '❌ 재생 실패';
         setTimeout(() => {
             playBtn.textContent = '🎤 AI 강종진 사진가 얘기 듣기';
-        }, 2000);
+        }, 3000);
     };
     
     currentAudio.play().catch(err => {
@@ -516,7 +516,7 @@ setTimeout(() => {
     if (typeof scene !== 'undefined' && scene) {
         createFollowingGuide();
     }
-}, 2000); // Three.js scene 초기화 대기
+}, 3000); // Three.js scene 초기화 대기
 
 console.log('✅ 따라다니는 가이드 시스템 로드 완료');
 
