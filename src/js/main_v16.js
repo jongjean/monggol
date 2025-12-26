@@ -427,3 +427,118 @@ window.addEventListener('dblclick', (event) => {
 
 console.log('✅ 더블클릭 이벤트 리스너 등록 완료');
 
+
+// ============================================
+// 따라다니는 가이드 시스템
+// ============================================
+
+let guideSprite = null;
+let isNearArtwork = false;
+
+// 가이드 스프라이트 생성
+function createFollowingGuide() {
+    const textureLoader = new THREE.TextureLoader();
+    
+    textureLoader.load('images/guide_on_horse.png', (texture) => {
+        const spriteMaterial = new THREE.SpriteMaterial({ 
+            map: texture,
+            transparent: true,
+            opacity: 0.9
+        });
+        
+        guideSprite = new THREE.Sprite(spriteMaterial);
+        guideSprite.scale.set(3, 3, 1); // 크기 조절
+        
+        scene.add(guideSprite);
+        console.log('✅ 따라다니는 가이드 생성 완료');
+    }, undefined, (error) => {
+        console.error('가이드 이미지 로드 실패:', error);
+    });
+}
+
+// 가이드 위치 업데이트 (카메라 따라다님)
+function updateGuidePosition() {
+    if (!guideSprite || !camera) return;
+    
+    // 카메라의 오른쪽 뒤쪽에 위치
+    const offset = new THREE.Vector3(3, 0, -2); // 오른쪽 3m, 뒤 2m
+    
+    // 카메라 방향 기준으로 오프셋 회전
+    offset.applyQuaternion(camera.quaternion);
+    
+    // 가이드 위치 설정
+    guideSprite.position.copy(camera.position).add(offset);
+    
+    // 작품 근접 확인 및 효과
+    checkArtworkProximityForGuide();
+}
+
+// 작품 근접 시 가이드 효과
+function checkArtworkProximityForGuide() {
+    if (!guideSprite) return;
+    
+    let nearArtwork = false;
+    const proximityDistance = 5; // 5m 이내
+    
+    // 모든 작품과의 거리 확인
+    scene.children.forEach(child => {
+        if (child.userData && child.userData.artworkId) {
+            const distance = camera.position.distanceTo(child.position);
+            
+            if (distance < proximityDistance) {
+                nearArtwork = true;
+            }
+        }
+    });
+    
+    // 근접 상태에 따라 효과 적용
+    if (nearArtwork && !isNearArtwork) {
+        // 가까워졌을 때: 크기 증가 + 빛나는 효과
+        guideSprite.scale.set(3.5, 3.5, 1);
+        guideSprite.material.opacity = 1.0;
+        console.log('✨ 작품 근처 도착!');
+    } else if (!nearArtwork && isNearArtwork) {
+        // 멀어졌을 때: 원래 크기
+        guideSprite.scale.set(3, 3, 1);
+        guideSprite.material.opacity = 0.9;
+    }
+    
+    isNearArtwork = nearArtwork;
+}
+
+// animate 루프에 추가할 함수
+function animateGuide() {
+    updateGuidePosition();
+}
+
+// 초기화
+setTimeout(() => {
+    if (typeof scene !== 'undefined' && scene) {
+        createFollowingGuide();
+    }
+}, 2000); // Three.js scene 초기화 대기
+
+console.log('✅ 따라다니는 가이드 시스템 로드 완료');
+
+
+// ============================================
+// animate 루프에 가이드 업데이트 통합
+// ============================================
+
+// requestAnimationFrame 후크
+(function() {
+    const originalRAF = window.requestAnimationFrame;
+    window.requestAnimationFrame = function(callback) {
+        return originalRAF.call(window, function(time) {
+            // 가이드 업데이트
+            if (typeof animateGuide === 'function') {
+                animateGuide();
+            }
+            // 원래 콜백 실행
+            callback(time);
+        });
+    };
+})();
+
+console.log('✅ animate 루프 통합 완료');
+
