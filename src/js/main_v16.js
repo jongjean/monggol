@@ -119,7 +119,7 @@ function initThreeJS() {
         frameGroup.userData = { artworkIndex: i + 1 };
 
         const imgNum = String(i + 1).padStart(3, '0');
-        const imagePath = `/images/artworks/${imgNum}.jpg`;
+        const imagePath = `images/artworks/${imgNum}.jpg`;
         artworkData[i] = imagePath;
 
         const loader = new THREE.TextureLoader();
