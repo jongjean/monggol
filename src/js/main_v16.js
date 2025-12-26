@@ -458,26 +458,35 @@ function createFollowingGuide() {
 
 
 // 가이드 위치 업데이트 (화면 왼쪽 상단 고정)
+
+
+// 가이드 위치 업데이트 (화면 왼쪽 상단 고정)
 function updateGuidePosition() {
     if (!guideSprite || !camera) return;
     
-    const distance = 8;
-    const left = -5;
-    const top = 3;
+    // 화면 왼쪽 상단 고정 위치 계산
+    const distance = 8; // 카메라로부터의 거리
+    const screenX = -5; // 왼쪽
+    const screenY = 3;  // 위쪽
     
+    // 카메라 방향 벡터
     const cameraDirection = new THREE.Vector3();
     camera.getWorldDirection(cameraDirection);
     
+    // 카메라 기준 상대 위치
     const right = new THREE.Vector3();
     right.crossVectors(camera.up, cameraDirection).normalize();
     
-    const up = new THREE.Vector3().copy(camera.up).normalize();
+    const up = new THREE.Vector3();
+    up.copy(camera.up).normalize();
     
+    // 가이드 위치 = 카메라 위치 + 전방 + 왼쪽 + 위
     guideSprite.position.copy(camera.position)
         .add(cameraDirection.multiplyScalar(distance))
-        .add(right.multiplyScalar(left))
-        .add(up.multiplyScalar(top));
+        .add(right.multiplyScalar(screenX))
+        .add(up.multiplyScalar(screenY));
     
+    // 작품 근접 확인 및 효과
     checkArtworkProximityForGuide();
 }
 
