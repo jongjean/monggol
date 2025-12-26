@@ -490,6 +490,30 @@ function updateGuidePosition() {
     checkArtworkProximityForGuide();
 }
 
+// 가이드 위치 업데이트 (화면 왼쪽 상단 고정)
+function updateGuidePosition() {
+    if (!guideSprite || !camera) return;
+    
+    const distance = 8;
+    const left = -5;
+    const top = 3;
+    
+    const cameraDirection = new THREE.Vector3();
+    camera.getWorldDirection(cameraDirection);
+    
+    const right = new THREE.Vector3();
+    right.crossVectors(camera.up, cameraDirection).normalize();
+    
+    const up = new THREE.Vector3().copy(camera.up).normalize();
+    
+    guideSprite.position.copy(camera.position)
+        .add(cameraDirection.multiplyScalar(distance))
+        .add(right.multiplyScalar(left))
+        .add(up.multiplyScalar(top));
+    
+    checkArtworkProximityForGuide();
+}
+
 // 작품 근접 시 가이드 효과
 function checkArtworkProximityForGuide() {
     if (!guideSprite) return;
