@@ -443,11 +443,11 @@ function createFollowingGuide() {
         const spriteMaterial = new THREE.SpriteMaterial({ 
             map: texture,
             transparent: true,
-            opacity: 0.9
+            opacity: 0.7
         });
         
         guideSprite = new THREE.Sprite(spriteMaterial);
-        guideSprite.scale.set(3, 3, 1); // 크기 조절
+        guideSprite.scale.set(1.5, 1.5, 1); // 크기 조절
         
         scene.add(guideSprite);
         console.log('✅ 따라다니는 가이드 생성 완료');
@@ -461,7 +461,7 @@ function updateGuidePosition() {
     if (!guideSprite || !camera) return;
     
     // 카메라의 오른쪽 뒤쪽에 위치
-    const offset = new THREE.Vector3(3, 0, -2); // 오른쪽 3m, 뒤 2m
+    const offset = new THREE.Vector3(4, -2, -3); // 오른쪽 3m, 뒤 2m
     
     // 카메라 방향 기준으로 오프셋 회전
     offset.applyQuaternion(camera.quaternion);
@@ -494,12 +494,12 @@ function checkArtworkProximityForGuide() {
     // 근접 상태에 따라 효과 적용
     if (nearArtwork && !isNearArtwork) {
         // 가까워졌을 때: 크기 증가 + 빛나는 효과
-        guideSprite.scale.set(3.5, 3.5, 1);
+        guideSprite.scale.set(2, 2, 1);
         guideSprite.material.opacity = 1.0;
         console.log('✨ 작품 근처 도착!');
     } else if (!nearArtwork && isNearArtwork) {
         // 멀어졌을 때: 원래 크기
-        guideSprite.scale.set(3, 3, 1);
+        guideSprite.scale.set(1.5, 1.5, 1);
         guideSprite.material.opacity = 0.9;
     }
     
