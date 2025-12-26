@@ -1,0 +1,204 @@
+console.log('🎬 main.js 시작');
+
+let threeInitialized = false;
+
+window.addEventListener('DOMContentLoaded', function() {
+    console.log('✅ DOM 로드 완료');
+    
+    setTimeout(() => {
+        const loadingScreen = document.getElementById('loading-screen');
+        const openingScene = document.getElementById('opening-scene');
+        
+        if (loadingScreen) {
+            loadingScreen.style.display = 'none';
+            console.log('✅ 로딩 화면 숨김');
+        }
+        
+        if (openingScene) {
+            openingScene.classList.remove('hidden');
+            openingScene.style.display = 'flex';
+            console.log('✅ 오프닝 화면 표시');
+        }
+    }, 1000);
+});
+
+function initThreeJS() {
+    if (threeInitialized) {
+        console.log('⚠️ Three.js 이미 초기화됨 - 중복 방지');
+        return;
+    }
+    threeInitialized = true;
+    
+    console.log('🚀 Three.js 초기화 시작');
+    
+    // 기존 Canvas 모두 제거
+    const oldCanvases = document.querySelectorAll('canvas');
+    console.log('🗑️ 기존 Canvas ' + oldCanvases.length + '개 제거');
+    oldCanvases.forEach(c => c.remove());
+    
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x87CEEB);
+    
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 1.6, 5);
+    
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    
+    const container = document.getElementById('exhibition-space');
+    if (!container) {
+        console.error('❌ exhibition-space 없음!');
+        return;
+    }
+    
+    const canvas = renderer.domElement;
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100vw';
+    canvas.style.height = '100vh';
+    canvas.style.display = 'block';
+    canvas.style.zIndex = '10000';
+    
+    container.appendChild(canvas);
+    console.log('✅ 새 Canvas 추가 완료');
+    
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+    scene.add(ambientLight);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    directionalLight.position.set(5, 10, 7);
+    scene.add(directionalLight);
+    
+    const groundGeometry = new THREE.PlaneGeometry(50, 50);
+    const groundMaterial = new THREE.MeshStandardMaterial({ color: 0xD2B48C });
+    const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+    ground.rotation.x = -Math.PI / 2;
+    scene.add(ground);
+    
+    console.log('📦 15개 액자 생성 시작');
+    
+    const textureLoader = new THREE.TextureLoader();
+    const artworkMeshes = [];
+    const radius = 8;
+    const angleStep = (Math.PI * 1.5) / 14;
+    
+    for (let i = 0; i < 15; i++) {
+        const angle = -Math.PI * 0.75 + angleStep * i;
+        const x = Math.sin(angle) * radius;
+        const z = Math.cos(angle) * radius;
+        
+        const frameGroup = new THREE.Group();
+        
+        const frameGeometry = new THREE.BoxGeometry(2.2, 1.5, 0.1);
+        const frameMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xFFD700,
+            metalness: 0.6,
+            roughness: 0.4
+        });
+        const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+        frameGroup.add(frame);
+        
+        const imgGeometry = new THREE.PlaneGeometry(2, 1.3);
+        const imgMaterial = new THREE.MeshBasicMaterial({ color: 0x888888 });
+        const imgMesh = new THREE.Mesh(imgGeometry, imgMaterial);
+        imgMesh.position.z = 0.06;
+        
+        const imgNum = String(i + 1).padStart(2, '0');
+        const imagePath = '/images/artworks/artwork_' + imgNum + '.jpg';
+        
+        textureLoader.load(
+            imagePath,
+            function(texture) {
+                imgMesh.material.map = texture;
+                imgMesh.material.color.set(0xFFFFFF);
+                imgMesh.material.needsUpdate = true;
+                console.log('✅ [' + (i+1) + '/15] 로드 성공');
+            },
+            undefined,
+            function() {
+                console.error('❌ [' + (i+1) + '/15] 로드 실패');
+                imgMesh.material.color.set(0xFF0000);
+            }
+        );
+        
+        imgMesh.userData = { artworkId: i + 1 };
+        frameGroup.add(imgMesh);
+        frameGroup.position.set(x, 1.6, z);
+        frameGroup.lookAt(0, 1.6, 0);
+        scene.add(frameGroup);
+        artworkMeshes.push(imgMesh);
+    }
+    
+    console.log('✅ 15개 액자 배치 완료');
+    
+    let isDragging = false;
+    let previousMouseX = 0;
+    let cameraRotationY = 0;
+    
+    canvas.addEventListener('mousedown', e => {
+        isDragging = true;
+        previousMouseX = e.clientX;
+    });
+    
+    canvas.addEventListener('mousemove', e => {
+        if (isDragging) {
+            const deltaX = e.clientX - previousMouseX;
+            cameraRotationY += deltaX * 0.005;
+            camera.position.x = Math.sin(cameraRotationY) * 5;
+            camera.position.z = Math.cos(cameraRotationY) * 5;
+            camera.lookAt(0, 1.6, 0);
+            previousMouseX = e.clientX;
+        }
+    });
+    
+    canvas.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+    
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+    animate();
+    
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+    
+    console.log('✅ Three.js 초기화 완료');
+    console.log('📊 현재 Canvas 개수:', document.querySelectorAll('canvas').length);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const enterBtn = document.getElementById('enter-btn');
+    if (enterBtn) {
+        enterBtn.addEventListener('click', () => {
+            console.log('🎯 전시관 입장 버튼 클릭');
+            
+            const openingScene = document.getElementById('opening-scene');
+            const exhibitionSpace = document.getElementById('exhibition-space');
+            
+            if (openingScene) openingScene.style.display = 'none';
+            
+            if (exhibitionSpace) {
+                exhibitionSpace.classList.remove('hidden');
+                exhibitionSpace.style.display = 'block';
+                exhibitionSpace.style.position = 'fixed';
+                exhibitionSpace.style.top = '0';
+                exhibitionSpace.style.left = '0';
+                exhibitionSpace.style.width = '100vw';
+                exhibitionSpace.style.height = '100vh';
+                exhibitionSpace.style.zIndex = '9999';
+                exhibitionSpace.style.background = '#000';
+                
+                console.log('✅ Exhibition space 표시');
+            }
+            
+            setTimeout(initThreeJS, 100);
+        }, { once: true });
+    }
+});
+
+console.log('✅ main.js 완료');

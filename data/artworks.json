@@ -1,0 +1,152 @@
+[
+  {
+    "id": 1,
+    "title": "유목민 가족",
+    "filename": "artwork_01.jpg",
+    "location": "헙스걸 호수",
+    "date": "2023",
+    "description": "헙스걸 호수에서 만난 유목민 가족입니다. 아이들은 수줍게 웃으며 다가왔고, 그 미소가 너무나 순수해서 카메라 셔터를 누르지 않을 수 없었습니다. 가족들은 따뜻한 수태차를 건네며 환대해주었습니다. 몽골의 초원에서 만난 가장 따뜻한 순간이었습니다.",
+    "hasAudio": true,
+    "audioFile": "audio_01.mp3"
+  },
+  {
+    "id": 2,
+    "title": "동화속의 부족 차탄족 사람들",
+    "filename": "artwork_02.jpg",
+    "location": "러시아-몽골 국경",
+    "date": "2023",
+    "description": "차탄족, 몽골 소수민족으로 약 200명만 남아있는 순록과 함께 사는 부족입니다. 러시아와 몽골 국경을 오가며 유목생활을 하는 그들은 태어나자마자 순록과 함께 자랍니다. 마치 동화 속 세상처럼 느껴졌던 그 순간, 저는 사라져가는 문화의 아름다움을 렌즈에 담았습니다.",
+    "hasAudio": true,
+    "audioFile": "audio_02.mp3"
+  },
+  {
+    "id": 3,
+    "title": "졸업을 맞은 몽골의 어린이들",
+    "filename": "artwork_03.jpg",
+    "location": "울란바토르",
+    "date": "2023",
+    "description": "졸업을 맞은 몽골의 어린이들입니다. 아이스크림을 먹으며 웃고 손을 흔드는 아이들의 모습에서 순수함 그 자체를 발견했습니다. 그들의 눈빛은 미래에 대한 꿈으로 가득했고, 그 순간을 놓치고 싶지 않았습니다. 몽골의 미래가 이렇게 밝게 빛나고 있었습니다.",
+    "hasAudio": true,
+    "audioFile": "audio_03.mp3"
+  },
+  {
+    "id": 4,
+    "title": "재래시장에서 만난 사람들",
+    "filename": "artwork_04.jpg",
+    "location": "전통 시장",
+    "date": "2023",
+    "description": "재래시장에서 물건을 팔고 난 후, 아이스크림을 함께 먹고 있는 가족입니다. 그들의 평온한 표정 속에는 우리가 잃어버린 삶의 본질이 담겨 있었습니다. 바쁜 일상에서 벗어나, 가족과 함께하는 소소한 행복. 그것이 진정한 삶의 의미가 아닐까요? 그 질문을 이 사진에 담았습니다.",
+    "hasAudio": true,
+    "audioFile": "audio_04.mp3"
+  },
+  {
+    "id": 5,
+    "title": "바람으로 채색한 몽골",
+    "filename": "artwork_05.jpg",
+    "location": "몽골 초원",
+    "date": "2023",
+    "description": "바람으로 채색한 몽골. 몽골의 집들은 독특한 파스텔톤 색상을 가지고 있습니다. 광활한 초원을 가로지르는 바람이 만들어낸 자연스러운 색감입니다. 이 색들은 인위적이지 않고, 오랜 시간 자연과 함께 숨 쉬며 만들어진 것입니다. 몽골의 바람이 그린 캔버스를 여러분께 보여드립니다.",
+    "hasAudio": true,
+    "audioFile": "audio_05.mp3"
+  },
+  {
+    "id": 6,
+    "title": "별들의 축제",
+    "filename": "artwork_06.jpg",
+    "location": "고비 사막",
+    "date": "2023",
+    "description": "별들의 축제. 사막에서 야영을 하던 밤, 하늘을 가득 메운 별들과 은하수, 그리고 유성을 목격했습니다. 도시에서는 절대 볼 수 없는 우주의 쇼였습니다. 카메라 셔터를 열어두고 이 장엄한 순간을 담았습니다. 인간이 얼마나 작은 존재인지, 동시에 이 우주의 일부라는 것이 얼마나 경이로운지 깨달았던 밤이었습니다.",
+    "hasAudio": true,
+    "audioFile": "audio_06.mp3"
+  },
+  {
+    "id": 7,
+    "title": "한 때 한 곳을 스쳐간 사계",
+    "filename": "artwork_07.jpg",
+    "location": "알타이 산맥",
+    "date": "2023",
+    "description": "한 때, 한 곳을 스쳐간 사계. 맑은 하늘이 순식간에 눈보라로 변했습니다. 그때 칭기즈칸의 후손이 말을 타고 눈보라를 뚫고 질주했습니다. 양떼를 구하기 위해서였습니다. 그 극적인 순간, 대자연의 변덕과 인간의 의지가 충돌하는 장면을 포착했습니다. 몽골의 사계절이 한순간에 펼쳐진 기적 같은 순간이었습니다.",
+    "hasAudio": true,
+    "audioFile": "audio_07.mp3"
+  },
+  {
+    "id": 8,
+    "title": "유목민의 이사",
+    "filename": "artwork_08.jpg",
+    "location": "몽골 초원",
+    "date": "2023",
+    "description": "유목민의 이사. 몽골 유목민들은 일 년에 최대 30번까지 이동합니다. 게르는 낙타에 쉽게 실을 수 있도록 설계되어 있습니다. 그들의 삶은 자연의 리듬을 따라 움직입니다. 정착하지 않고 흐르는 삶, 그 속에서 진정한 자유를 발견했습니다. 소유하지 않기에 더 풍요로운 삶의 방식을 이 사진에 담았습니다.",
+    "hasAudio": true,
+    "audioFile": "audio_08.mp3"
+  },
+  {
+    "id": 9,
+    "title": "칭기즈 칸의 후예, 그 순박함 속의 용맹",
+    "filename": "artwork_09.jpg",
+    "location": "몽골 대초원",
+    "date": "2023",
+    "description": "칭기즈칸의 후예, 그 순박함 속의 용맹. 지평선에서 유목민 청년들이 말을 타고 나타났습니다. 그들은 야생마를 밧줄로 포획하는 중이었습니다. 두려움 없이 질주하는 모습은 마치 다큐멘터리의 한 장면 같았습니다. 순박한 미소 뒤에 숨겨진 칭기즈칸의 DNA, 그 용맹함을 이 순간 목격했습니다.",
+    "hasAudio": true,
+    "audioFile": "audio_09.mp3"
+  },
+  {
+    "id": 10,
+    "title": "초원의 아침",
+    "filename": "artwork_10.jpg",
+    "location": "헙스걸 호수 일대",
+    "date": "2023",
+    "description": "초원의 아침, 첫 햇살이 대지를 깨우는 순간입니다.",
+    "hasAudio": false,
+    "audioFile": null
+  },
+  {
+    "id": 11,
+    "title": "설원의 침묵",
+    "filename": "artwork_11.jpg",
+    "location": "헙스걸 호수 일대",
+    "date": "2023",
+    "description": "눈 덮인 침묵의 풍경, 자연의 고요함이 느껴집니다.",
+    "hasAudio": false,
+    "audioFile": null
+  },
+  {
+    "id": 12,
+    "title": "호수의 반영",
+    "filename": "artwork_12.jpg",
+    "location": "헙스걸 호수",
+    "date": "2023",
+    "description": "호수에 비친 하늘과 산의 모습이 한 폭의 그림 같습니다.",
+    "hasAudio": false,
+    "audioFile": null
+  },
+  {
+    "id": 13,
+    "title": "유르트의 저녁",
+    "filename": "artwork_13.jpg",
+    "location": "몽골 초원",
+    "date": "2023",
+    "description": "유르트에서 피어오르는 저녁 연기, 평화로운 유목민의 삶입니다.",
+    "hasAudio": false,
+    "audioFile": null
+  },
+  {
+    "id": 14,
+    "title": "말 떼의 질주",
+    "filename": "artwork_14.jpg",
+    "location": "몽골 대초원",
+    "date": "2023",
+    "description": "초원을 가로지르는 말 떼의 역동적인 순간을 포착했습니다.",
+    "hasAudio": false,
+    "audioFile": null
+  },
+  {
+    "id": 15,
+    "title": "하늘의 캔버스",
+    "filename": "artwork_15.jpg",
+    "location": "고비 사막",
+    "date": "2023",
+    "description": "몽골의 하늘은 매일 다른 그림을 그립니다.",
+    "hasAudio": false,
+    "audioFile": null
+  }
+]

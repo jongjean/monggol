@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>최소 테스트</title>
+    <style>
+        body { margin: 0; background: #000; color: #fff; font-family: Arial; }
+        #step1, #step2, #step3 { 
+            position: fixed; 
+            width: 100%; 
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            flex-direction: column;
+        }
+        #step2, #step3 { display: none; }
+        button { 
+            padding: 20px 40px; 
+            font-size: 20px; 
+            background: #ffd700; 
+            border: none; 
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="step1">
+        <h1>Step 1: JavaScript 작동 테스트</h1>
+        <p id="test-result">JavaScript 로딩 중...</p>
+    </div>
+
+    <div id="step2">
+        <h1>Step 2: Three.js 로드 테스트</h1>
+        <p id="threejs-result">Three.js 확인 중...</p>
+        <button onclick="goStep3()">Step 3으로</button>
+    </div>
+
+    <div id="step3" style="background: #87CEEB;">
+        <h1 style="color: #000;">Step 3: 3D 렌더링 성공!</h1>
+        <p style="color: #000;">파란 하늘이 보이면 성공</p>
+    </div>
+
+    <script src="/js/three.min.js"></script>
+    <script>
+        console.log('=== MINIMAL TEST START ===');
+        
+        document.getElementById('test-result').innerText = '✅ JavaScript 정상 작동!';
+        console.log('✅ Step 1 완료');
+        
+        setTimeout(() => {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'flex';
+            
+            if (typeof THREE !== 'undefined') {
+                document.getElementById('threejs-result').innerText = 
+                    '✅ Three.js 로드 성공! (버전: r' + THREE.REVISION + ')';
+                console.log('✅ Step 2 완료 - Three.js 버전:', THREE.REVISION);
+            } else {
+                document.getElementById('threejs-result').innerText = 
+                    '❌ Three.js 로드 실패!';
+                console.error('❌ Step 2 실패');
+            }
+        }, 2000);
+        
+        function goStep3() {
+            console.log('✅ Step 3 시작');
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step3').style.display = 'flex';
+            
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB);
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('step3').appendChild(renderer.domElement);
+            const geometry = new THREE.BoxGeometry(2, 2, 2);
+            const material = new THREE.MeshBasicMaterial({ color: 0xFFD700 });
+            const cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+            function animate() {
+                requestAnimationFrame(animate);
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+            animate();
+            console.log('✅ Step 3 완료');
+        }
+    </script>
+</body>
+</html>

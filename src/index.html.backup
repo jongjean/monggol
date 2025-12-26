@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>끝없는 지평선 너머 - 몽골 대자연 사진전</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-content">
+            <h1>끝없는 지평선 너머</h1>
+            <p>몽골 대자연 사진전</p>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <p class="loading-text">전시관을 준비하고 있습니다...</p>
+        </div>
+    </div>
+
+    <!-- Opening Scene -->
+    <div id="opening-scene" class="hidden">
+        <div class="opening-background"></div>
+        <div class="opening-content">
+            <h1 class="title-main">끝없는 지평선 너머</h1>
+            <h2 class="title-sub">Beyond the Endless Horizon</h2>
+            <p class="title-desc">몽골 대자연 사진전 | Mongolian Nature Photography Exhibition</p>
+            <button id="enter-btn" class="enter-button">전시관 입장</button>
+        </div>
+    </div>
+
+    <!-- Main Exhibition Space -->
+    <div id="exhibition-space" class="hidden">
+        <!-- Three.js Canvas -->
+        <canvas id="three-canvas"></canvas>
+
+        <!-- UI Overlay -->
+        <div id="ui-overlay">
+            <div class="top-bar">
+                <h3 class="exhibition-title">끝없는 지평선 너머</h3>
+                <button id="info-toggle" class="icon-btn">ℹ️</button>
+            </div>
+
+            <div class="controls-hint">
+                <p>🖱️ 마우스 드래그: 둘러보기 | 🎯 클릭: 작품 감상</p>
+            </div>
+
+            <!-- Mini Map (Optional) -->
+            <div id="minimap" class="minimap hidden">
+                <canvas id="minimap-canvas"></canvas>
+            </div>
+        </div>
+
+        <!-- Artwork Popup -->
+        <div id="artwork-popup" class="hidden">
+            <div class="popup-overlay"></div>
+            <div class="popup-content">
+                <button class="close-btn">✕</button>
+                <div class="artwork-container">
+                    <img id="popup-image" src="" alt="">
+                </div>
+                <div class="artwork-info">
+                    <h2 id="artwork-title"></h2>
+                    <p id="artwork-location"></p>
+                    <div class="audio-player">
+                        <button id="play-audio" class="audio-btn">▶️ AI 도슨트 듣기</button>
+                        <div id="audio-progress" class="audio-progress hidden">
+                            <div class="audio-bar"></div>
+                        </div>
+                    </div>
+                    <div id="subtitle-box" class="subtitle-box hidden">
+                        <p id="subtitle-text"></p>
+                    </div>
+                </div>
+                <div class="navigation-arrows">
+                    <button id="prev-artwork" class="nav-btn">← 이전</button>
+                    <button id="next-artwork" class="nav-btn">다음 →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Panel -->
+        <div id="info-panel" class="info-panel hidden">
+            <div class="info-content">
+                <h3>전시 안내</h3>
+                <p>헙스걸 호수를 배경으로 펼쳐지는 몽골의 아름다운 순간들</p>
+                <h4>조작 방법</h4>
+                <ul>
+                    <li>마우스 드래그: 시점 회전</li>
+                    <li>스크롤: 이동</li>
+                    <li>작품 클릭: 상세 보기</li>
+                    <li>ESC: 닫기</li>
+                </ul>
+                <button id="close-info" class="close-info-btn">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ending Scene (Guestbook) -->
+    <div id="ending-scene" class="hidden">
+        <div class="ending-content">
+            <h2>관람해주셔서 감사합니다</h2>
+            <p>몽골의 순수한 자연이 여러분의 마음에 남기를 바랍니다</p>
+            <button id="restart-btn" class="restart-btn">처음부터 다시 보기</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/three.min.js"></script>
+    <script src="js/scene.js"></script>
+    <script src="js/main.js"></script>
+    <!-- Three.js Library -->
+    <script src="/js/three.min.js"></script>
+    
+    <!-- Scene Script -->
+    <script src="/js/scene.js"></script>
+    
+    <!-- Main App Script -->
+    <script src="/js/app.js"></script>
+</body>
+</html>

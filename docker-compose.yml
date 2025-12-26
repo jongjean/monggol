@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  mongolia-gallery:
+    build: .
+    image: mongolia-gallery:v1.0
+    container_name: mongolia-gallery
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    networks:
+      - gallery-network
+
+networks:
+  gallery-network:
+    driver: bridge
