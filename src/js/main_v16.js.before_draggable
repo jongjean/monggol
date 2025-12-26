@@ -1,0 +1,1536 @@
+// 전역 변수 v16
+let scene, camera, renderer;
+
+console.log('🎬 main.js v13.0 - 테스트');
+
+let threeInitialized = false;
+
+window.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        const loadingScreen = document.getElementById('loading-screen');
+        const openingScene = document.getElementById('opening-scene');
+        if (loadingScreen) loadingScreen.style.display = 'none';
+        if (openingScene) {
+            openingScene.classList.remove('hidden');
+            openingScene.style.display = 'flex';
+        }
+    }, 1000);
+
+    const enterBtn = document.getElementById('enter-btn');
+    if (enterBtn) {
+        enterBtn.addEventListener('click', function() {
+            const openingScene = document.getElementById('opening-scene');
+            const exhibitionSpace = document.getElementById('exhibition-space');
+            if (openingScene) openingScene.style.display = 'none';
+            if (exhibitionSpace) {
+                exhibitionSpace.classList.remove('hidden');
+                exhibitionSpace.style.display = 'block';
+                exhibitionSpace.style.position = 'fixed';
+                exhibitionSpace.style.top = '0';
+                exhibitionSpace.style.left = '0';
+                exhibitionSpace.style.width = '100vw';
+                exhibitionSpace.style.height = '100vh';
+                exhibitionSpace.style.zIndex = '9999';
+            }
+            setTimeout(initThreeJS, 100);
+        }, { once: true });
+    }
+});
+
+function initThreeJS() {
+    if (threeInitialized) return;
+    threeInitialized = true;
+    console.log('🚀 Three.js v13.0');
+
+    const container = document.getElementById('exhibition-space');
+    if (!container) return;
+
+    scene = new THREE.Scene();
+    // scene.background = new THREE.Color(0x87CEEB); // 주석 처리
+    // scene.fog 제거 - 하늘 보이도록
+
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.001, 1000);
+    camera.position.set(0, 3, 10);
+    camera.lookAt(0, 2, 0);
+
+    const canvas = document.createElement('canvas');
+    canvas.style.touchAction = 'none';
+    canvas.style.userSelect = 'none';
+    canvas.style.webkitUserSelect = 'none';
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+    window.scene = scene;
+    window.camera = camera;
+    window.renderer = renderer;
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(10, 20, 10);
+    scene.add(directionalLight);
+
+    // 테스트: 빨간 하늘 구체
+    // 하늘 구체 (khuvsgul_sky_only.jpg?v=1766679064)
+    const skyGeometry = new THREE.SphereGeometry(450, 60, 40);
+    const skyLoader = new THREE.TextureLoader();
+    skyLoader.load('images/background/khuvsgul_sky_only.jpg?v=1766679064', (skyTexture) => {
+        const skyMaterial = new THREE.MeshBasicMaterial({
+            map: skyTexture,
+            side: THREE.BackSide
+        });
+        const sky = new THREE.Mesh(skyGeometry, skyMaterial);
+        scene.add(sky);
+        console.log('🌅 하늘 텍스처 로드 완료');
+    });
+
+    // 바닥
+    const groundLoader = new THREE.TextureLoader();
+    groundLoader.load('images/background/khuvsgul_lake.jpg', (groundTexture) => {
+        const groundGeometry = new THREE.CircleGeometry(150, 64);
+        const groundMaterial = new THREE.MeshStandardMaterial({ 
+            map: groundTexture,
+            roughness: 0.3,
+            metalness: 0.1,
+            transparent: true,
+            opacity: 0.85
+        });
+        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.y = 0;
+        scene.add(ground);
+    });
+
+    // 작품 배치 (32개)
+    const artworks = [];
+    const artworkData = [];
+    const radius = 25; // 간격 넓게
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    window.raycaster = raycaster;
+
+    for (let i = 0; i < 32; i++) {
+        const angle = (i / 32) * Math.PI * 2;
+        const x = Math.cos(angle) * radius;
+        const z = Math.sin(angle) * radius;
+
+        const frameGroup = new THREE.Group();
+        frameGroup.userData = { artworkIndex: i + 1 };
+
+        const imgNum = String(i + 1).padStart(3, '0');
+        const imagePath = `images/artworks/${imgNum}.jpg`;
+        artworkData[i] = imagePath;
+        if (imgNum === "012") frameGroup.userData.artworkId = "012";
+
+        const loader = new THREE.TextureLoader();
+        loader.load(imagePath, (texture) => {
+            const imgGeometry = new THREE.PlaneGeometry(3.0, 2.0);
+            const imgMaterial = new THREE.MeshBasicMaterial({ map: texture });
+            const imgMesh = new THREE.Mesh(imgGeometry, imgMaterial);
+            frameGroup.add(imgMesh);
+        });
+
+        frameGroup.position.set(x, 2.5, z);
+        frameGroup.lookAt(0, 2.5, 0);
+        scene.add(frameGroup);
+        artworks.push(frameGroup);
+    }
+
+    let isDragging = false;
+    let previousMouseX = 0;
+    let previousMouseY = 0;
+    let cameraAngleH = 0;
+    let cameraAngleV = 0.1;
+    let cameraRadius = 10;
+
+    function updateCameraPosition() {
+        const y = Math.sin(cameraAngleV) * cameraRadius + 2;
+        const horizontalRadius = Math.cos(cameraAngleV) * cameraRadius;
+        const x = Math.sin(cameraAngleH) * horizontalRadius;
+        const z = Math.cos(cameraAngleH) * horizontalRadius;
+        camera.position.set(x, y, z);
+        camera.lookAt(0, 2, 0);
+        
+        const minFOV = 15;
+        const maxFOV = 75;
+        const t = Math.max(0, Math.min(1, (cameraRadius - 0.5) / 29.5));
+        camera.fov = minFOV + (maxFOV - minFOV) * t;
+        camera.updateProjectionMatrix();
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        previousMouseX = e.clientX;
+        previousMouseY = e.clientY;
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - previousMouseX;
+        const deltaY = previousMouseY - e.clientY;
+        cameraAngleH += deltaX * 0.002;
+        cameraAngleV += deltaY * 0.001;
+        cameraAngleV = Math.max(0, Math.min(Math.PI / 4, cameraAngleV));
+        updateCameraPosition();
+        previousMouseX = e.clientX;
+        previousMouseY = e.clientY;
+    });
+
+    canvas.addEventListener('mouseup', () => { isDragging = false; });
+
+    // 터치 컨트롤 (스마트폰)
+    let initialPinchDistance = 0;
+
+    canvas.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+            isDragging = true;
+            previousMouseX = e.touches[0].clientX;
+            previousMouseY = e.touches[0].clientY;
+        } else if (e.touches.length === 2) {
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            initialPinchDistance = Math.sqrt(dx * dx + dy * dy);
+        }
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 1 && isDragging) {
+            e.preventDefault();
+            const deltaX = e.touches[0].clientX - previousMouseX;
+            const deltaY = previousMouseY - e.touches[0].clientY;
+            cameraAngleH += deltaX * 0.002;
+            cameraAngleV += deltaY * 0.001;
+            cameraAngleV = Math.max(0, Math.min(Math.PI / 4, cameraAngleV));
+            updateCameraPosition();
+            previousMouseX = e.touches[0].clientX;
+            previousMouseY = e.touches[0].clientY;
+        } else if (e.touches.length === 2) {
+            e.preventDefault();
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const delta = (initialPinchDistance - distance) * 0.05;
+            cameraRadius += delta;
+            if (cameraRadius < 0.5) cameraRadius = 0.5;
+            if (cameraRadius > 30) cameraRadius = 30;
+            updateCameraPosition();
+            initialPinchDistance = distance;
+        }
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', () => {
+        isDragging = false;
+    });
+    canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        cameraRadius += e.deltaY * 0.005;
+        if (cameraRadius < 0.5) cameraRadius = 0.5;
+        if (cameraRadius > 30) cameraRadius = 30;
+        updateCameraPosition();
+    }, { passive: false });
+
+    let lastClickTime = 0;
+    canvas.addEventListener('click', (event) => {
+        const currentTime = Date.now();
+        const isDoubleClick = currentTime - lastClickTime < 300;
+        lastClickTime = currentTime;
+        if (isDragging) return;
+
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(artworks, true);
+        
+        if (intersects.length > 0 && isDoubleClick) {
+            const clicked = intersects[0].object.parent;
+            const artworkIndex = clicked.userData.artworkIndex;
+            const imagePath = artworkData[artworkIndex - 1];
+            
+            const popup = document.createElement('div');
+            popup.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.95);z-index:10000;display:flex;align-items:center;justify-content:center;cursor:pointer;';
+            const img = document.createElement('img');
+            img.src = imagePath;
+            img.style.cssText = 'max-width:90vw;max-height:90vh;object-fit:contain;';
+            popup.appendChild(img);
+            document.body.appendChild(popup);
+            popup.onclick = () => document.body.removeChild(popup);
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    window.scene = scene;
+    window.camera = camera;
+    window.renderer = renderer;
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    console.log('✅ v13.0 완료');
+}
+
+console.log('✅ main.js v13.0');
+
+
+
+// ============================================
+// animate 루프에 가이드 업데이트 통합
+// ============================================
+
+// requestAnimationFrame 후크
+(function() {
+    const originalRAF = window.requestAnimationFrame;
+    window.requestAnimationFrame = function(callback) {
+        return originalRAF.call(window, function(time) {
+            // 가이드 업데이트
+            if (typeof animateGuide === 'function') {
+            }
+            // 원래 콜백 실행
+            callback(time);
+        });
+    };
+})();
+
+console.log('✅ animate 루프 통합 완료');
+
+
+
+// ============================================
+
+// ============================================
+
+// ============================================
+
+// HTML 고정 가이드
+function createHTMLGuide() {
+    if (document.getElementById('fixedGuide')) return;
+    document.body.insertAdjacentHTML('beforeend', '<div id="fixedGuide" class="fixed-guide"><img src="images/guide_on_horse.png" alt="AI 가이드"></div>');
+    console.log('✅ HTML 고정 가이드 생성');
+}
+
+function checkGuideProximity() {
+    const guide = document.getElementById('fixedGuide');
+    if (!guide || !camera || !scene) return;
+    let near = false;
+    scene.children.forEach(c => {
+        if (c.userData && c.userData.artworkId && camera.position.distanceTo(c.position) < 5) near = true;
+    });
+    guide.classList.toggle('near-artwork', near);
+}
+
+setTimeout(() => createHTMLGuide(), 2000);
+setInterval(() => checkGuideProximity(), 200);
+
+
+// 초기화
+
+
+
+
+// ==================== 3D 도슨트: 입장 후에만 표시 ====================
+
+setTimeout(() => {
+}, 2000);
+
+
+
+// ==================== 3D 갤러리 UI 시스템 (최종) ====================
+(function() {
+  console.log('✅ 3D 갤러리 UI 시스템 로드');
+  
+  function showUI() {
+    var ui = document.querySelector('.gallery-top-left-ui');
+    if (!ui) {
+      console.warn('⚠️ gallery-top-left-ui 없음');
+      return;
+    }
+    
+    ui.style.display = 'flex';
+    console.log('✅ UI 표시 완료');
+    
+    var video = document.querySelector('.docent-video-ui');
+    var player = document.getElementById('greetingPlayer');
+    
+    if (video && player) {
+      video.addEventListener('click', function() {
+        player.style.display = 'block';
+        console.log('🎤 인사말 열림');
+      });
+    }
+  }
+  
+  window.addEventListener('load', function() {
+    var btn = document.querySelector('.enter-btn, #enter-btn, [class*="enter"]');
+    if (btn) {
+      btn.addEventListener('click', function() {
+        setTimeout(showUI, 1500);
+      });
+    }
+    
+    setTimeout(function() {
+      var ui = document.querySelector('.gallery-top-left-ui');
+      if (ui && ui.style.display !== 'flex') {
+        showUI();
+      }
+    }, 8000);
+  });
+})();
+
+
+// ==================== 인사말 플레이어 시스템 (안전) ====================
+(function() {
+  window.addEventListener('load', function() {
+    const audio = document.getElementById('greeting-audio-fixed');
+    const playBtn = document.getElementById('play-btn-fixed');
+    const pauseBtn = document.getElementById('pause-btn-fixed');
+    const stopBtn = document.getElementById('stop-btn-fixed');
+    const progressBar = document.getElementById('progress-bar-fixed');
+    const timeDisplay = document.getElementById('time-display-fixed');
+    
+    // 요소 존재 확인
+    if (!audio || !playBtn || !pauseBtn || !stopBtn || !progressBar || !timeDisplay) {
+      console.warn('⚠️ 플레이어 요소를 찾을 수 없습니다');
+      return;
+    }
+    
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return mins + ':' + (secs < 10 ? '0' : '') + secs;
+    }
+    
+    playBtn.addEventListener('click', function() {
+      audio.play();
+      playBtn.style.display = 'none';
+      pauseBtn.style.display = 'flex';
+    });
+    
+    pauseBtn.addEventListener('click', function() {
+      audio.pause();
+      pauseBtn.style.display = 'none';
+      playBtn.style.display = 'flex';
+    });
+    
+    stopBtn.addEventListener('click', function() {
+      audio.pause();
+      audio.currentTime = 0;
+      pauseBtn.style.display = 'none';
+      playBtn.style.display = 'flex';
+      progressBar.value = 0;
+    });
+    
+    audio.addEventListener('timeupdate', function() {
+      if (audio.duration) {
+        const percent = (audio.currentTime / audio.duration) * 100;
+        progressBar.value = percent;
+        timeDisplay.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+      }
+    });
+    
+    progressBar.addEventListener('input', function() {
+      const time = (progressBar.value / 100) * audio.duration;
+      audio.currentTime = time;
+    });
+    
+    audio.addEventListener('ended', function() {
+      pauseBtn.style.display = 'none';
+      playBtn.style.display = 'flex';
+      progressBar.value = 0;
+    });
+    
+    console.log('✅ 인사말 플레이어 초기화 완료');
+  });
+})();
+
+// ==================== 우측 제목 블록 표시 ====================
+(function() {
+  function showRightTitle() {
+    var titleBlock = document.querySelector('.title-block-right');
+    if (titleBlock) {
+      titleBlock.style.cssText = `
+        position: fixed !important;
+        top: 20px !important;
+        left: 260px !important;
+        z-index: 999999 !important;
+        display: block !important;
+        background: rgba(20,20,20,0.85) !important;
+        padding: 15px 20px !important;
+        border-radius: 8px;
+        border: 2px solid rgba(212,175,55,0.6);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      `;
+      
+      var mainTitle = titleBlock.querySelector('.main-title-ui');
+      if (mainTitle) {
+        mainTitle.style.cssText = 'display: block !important; font-size: 32px !important; font-weight: 700; color: rgba(255,255,255,0.95) !important; margin: 0 0 10px 0; text-shadow: 0 4px 12px rgba(0,0,0,0.8);';
+      }
+      
+      var subtitle = titleBlock.querySelector('.subtitle-ui');
+      if (subtitle) {
+        subtitle.style.cssText = 'display: block !important; font-size: 18px !important; font-weight: 300; color: rgba(255,255,255,0.8) !important; margin: 0; text-shadow: 0 3px 10px rgba(0,0,0,0.7);';
+      }
+      
+      console.log('✅ 우측 제목 표시');
+    }
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', showRightTitle);
+  } else {
+    showRightTitle();
+  }
+  setTimeout(showRightTitle, 500);
+  setTimeout(showRightTitle, 1000);
+})();
+
+
+// ==================== 로딩/오프닝 화면 중앙 배치 ====================
+(function() {
+  function centerScreens() {
+    // 로딩 화면 중앙 배치
+    var loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+      loadingScreen.style.cssText = `
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 10000 !important;
+      `;
+      
+      var loadingContent = loadingScreen.querySelector('.loading-content');
+      if (loadingContent) {
+        loadingContent.style.cssText = 'text-align: center !important;';
+      }
+      
+      console.log('✅ 로딩 화면 중앙 배치');
+    }
+    
+    // 오프닝 화면 중앙 배치
+    var openingScene = document.getElementById('opening-scene');
+    if (openingScene) {
+      openingScene.style.cssText = `
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 9999 !important;
+      `;
+      
+      var openingContent = openingScene.querySelector('.opening-content');
+      if (openingContent) {
+        openingContent.style.cssText = `
+          text-align: center !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          gap: 30px !important;
+        `;
+        
+        var titleSub = openingContent.querySelector('.title-sub');
+        if (titleSub) {
+          titleSub.style.cssText = 'font-size: 48px !important; margin: 0 !important;';
+        }
+        
+        var titleDesc = openingContent.querySelector('.title-desc');
+        if (titleDesc) {
+          titleDesc.style.cssText = 'font-size: 24px !important; margin: 20px 0 !important;';
+        }
+        
+        var enterBtn = openingContent.querySelector('.enter-button');
+        if (enterBtn) {
+          enterBtn.style.cssText = 'margin: 20px auto 0 !important; display: block !important;';
+        }
+      }
+      
+      console.log('✅ 오프닝 화면 중앙 배치');
+    }
+  }
+  
+  // 즉시 실행
+  centerScreens();
+  
+  // DOMContentLoaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', centerScreens);
+  }
+  
+  // 약간의 딜레이 후 다시 실행
+  setTimeout(centerScreens, 100);
+  setTimeout(centerScreens, 500);
+})();
+
+
+// ==================== 로딩 화면 제목 표시 ====================
+(function() {
+  function styleLoadingScreen() {
+    var loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+      loadingScreen.style.cssText = `
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: linear-gradient(135deg, #1a2a4e 0%, #0d1929 100%) !important;
+        z-index: 10000 !important;
+      `;
+      
+      var loadingContent = loadingScreen.querySelector('.loading-content');
+      if (loadingContent) {
+        loadingContent.style.cssText = `
+          text-align: center !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          gap: 20px !important;
+        `;
+      }
+      
+      console.log('✅ 로딩 화면 스타일 적용');
+    }
+  }
+  
+  // 즉시 실행
+  styleLoadingScreen();
+  
+  // 타이밍 보장
+  setTimeout(styleLoadingScreen, 50);
+  setTimeout(styleLoadingScreen, 100);
+})();
+
+
+// ==================== 플레이어 프레임 간격 조정 ====================
+(function() {
+  function adjustPlayerSpacing() {
+    var player = document.querySelector('.greeting-player-fixed');
+    if (player) {
+      player.style.cssText = `
+        display: block !important;
+        background: rgba(20,20,20,0.9) !important;
+        padding: 12px 12px !important;
+        border-radius: 8px;
+        width: 200px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+        border: 2px solid rgba(212,175,55,0.7);
+        min-height: 70px !important;
+      `;
+      
+      var progressContainer = player.querySelector('.progress-container');
+      if (progressContainer) {
+        progressContainer.style.cssText = 'display: block !important; width: 100%; margin-bottom: 12px !important;';
+      }
+      
+      var controls = player.querySelector('.player-controls');
+      if (controls) {
+        controls.style.cssText = 'display: flex !important; align-items: center; gap: 8px; justify-content: space-between; margin-top: 4px !important;';
+      }
+      
+      console.log('✅ 플레이어 간격 조정');
+    }
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', adjustPlayerSpacing);
+  } else {
+    adjustPlayerSpacing();
+  }
+  setTimeout(adjustPlayerSpacing, 500);
+  setTimeout(adjustPlayerSpacing, 1000);
+})();
+
+
+// ==================== 플레이어 버튼 간격 조정 ====================
+(function() {
+  function adjustPlayerButtonSpacing() {
+    var playerLeft = document.querySelector('.player-left');
+    if (playerLeft) {
+      playerLeft.style.cssText = 'display: flex !important; align-items: center; gap: 10px !important; flex: 1;';
+      
+      console.log('✅ 플레이어 버튼 간격 조정');
+    }
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', adjustPlayerButtonSpacing);
+  } else {
+    adjustPlayerButtonSpacing();
+  }
+  setTimeout(adjustPlayerButtonSpacing, 500);
+  setTimeout(adjustPlayerButtonSpacing, 1000);
+})();
+
+
+// ==================== 플레이어 버튼 간격 대폭 증가 ====================
+(function() {
+  function widerButtonSpacing() {
+    var playerLeft = document.querySelector('.player-left');
+    if (playerLeft) {
+      playerLeft.style.cssText = 'display: flex !important; align-items: center; gap: 15px !important; flex: 1;';
+    }
+    
+    var playerTitle = document.querySelector('.player-title');
+    if (playerTitle) {
+      playerTitle.style.cssText = 'display: inline-block !important; font-size: 11px !important; color: #d4af37 !important; min-width: 30px !important; margin-right: 5px !important;';
+    }
+    
+    console.log('✅ 버튼 간격 15px로 증가');
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', widerButtonSpacing);
+  } else {
+    widerButtonSpacing();
+  }
+  setTimeout(widerButtonSpacing, 500);
+  setTimeout(widerButtonSpacing, 1000);
+})();
+
+
+// ==================== 인사 텍스트 중앙 정렬 ====================
+(function() {
+  function centerPlayerTitle() {
+    var playerTitle = document.querySelector('.player-title');
+    if (playerTitle) {
+      playerTitle.style.cssText = `
+        display: inline-block !important;
+        font-size: 11px !important;
+        color: #d4af37 !important;
+        min-width: 30px !important;
+        margin-right: 5px !important;
+        text-align: center !important;
+      `;
+      
+      console.log('✅ 인사 텍스트 중앙 정렬');
+    }
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', centerPlayerTitle);
+  } else {
+    centerPlayerTitle();
+  }
+  setTimeout(centerPlayerTitle, 500);
+  setTimeout(centerPlayerTitle, 1000);
+})();
+
+
+// ==================== 플레이어 너비 증가 ====================
+(function() {
+  function widenPlayer() {
+    var player = document.querySelector('.greeting-player-fixed');
+    if (player) {
+      player.style.cssText = `
+        display: block !important;
+        background: rgba(20,20,20,0.9) !important;
+        padding: 12px 12px !important;
+        border-radius: 8px;
+        width: 240px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+        border: 2px solid rgba(212,175,55,0.7);
+        min-height: 70px !important;
+      `;
+    }
+    
+    var playerLeft = document.querySelector('.player-left');
+    if (playerLeft) {
+      playerLeft.style.cssText = 'display: flex !important; align-items: center; gap: 12px !important; flex: 1;';
+    }
+    
+    var playerTitle = document.querySelector('.player-title');
+    if (playerTitle) {
+      playerTitle.style.cssText = `
+        display: inline-block !important;
+        font-size: 11px !important;
+        color: #d4af37 !important;
+        min-width: 30px !important;
+        text-align: center !important;
+      `;
+    }
+    
+    console.log('✅ 플레이어 너비 240px로 증가');
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', widenPlayer);
+  } else {
+    widenPlayer();
+  }
+  setTimeout(widenPlayer, 500);
+  setTimeout(widenPlayer, 1000);
+})();
+
+
+// ==================== 작품 해설 데이터 ====================
+const artworkData = {
+  '012': {
+    title: '한 때 한 곳을 스쳐간 사계',
+    description: `검푸르게 화창하던 하늘에서 산을 하나 넘어서자
+갑자기 눈보라가 휘몰아쳤다. 
+바람이 너무도 세 눈이 수평으로 내렸다. 
+흠칫 순간 무엇인가 지나가는 가 했더니 
+눈보라 속을 무서운 속도로 질주하는 
+징키스칸의 후예가 있었다. 
+미처 카메라를 대지 못할 정도로 
+눈 깜짝할 새 눈보라 속으로 사라졌다. 
+셔터를 누르지 못한 것이 너무도 안타까웠다.
+한참 후 그가 눈보라 속에서 모습을 드러냈다.
+백여 마리의 양떼를 이끌고 돌아오고 있었다. 
+갑자기 몰아친 눈보라에 
+양떼들이 휩쓸려 가는 것을 구하기 위해 
+전속력으로 달려갔던 것이었다.`,
+    audioFile: 'audio/artwork_012_commentary.mp3'
+  }
+};
+
+// ==================== AI 도슨트 팝업 시스템 ====================
+(function() {
+  let docentPopup = null;
+  let docentAudio = null;
+  let currentArtwork = null;
+  
+  function createDocentPopup() {
+    // 팝업 HTML 생성
+    const popupHTML = `
+      <div id="docent-popup" class="docent-popup" style="display: none;">
+        <div class="docent-popup-overlay"></div>
+        <div class="docent-popup-content">
+          <button class="docent-close-btn">✕</button>
+          
+          <!-- 프로필 사진 -->
+          <div class="docent-profile">
+            <img src="images/guide_on_horse.png" alt="강종진 작가" class="docent-profile-img">
+            <h3 class="docent-profile-name">강종진 작가</h3>
+          </div>
+          
+          <!-- 작품 정보 -->
+          <div class="docent-info">
+            <h2 class="docent-artwork-title" id="docent-artwork-title"></h2>
+            <div class="docent-artwork-desc" id="docent-artwork-desc"></div>
+          </div>
+          
+          <!-- 해설 듣기 버튼 -->
+          <button class="docent-listen-btn" id="docent-listen-btn">
+            🎧 해설 듣기
+          </button>
+          
+          <!-- 오디오 컨트롤러 -->
+          <div class="docent-audio-controls" id="docent-audio-controls" style="display: none;">
+            <audio id="docent-audio"></audio>
+            
+            <div class="docent-progress-container">
+              <input type="range" id="docent-progress-bar" class="docent-progress-bar" min="0" max="100" value="0">
+            </div>
+            
+            <div class="docent-control-buttons">
+              <button id="docent-play-btn" class="docent-control-btn">▶</button>
+              <button id="docent-pause-btn" class="docent-control-btn" style="display:none;">⏸</button>
+              <button id="docent-stop-btn" class="docent-control-btn">⏹</button>
+              <span id="docent-time-display" class="docent-time-display">0:00 / 0:00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', popupHTML);
+    docentPopup = document.getElementById('docent-popup');
+    docentAudio = document.getElementById('docent-audio');
+    
+    // 팝업 스타일 적용
+    applyDocentStyles();
+    
+    // 이벤트 바인딩
+    bindDocentEvents();
+    
+    console.log('✅ AI 도슨트 팝업 생성 완료');
+  }
+  
+  function applyDocentStyles() {
+    const popup = document.getElementById('docent-popup');
+    if (!popup) return;
+    
+    popup.style.cssText = `
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 100000 !important;
+    `;
+    
+    const overlay = popup.querySelector('.docent-popup-overlay');
+    if (overlay) {
+      overlay.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.7);
+      `;
+    }
+    
+    const content = popup.querySelector('.docent-popup-content');
+    if (content) {
+      content.style.cssText = `
+        position: absolute !important;
+        top: 50% !important;
+        right: 80px !important;
+        transform: translateY(-50%) !important;
+        width: 400px !important;
+        max-height: 80vh !important;
+        background: rgba(20,20,20,0.95) !important;
+        border: 3px solid rgba(212,175,55,0.8) !important;
+        border-radius: 15px !important;
+        padding: 30px !important;
+        overflow-y: auto !important;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.8) !important;
+      `;
+    }
+    
+    const closeBtn = popup.querySelector('.docent-close-btn');
+    if (closeBtn) {
+      closeBtn.style.cssText = `
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(212,175,55,0.8);
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        font-size: 20px;
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      `;
+    }
+    
+    const profile = popup.querySelector('.docent-profile');
+    if (profile) {
+      profile.style.cssText = `
+        text-align: center;
+        margin-bottom: 25px;
+      `;
+      
+      const img = profile.querySelector('.docent-profile-img');
+      if (img) {
+        img.style.cssText = `
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          border: 4px solid rgba(212,175,55,0.8);
+          object-fit: cover;
+          margin-bottom: 10px;
+        `;
+      }
+      
+      const name = profile.querySelector('.docent-profile-name');
+      if (name) {
+        name.style.cssText = `
+          font-size: 18px;
+          color: rgba(212,175,55,1);
+          margin: 0;
+        `;
+      }
+    }
+    
+    const info = popup.querySelector('.docent-info');
+    if (info) {
+      info.style.cssText = `
+        margin-bottom: 25px;
+      `;
+      
+      const title = info.querySelector('.docent-artwork-title');
+      if (title) {
+        title.style.cssText = `
+          font-size: 24px;
+          color: rgba(255,255,255,0.95);
+          margin: 0 0 15px 0;
+          text-align: center;
+        `;
+      }
+      
+      const desc = info.querySelector('.docent-artwork-desc');
+      if (desc) {
+        desc.style.cssText = `
+          font-size: 15px;
+          line-height: 1.8;
+          color: rgba(255,255,255,0.85);
+          white-space: pre-line;
+          max-height: 200px;
+          overflow-y: auto;
+        `;
+      }
+    }
+    
+    const listenBtn = popup.querySelector('.docent-listen-btn');
+    if (listenBtn) {
+      listenBtn.style.cssText = `
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, rgba(212,175,55,0.9), rgba(180,150,40,0.9));
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-bottom: 20px;
+        transition: all 0.3s;
+      `;
+    }
+    
+    const audioControls = popup.querySelector('.docent-audio-controls');
+    if (audioControls) {
+      audioControls.style.cssText = `
+        background: rgba(30,30,30,0.8);
+        border-radius: 8px;
+        padding: 15px;
+      `;
+      
+      const progressContainer = audioControls.querySelector('.docent-progress-container');
+      if (progressContainer) {
+        progressContainer.style.cssText = `
+          margin-bottom: 15px;
+        `;
+        
+        const progressBar = progressContainer.querySelector('.docent-progress-bar');
+        if (progressBar) {
+          progressBar.style.cssText = `
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            cursor: pointer;
+          `;
+        }
+      }
+      
+      const controlButtons = audioControls.querySelector('.docent-control-buttons');
+      if (controlButtons) {
+        controlButtons.style.cssText = `
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        `;
+        
+        const buttons = controlButtons.querySelectorAll('.docent-control-btn');
+        buttons.forEach(btn => {
+          btn.style.cssText = `
+            background: rgba(212,175,55,0.8);
+            border: none;
+            border-radius: 5px;
+            width: 40px;
+            height: 40px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+          `;
+        });
+        
+        const timeDisplay = controlButtons.querySelector('.docent-time-display');
+        if (timeDisplay) {
+          timeDisplay.style.cssText = `
+            margin-left: auto;
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            font-family: monospace;
+          `;
+        }
+      }
+    }
+  }
+  
+  function bindDocentEvents() {
+    const closeBtn = document.querySelector('.docent-close-btn');
+    const listenBtn = document.getElementById('docent-listen-btn');
+    const playBtn = document.getElementById('docent-play-btn');
+    const pauseBtn = document.getElementById('docent-pause-btn');
+    const stopBtn = document.getElementById('docent-stop-btn');
+    const progressBar = document.getElementById('docent-progress-bar');
+    const overlay = document.querySelector('.docent-popup-overlay');
+    
+    // 닫기
+    if (closeBtn) closeBtn.addEventListener('click', closeDocentPopup);
+    if (overlay) overlay.addEventListener('click', closeDocentPopup);
+    
+    // 해설 듣기 버튼
+    if (listenBtn) {
+      listenBtn.addEventListener('click', function() {
+        document.getElementById('docent-audio-controls').style.display = 'block';
+        docentAudio.play();
+        document.getElementById('docent-play-btn').style.display = 'none';
+        document.getElementById('docent-pause-btn').style.display = 'inline-flex';
+      });
+    }
+    
+    // 재생
+    if (playBtn) {
+      playBtn.addEventListener('click', function() {
+        docentAudio.play();
+        playBtn.style.display = 'none';
+        pauseBtn.style.display = 'inline-flex';
+      });
+    }
+    
+    // 일시정지
+    if (pauseBtn) {
+      pauseBtn.addEventListener('click', function() {
+        docentAudio.pause();
+        pauseBtn.style.display = 'none';
+        playBtn.style.display = 'inline-flex';
+      });
+    }
+    
+    // 정지
+    if (stopBtn) {
+      stopBtn.addEventListener('click', function() {
+        docentAudio.pause();
+        docentAudio.currentTime = 0;
+        pauseBtn.style.display = 'none';
+        playBtn.style.display = 'inline-flex';
+        progressBar.value = 0;
+      });
+    }
+    
+    // 시간 업데이트
+    if (docentAudio) {
+      docentAudio.addEventListener('timeupdate', function() {
+        if (docentAudio.duration) {
+          const progress = (docentAudio.currentTime / docentAudio.duration) * 100;
+          progressBar.value = progress;
+          
+          const current = formatTime(docentAudio.currentTime);
+          const total = formatTime(docentAudio.duration);
+          document.getElementById('docent-time-display').textContent = current + ' / ' + total;
+        }
+      });
+      
+      docentAudio.addEventListener('ended', function() {
+        pauseBtn.style.display = 'none';
+        playBtn.style.display = 'inline-flex';
+        progressBar.value = 0;
+      });
+    }
+    
+    // 프로그레스바
+    if (progressBar) {
+      progressBar.addEventListener('input', function() {
+        if (docentAudio.duration) {
+          const time = (progressBar.value / 100) * docentAudio.duration;
+          docentAudio.currentTime = time;
+        }
+      });
+    }
+  }
+  
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return mins + ':' + (secs < 10 ? '0' : '') + secs;
+  }
+  
+  function openDocentPopup(artworkNumber) {
+    const data = artworkData[artworkNumber];
+    if (!data) {
+      console.log('⚠️ 작품 데이터 없음:', artworkNumber);
+      return;
+    }
+    
+    currentArtwork = artworkNumber;
+    
+    // 팝업이 없으면 생성
+    if (!docentPopup) {
+      createDocentPopup();
+    }
+    
+    // 데이터 채우기
+    document.getElementById('docent-artwork-title').textContent = data.title;
+    document.getElementById('docent-artwork-desc').textContent = data.description;
+    docentAudio.src = data.audioFile;
+    
+    // 컨트롤 초기화
+    document.getElementById('docent-audio-controls').style.display = 'none';
+    document.getElementById('docent-play-btn').style.display = 'inline-flex';
+    document.getElementById('docent-pause-btn').style.display = 'none';
+    document.getElementById('docent-progress-bar').value = 0;
+    
+    // 팝업 표시
+    docentPopup.style.display = 'block';
+    
+    console.log('✅ 도슨트 팝업 열림:', artworkNumber);
+  }
+  
+  function closeDocentPopup() {
+    if (docentAudio) {
+      docentAudio.pause();
+      docentAudio.currentTime = 0;
+    }
+    if (docentPopup) {
+      docentPopup.style.display = 'none';
+    }
+    console.log('✅ 도슨트 팝업 닫힘');
+  }
+  
+  // 작품 더블클릭 이벤트 (012번만 일단 테스트)
+  function attachArtworkListeners() {
+    // Three.js 작품 클릭 이벤트에 추가해야 함
+    // 일단 전역 함수로 노출
+    window.openDocentPopup = openDocentPopup;
+    console.log('✅ 도슨트 시스템 준비 완료');
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attachArtworkListeners);
+  } else {
+    attachArtworkListeners();
+  }
+  
+  setTimeout(attachArtworkListeners, 1000);
+})();
+
+
+// ==================== 작품 해설 데이터 ====================
+
+// ==================== AI 도슨트 팝업 ====================
+(function() {
+  let popup = null;
+  let audio = null;
+  
+  function createPopup() {
+    const html = `
+      <div id="ai-docent-popup" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:200000;">
+        <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);" onclick="closeDocent()"></div>
+        <div id="docent-content" style="position:absolute;top:50%;right:80px;transform:translateY(-50%);width:400px;max-height:80vh;background:rgba(20,20,20,0.95);border:3px solid rgba(212,175,55,0.8);border-radius:15px;padding:30px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8);">
+          <button onclick="closeDocent()" style="position:absolute;top:15px;right:15px;background:rgba(212,175,55,0.8);border:none;border-radius:50%;width:35px;height:35px;font-size:20px;color:white;cursor:pointer;">✕</button>
+          
+          <div style="text-align:center;margin-bottom:25px;">
+            <img src="images/guide_on_horse.png" style="width:120px;height:120px;border-radius:50%;border:4px solid rgba(212,175,55,0.8);object-fit:cover;margin-bottom:10px;">
+            <h3 style="font-size:18px;color:rgba(212,175,55,1);margin:0;">강종진 작가</h3>
+          </div>
+          
+          <div style="margin-bottom:25px;">
+            <h2 id="docent-title" style="font-size:24px;color:rgba(255,255,255,0.95);margin:0 0 15px 0;text-align:center;"></h2>
+            <div id="docent-desc" style="font-size:15px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-line;max-height:200px;overflow-y:auto;"></div>
+          </div>
+          
+          <button id="listen-btn" style="width:100%;padding:15px;background:linear-gradient(135deg,rgba(212,175,55,0.9),rgba(180,150,40,0.9));border:none;border-radius:8px;color:white;font-size:18px;font-weight:bold;cursor:pointer;margin-bottom:20px;">🎧 해설 듣기</button>
+          
+          <div id="audio-controls" style="display:none;background:rgba(30,30,30,0.8);border-radius:8px;padding:15px;">
+            <audio id="docent-audio"></audio>
+            <div style="margin-bottom:15px;">
+              <input type="range" id="progress" min="0" max="100" value="0" style="width:100%;height:8px;cursor:pointer;">
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <button id="play-btn" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">▶</button>
+              <button id="pause-btn" style="display:none;background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏸</button>
+              <button id="stop-btn" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏹</button>
+              <span id="time-display" style="margin-left:auto;font-size:14px;color:rgba(255,255,255,0.8);font-family:monospace;">0:00 / 0:00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', html);
+    popup = document.getElementById('ai-docent-popup');
+    audio = document.getElementById('docent-audio');
+    
+    // 이벤트 바인딩
+    document.getElementById('listen-btn').onclick = function() {
+      document.getElementById('audio-controls').style.display = 'block';
+      audio.play();
+      document.getElementById('play-btn').style.display = 'none';
+      document.getElementById('pause-btn').style.display = 'inline-block';
+    };
+    
+    document.getElementById('play-btn').onclick = function() {
+      audio.play();
+      this.style.display = 'none';
+      document.getElementById('pause-btn').style.display = 'inline-block';
+    };
+    
+    document.getElementById('pause-btn').onclick = function() {
+      audio.pause();
+      this.style.display = 'none';
+      document.getElementById('play-btn').style.display = 'inline-block';
+    };
+    
+    document.getElementById('stop-btn').onclick = function() {
+      audio.pause();
+      audio.currentTime = 0;
+      document.getElementById('pause-btn').style.display = 'none';
+      document.getElementById('play-btn').style.display = 'inline-block';
+      document.getElementById('progress').value = 0;
+    };
+    
+    audio.ontimeupdate = function() {
+      if (audio.duration) {
+        document.getElementById('progress').value = (audio.currentTime / audio.duration) * 100;
+        const formatTime = (s) => Math.floor(s/60) + ':' + (Math.floor(s%60)<10?'0':'') + Math.floor(s%60);
+        document.getElementById('time-display').textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+      }
+    };
+    
+    document.getElementById('progress').oninput = function() {
+      if (audio.duration) {
+        audio.currentTime = (this.value / 100) * audio.duration;
+      }
+    };
+    
+    audio.onended = function() {
+      document.getElementById('pause-btn').style.display = 'none';
+      document.getElementById('play-btn').style.display = 'inline-block';
+      document.getElementById('progress').value = 0;
+    };
+    
+    console.log('✅ 도슨트 팝업 생성');
+  }
+  
+  window.openDocent = function(artworkId) {
+    const data = artworkData[artworkId];
+    if (!data) return;
+    
+    if (!popup) createPopup();
+    
+    document.getElementById('docent-title').textContent = data.title;
+    document.getElementById('docent-desc').textContent = data.description;
+    audio.src = data.audioFile;
+    
+    document.getElementById('audio-controls').style.display = 'none';
+    document.getElementById('play-btn').style.display = 'inline-block';
+    document.getElementById('pause-btn').style.display = 'none';
+    document.getElementById('progress').value = 0;
+    
+    popup.style.display = 'block';
+    console.log('✅ 도슨트 열림:', artworkId);
+  };
+  
+  window.closeDocent = function() {
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+    if (popup) popup.style.display = 'none';
+  };
+  
+  setTimeout(createPopup, 1000);
+})();
+
+// ==================== 012번 작품 더블클릭 연결 ====================
+(function() {
+  let lastClickTime = 0;
+  let lastClickedObject = null;
+  
+  // 기존 클릭 이벤트에 더블클릭 감지 추가
+  const canvas = document.querySelector('canvas');
+  if (canvas) {
+    canvas.addEventListener('click', function(e) {
+      const now = Date.now();
+      
+      // 더블클릭 감지 (300ms 이내)
+      if (now - lastClickTime < 300) {
+        // raycaster로 클릭된 객체 확인
+        const mouse = { x: (e.clientX / window.innerWidth) * 2 - 1, y: -(e.clientY / window.innerHeight) * 2 + 1 };
+        
+        if (window.raycaster && window.camera && window.scene) {
+          window.raycaster.setFromCamera(mouse, window.camera);
+          const intersects = window.raycaster.intersectObjects(window.scene.children, true);
+          
+          for (let i = 0; i < intersects.length; i++) {
+            const obj = intersects[i].object;
+            if (obj.userData && obj.userData.artworkId) {
+              const artworkId = obj.userData.artworkId;
+              console.log('🎨 작품 더블클릭:', artworkId);
+              
+              // 012번이면 도슨트 열기
+              if (artworkId === '012') {
+                window.openDocent('012');
+              }
+              break;
+            }
+          }
+        }
+      }
+      
+      lastClickTime = now;
+    });
+    
+    console.log('✅ 작품 더블클릭 이벤트 연결');
+  }
+})();
+
+
+// 012번 도슨트
+(function(){
+const data={'012':{title:'한 때 한 곳을 스쳐간 사계',description:`검푸르게 화창하던 하늘에서 산을 하나 넘어서자
+갑자기 눈보라가 휘몰아쳤다. 
+바람이 너무도 세 눈이 수평으로 내렸다. 
+흠칫 순간 무엇인가 지나가는 가 했더니 
+눈보라 속을 무서운 속도로 질주하는 
+징키스칸의 후예가 있었다. 
+미처 카메라를 대지 못할 정도로 
+눈 깜짝할 새 눈보라 속으로 사라졌다. 
+셔터를 누르지 못한 것이 너무도 안타까웠다.
+
+한참 후 그가 눈보라 속에서 모습을 드러냈다.
+백여 마리의 양떼를 이끌고 돌아오고 있었다. 
+갑자기 몰아친 눈보라에 
+양떼들이 휩쓸려 가는 것을 구하기 위해 
+전속력으로 달려갔던 것이었다.`,audio:'audio/artwork_012_commentary.mp3'}};
+let p=null,a=null;
+function create(){
+if(p)return;
+const h=`<div id="doc-pop" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:200000;"><div onclick="window.closeDoc()" style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);"></div><div style="position:absolute;top:50%;right:80px;transform:translateY(-50%);width:400px;max-height:80vh;background:rgba(20,20,20,0.95);border:3px solid rgba(212,175,55,0.8);border-radius:15px;padding:30px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8);"><button onclick="window.closeDoc()" style="position:absolute;top:15px;right:15px;background:rgba(212,175,55,0.8);border:none;border-radius:50%;width:35px;height:35px;font-size:20px;color:white;cursor:pointer;">✕</button><div style="text-align:center;margin-bottom:25px;"><img src="images/author_profile_012.jpg" style="width:150px;height:150px;border-radius:15px;border:4px solid rgba(212,175,55,0.8);object-fit:cover;margin-bottom:10px;"><h3 style="font-size:18px;color:rgba(212,175,55,1);margin:0;">강종진 작가</h3></div><div style="margin-bottom:25px;"><h2 id="doc-t" style="font-size:24px;color:#fff;margin:0 0 15px 0;text-align:center;"></h2><div id="doc-d" style="font-size:15px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-line;max-height:200px;overflow-y:auto;"></div></div><button id="listen" style="width:100%;padding:15px;background:linear-gradient(135deg,rgba(212,175,55,0.9),rgba(180,150,40,0.9));border:none;border-radius:8px;color:white;font-size:18px;font-weight:bold;cursor:pointer;margin-bottom:20px;">🎧 해설 듣기</button><div id="ac" style="display:none;background:rgba(30,30,30,0.8);border-radius:8px;padding:15px;"><audio id="da"></audio><div style="margin-bottom:15px;"><input type="range" id="pb" min="0" max="100" value="0" style="width:100%;height:8px;cursor:pointer;"></div><div style="display:flex;align-items:center;gap:10px;"><button id="pl" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">▶</button><button id="pa" style="display:none;background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏸</button><button id="st" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏹</button><span id="td" style="margin-left:auto;font-size:14px;color:rgba(255,255,255,0.8);font-family:monospace;">0:00/0:00</span></div></div></div></div>`;
+document.body.insertAdjacentHTML('beforeend',h);
+p=document.getElementById('doc-pop');
+a=document.getElementById('da');
+document.getElementById('listen').onclick=()=>{document.getElementById('ac').style.display='block';a.play();document.getElementById('pl').style.display='none';document.getElementById('pa').style.display='inline-block';};
+document.getElementById('pl').onclick=()=>{a.play();document.getElementById('pl').style.display='none';document.getElementById('pa').style.display='inline-block';};
+document.getElementById('pa').onclick=()=>{a.pause();document.getElementById('pa').style.display='none';document.getElementById('pl').style.display='inline-block';};
+document.getElementById('st').onclick=()=>{a.pause();a.currentTime=0;document.getElementById('pa').style.display='none';document.getElementById('pl').style.display='inline-block';document.getElementById('pb').value=0;};
+a.ontimeupdate=()=>{if(a.duration){document.getElementById('pb').value=(a.currentTime/a.duration)*100;const f=s=>Math.floor(s/60)+':'+(Math.floor(s%60)<10?'0':'')+Math.floor(s%60);document.getElementById('td').textContent=f(a.currentTime)+'/'+f(a.duration);}};
+document.getElementById('pb').oninput=function(){if(a.duration)a.currentTime=(this.value/100)*a.duration;};
+a.onended=()=>{document.getElementById('pa').style.display='none';document.getElementById('pl').style.display='inline-block';document.getElementById('pb').value=0;};
+console.log('✅ 012 도슨트 생성');
+}
+const c=document.querySelector('canvas');
+const container=document.getElementById('doc-container');
+...
+(전체 코드)
+...
+if(container){
+const audio=document.getElementById('doc-audio');
+if(audio){audio.pause();audio.currentTime=0;}
+container.style.display='none';
+}
+};
+if(c){let lt=0;c.addEventListener('click',e=>{const n=Date.now();if(n-lt<300){const m={x:(e.clientX/window.innerWidth)*2-1,y:-(e.clientY/window.innerHeight)*2+1};if(window.raycaster&&window.camera&&window.scene){window.raycaster.setFromCamera(m,window.camera);const i=window.raycaster.intersectObjects(window.scene.children,true);for(let j=0;j<i.length;j++){const o=i[j].object;if(o.userData&&o.userData.artworkId){console.log('🎨더블클릭:',o.userData.artworkId);if(o.userData.artworkId==='012')window.openDoc('012');break;}}}}lt=n;});console.log('✅ 012 더블클릭 연결');}
+})();
+
+
+// 안전한 더블클릭 이벤트 (페이지 로드 후 실행)
+window.addEventListener('load', function() {
+  setTimeout(() => {
+    const canvas = document.querySelector('canvas');
+    if (!canvas) {
+      console.error('❌ Canvas 없음');
+      return;
+    }
+    
+    let lastClick = 0;
+    
+    canvas.addEventListener('click', function(e) {
+      const now = Date.now();
+      
+      if (now - lastClick < 300) {
+        // 더블클릭
+        const mouse = {
+          x: (e.clientX / window.innerWidth) * 2 - 1,
+          y: -(e.clientY / window.innerHeight) * 2 + 1
+        };
+        
+        if (window.raycaster && window.camera && window.scene) {
+          window.raycaster.setFromCamera(mouse, window.camera);
+          const hits = window.raycaster.intersectObjects(window.scene.children, true);
+          
+          for (let i = 0; i < hits.length; i++) {
+            let obj = hits[i].object;
+            
+            // 부모까지 탐색
+            while (obj) {
+              if (obj.userData && obj.userData.artworkId) {
+                console.log('🎨 더블클릭:', obj.userData.artworkId);
+                window.openDoc(obj.userData.artworkId);
+                return;
+              }
+              obj = obj.parent;
+            }
+          }
+        }
+      }
+      
+      lastClick = now;
+    });
+    
+    console.log('✅ 더블클릭 이벤트 연결');
+  }, 3000);
+});
+
+
+// 안전한 더블클릭 이벤트 (페이지 로드 후 실행)
+window.addEventListener('load', function() {
+  setTimeout(() => {
+    const canvas = document.querySelector('canvas');
+    if (!canvas) {
+      console.error('❌ Canvas 없음');
+      return;
+    }
+    
+    let lastClick = 0;
+    
+    canvas.addEventListener('click', function(e) {
+      const now = Date.now();
+      
+      if (now - lastClick < 300) {
+        // 더블클릭
+        const mouse = {
+          x: (e.clientX / window.innerWidth) * 2 - 1,
+          y: -(e.clientY / window.innerHeight) * 2 + 1
+        };
+        
+        if (window.raycaster && window.camera && window.scene) {
+          window.raycaster.setFromCamera(mouse, window.camera);
+          const hits = window.raycaster.intersectObjects(window.scene.children, true);
+          
+          for (let i = 0; i < hits.length; i++) {
+            let obj = hits[i].object;
+            
+            // 부모까지 탐색
+            while (obj) {
+              if (obj.userData && obj.userData.artworkId) {
+                console.log('🎨 더블클릭:', obj.userData.artworkId);
+                window.openDoc(obj.userData.artworkId);
+                return;
+              }
+              obj = obj.parent;
+            }
+          }
+        }
+      }
+      
+      lastClick = now;
+    });
+    
+    console.log('✅ 더블클릭 이벤트 연결');
+  }, 3000);
+});
+
