@@ -399,3 +399,31 @@ window.addEventListener('DOMContentLoaded', () => {
     console.log('✅ AI 도슨트 시스템 초기화 완료');
 });
 
+
+// ============================================
+// 작품 더블클릭 이벤트 연결
+// ============================================
+
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+window.addEventListener('dblclick', (event) => {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(scene.children, true);
+    
+    if (intersects.length > 0) {
+        const clickedObject = intersects[0].object;
+        
+        if (clickedObject.userData && clickedObject.userData.artworkId) {
+            const artworkId = clickedObject.userData.artworkId;
+            console.log('✅ 작품 더블클릭:', artworkId);
+            showArtworkPopup(artworkId);
+        }
+    }
+});
+
+console.log('✅ 더블클릭 이벤트 리스너 등록 완료');
+
