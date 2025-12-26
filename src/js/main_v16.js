@@ -456,20 +456,28 @@ function createFollowingGuide() {
     });
 }
 
-// 가이드 위치 업데이트 (카메라 따라다님)
+
+// 가이드 위치 업데이트 (화면 왼쪽 상단 고정)
 function updateGuidePosition() {
     if (!guideSprite || !camera) return;
     
-    // 카메라의 오른쪽 뒤쪽에 위치
-    const offset = new THREE.Vector3(4, -2, -3); // 오른쪽 3m, 뒤 2m
+    const distance = 8;
+    const left = -5;
+    const top = 3;
     
-    // 카메라 방향 기준으로 오프셋 회전
-    offset.applyQuaternion(camera.quaternion);
+    const cameraDirection = new THREE.Vector3();
+    camera.getWorldDirection(cameraDirection);
     
-    // 가이드 위치 설정
-    guideSprite.position.copy(camera.position).add(offset);
+    const right = new THREE.Vector3();
+    right.crossVectors(camera.up, cameraDirection).normalize();
     
-    // 작품 근접 확인 및 효과
+    const up = new THREE.Vector3().copy(camera.up).normalize();
+    
+    guideSprite.position.copy(camera.position)
+        .add(cameraDirection.multiplyScalar(distance))
+        .add(right.multiplyScalar(left))
+        .add(up.multiplyScalar(top));
+    
     checkArtworkProximityForGuide();
 }
 
