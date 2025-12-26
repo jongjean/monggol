@@ -277,3 +277,125 @@ function initThreeJS() {
 }
 
 console.log('✅ main.js v13.0');
+
+// ============================================
+// AI 도슨트 시스템
+// ============================================
+
+// 전역 변수
+let currentAudio = null;
+
+// 작품 데이터
+const artworkData = {
+    '012': {
+        title: '한 때 한 곳을 스쳐간 사계',
+        description: '검푸르게 화창하던 하늘에서 산을 하나 넘어서자 갑자기 눈보라가 휘몰아쳤다...',
+        audio: 'audio/docent_012.mp3'
+    }
+};
+
+// 팝업 HTML 생성
+function createPopup() {
+    const popupHTML = `
+        <div id="artworkPopup" class="popup-overlay">
+            <div class="popup-container">
+                <button class="popup-close" onclick="closePopup()">×</button>
+                <img id="popupImage" class="popup-artwork-image" src="" alt="작품">
+                <h2 id="popupTitle" class="popup-artwork-title"></h2>
+                
+                <div class="docent-section">
+                    <img src="images/guide_on_horse.png" class="guide-avatar" alt="AI 가이드">
+                    <button id="playDocentBtn" class="play-docent-btn">
+                        🎤 AI 강종진 사진가 얘기 듣기
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', popupHTML);
+}
+
+// 팝업 열기
+function showArtworkPopup(artworkId) {
+    const popup = document.getElementById('artworkPopup');
+    const image = document.getElementById('popupImage');
+    const title = document.getElementById('popupTitle');
+    const playBtn = document.getElementById('playDocentBtn');
+    
+    const artwork = artworkData[artworkId];
+    
+    if (!artwork) {
+        console.warn('작품 데이터 없음:', artworkId);
+        return;
+    }
+    
+    image.src = `images/artworks/${artworkId}.jpg`;
+    title.textContent = artwork.title;
+    
+    playBtn.onclick = () => playDocent(artworkId);
+    
+    popup.classList.add('active');
+}
+
+// 팝업 닫기
+function closePopup() {
+    const popup = document.getElementById('artworkPopup');
+    popup.classList.remove('active');
+    
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+    }
+    
+    const playBtn = document.getElementById('playDocentBtn');
+    playBtn.classList.remove('playing');
+    playBtn.textContent = '🎤 AI 강종진 사진가 얘기 듣기';
+}
+
+// 도슨트 재생
+function playDocent(artworkId) {
+    const artwork = artworkData[artworkId];
+    const playBtn = document.getElementById('playDocentBtn');
+    
+    if (!artwork || !artwork.audio) {
+        console.warn('오디오 파일 없음:', artworkId);
+        return;
+    }
+    
+    if (currentAudio) {
+        currentAudio.pause();
+    }
+    
+    currentAudio = new Audio(artwork.audio);
+    
+    currentAudio.onplay = () => {
+        playBtn.classList.add('playing');
+        playBtn.textContent = '🔊 재생 중...';
+    };
+    
+    currentAudio.onended = () => {
+        playBtn.classList.remove('playing');
+        playBtn.textContent = '🎤 AI 강종진 사진가 얘기 듣기';
+        currentAudio = null;
+    };
+    
+    currentAudio.onerror = () => {
+        console.error('오디오 로드 실패:', artwork.audio);
+        playBtn.textContent = '❌ 재생 실패';
+        setTimeout(() => {
+            playBtn.textContent = '🎤 AI 강종진 사진가 얘기 듣기';
+        }, 2000);
+    };
+    
+    currentAudio.play().catch(err => {
+        console.error('오디오 재생 실패:', err);
+    });
+}
+
+// 초기화
+window.addEventListener('DOMContentLoaded', () => {
+    createPopup();
+    console.log('✅ AI 도슨트 시스템 초기화 완료');
+});
+

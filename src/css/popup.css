@@ -1,0 +1,157 @@
+/* 팝업 오버레이 */
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-overlay.active {
+    display: flex;
+}
+
+/* 팝업 컨테이너 */
+.popup-container {
+    background: linear-gradient(135deg, #2c1810 0%, #1a0f0a 100%);
+    border: 3px solid #d4af37;
+    border-radius: 20px;
+    max-width: 90%;
+    max-height: 90%;
+    overflow: auto;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 0 50px rgba(212, 175, 55, 0.5);
+}
+
+/* 닫기 버튼 */
+.popup-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 30px;
+    color: #d4af37;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: transform 0.3s;
+}
+
+.popup-close:hover {
+    transform: rotate(90deg) scale(1.2);
+    color: #fff;
+}
+
+/* 작품 이미지 */
+.popup-artwork-image {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* 작품 제목 */
+.popup-artwork-title {
+    color: #d4af37;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* 도슨트 섹션 */
+.docent-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(212, 175, 55, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid #d4af37;
+    margin-top: 20px;
+}
+
+/* 가이드 아바타 */
+.guide-avatar {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #d4af37;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+}
+
+/* 도슨트 버튼 */
+.play-docent-btn {
+    flex: 1;
+    background: linear-gradient(135deg, #d4af37 0%, #aa8a2e 100%);
+    color: #1a0f0a;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+}
+
+.play-docent-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
+    background: linear-gradient(135deg, #fff 0%, #d4af37 100%);
+}
+
+.play-docent-btn:active {
+    transform: translateY(0);
+}
+
+.play-docent-btn.playing {
+    background: linear-gradient(135deg, #4a9eff 0%, #2563eb 100%);
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 5px 15px rgba(74, 158, 255, 0.4);
+    }
+    50% {
+        box-shadow: 0 5px 30px rgba(74, 158, 255, 0.8);
+    }
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+    .popup-container {
+        padding: 20px;
+        max-width: 95%;
+    }
+    
+    .popup-artwork-title {
+        font-size: 20px;
+    }
+    
+    .docent-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .guide-avatar {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .play-docent-btn {
+        width: 100%;
+        font-size: 16px;
+    }
+}
