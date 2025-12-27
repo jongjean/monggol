@@ -265,36 +265,13 @@ function initThreeJS() {
             const imagePath = artworkData[artworkIndex - 1];
             
             const popup = document.createElement('div');
-            popup.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.95);z-index:10000;display:flex;align-items:center;justify-content:center;';
+            popup.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.95);z-index:10000;display:flex;align-items:center;justify-content:center;cursor:pointer;';
             const img = document.createElement('img');
             img.src = imagePath;
-            img.style.cssText = 'max-width:90vw;max-height:90vh;object-fit:contain;cursor:default;';
+            img.style.cssText = 'max-width:90vw;max-height:90vh;object-fit:contain;';
             popup.appendChild(img);
             document.body.appendChild(popup);
-            
-            // 배경만 클릭 시 닫기 (이미지는 제외)
-            popup.onclick = (e) => {
-                if (e.target === popup) {
-                    e.stopPropagation();
-                    document.body.removeChild(popup);
-                }
-            };
-            
-            // 이미지 더블클릭으로 닫기
-            let imgLastClick = 0;
-            img.onclick = (e) => {
-                e.stopPropagation();
-                const now = Date.now();
-                if (now - imgLastClick < 300) {
-                    // 더블클릭
-                    document.body.removeChild(popup);
-                    if (window.closeArtwork) {
-                        window.closeArtwork();
-                    }
-                    console.log('✅ 작품 이미지 더블클릭→닫기');
-                }
-                imgLastClick = now;
-            };
+            popup.onclick = () => document.body.removeChild(popup);
         }
     });
 
@@ -1267,6 +1244,7 @@ const artworkData = {
   function createPopup() {
     const html = `
       <div id="ai-docent-popup" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:200000;">
+        <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);" onclick="closeDocent()"></div>
         <div id="docent-content" style="position:absolute;top:50%;right:80px;transform:translateY(-50%);width:400px;max-height:80vh;background:rgba(20,20,20,0.95);cursor:move;box-shadow:0 10px 40px rgba(0,0,0,0.8);border:3px solid rgba(212,175,55,0.8);border-radius:15px;padding:30px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8);">
           <button onclick="closeDocent()" style="position:absolute;top:15px;right:15px;background:rgba(212,175,55,0.8);border:none;border-radius:50%;width:35px;height:35px;font-size:20px;color:white;cursor:pointer;">−</button>
           
@@ -1384,6 +1362,50 @@ const artworkData = {
 })();
 
 // ==================== 012번 작품 더블클릭 연결 ====================
+(function() {
+  let lastClickTime = 0;
+  let lastClickedObject = null;
+  
+  // 기존 클릭 이벤트에 더블클릭 감지 추가
+  const canvas = document.querySelector('canvas');
+  if (canvas) {
+    canvas.addEventListener('click', function(e) {
+      const now = Date.now();
+      
+      // 더블클릭 감지 (300ms 이내)
+      if (now - lastClickTime < 300) {
+        // raycaster로 클릭된 객체 확인
+        const mouse = { x: (e.clientX / window.innerWidth) * 2 - 1, y: -(e.clientY / window.innerHeight) * 2 + 1 };
+        
+        if (window.raycaster && window.camera && window.scene) {
+          window.raycaster.setFromCamera(mouse, window.camera);
+          const intersects = window.raycaster.intersectObjects(window.scene.children, true);
+          
+          for (let i = 0; i < intersects.length; i++) {
+            const obj = intersects[i].object;
+            if (obj.userData && obj.userData.artworkId) {
+              const artworkId = obj.userData.artworkId;
+              console.log('🎨 작품 더블클릭:', artworkId);
+              
+              // 012번이면 도슨트 열기
+              if (artworkId === '012') {
+                window.openDocent('012');
+              }
+              break;
+            }
+          }
+        }
+      }
+      
+      lastClickTime = now;
+    });
+    
+    console.log('✅ 작품 더블클릭 이벤트 연결');
+  }
+})();
+
+
+// 012번 도슨트
 (function(){
 const data={'012':{title:'한 때 한 곳을 스쳐간 사계',description:`검푸르게 화창하던 하늘에서 산을 하나 넘어서자
 갑자기 눈보라가 휘몰아쳤다. 
@@ -1496,14 +1518,6 @@ window.addEventListener('load', function() {
       
       if (now - lastClick < 300) {
         // 더블클릭
-        // 1) 먼저 도슨트가 열려있는지 확인
-        const docPop = document.getElementById('doc-pop');
-        if (docPop && docPop.style.display !== 'none') {
-          window.closeArtwork();
-          console.log('✅ Canvas 더블클릭→닫기');
-          return;
-        }
-
         const mouse = {
           x: (e.clientX / window.innerWidth) * 2 - 1,
           y: -(e.clientY / window.innerHeight) * 2 + 1
@@ -1562,26 +1576,15 @@ window.closeDoc=function(){
 };
 
 // 작품창 닫기 함수
-window.closeArtwork=function(){console.log("🔴 closeArtwork 호출됨!");
+window.closeArtwork=function(){
 const popup=document.getElementById('doc-pop');
 const mini=document.getElementById('doc-mini');
 const audio=document.getElementById('da');
-const cb=document.getElementById('artwork-close-btn');
-
-// 작품 이미지 팝업 닫기 (z-index:10000인 div 찾아서 제거)
-const allDivs = document.querySelectorAll('body > div');
-allDivs.forEach(div => {
-    if (div.style.zIndex === '10000') {
-        div.remove();
-    }
-});
-
 if(audio){
 audio.pause();
 audio.currentTime=0;
 }
-if(popup)popup.style.display='none';
-if(cb)cb.style.display='none';
+if(popup)popup.style.display='none';const cb=document.getElementById('artwork-close-btn');if(cb)cb.style.display='none';
 if(mini)mini.style.display='none';
 console.log('✅ 작품창 닫기');
 };

@@ -1568,13 +1568,9 @@ const mini=document.getElementById('doc-mini');
 const audio=document.getElementById('da');
 const cb=document.getElementById('artwork-close-btn');
 
-// 작품 이미지 팝업 닫기 (z-index:10000인 div 찾아서 제거)
-const allDivs = document.querySelectorAll('body > div');
-allDivs.forEach(div => {
-    if (div.style.zIndex === '10000') {
-        div.remove();
-    }
-});
+// 작품 이미지 팝업 닫기
+const artworkPopups = document.querySelectorAll('body > div[style*="z-index:10000"]');
+artworkPopups.forEach(p => p.remove());
 
 if(audio){
 audio.pause();

@@ -1566,22 +1566,11 @@ window.closeArtwork=function(){console.log("🔴 closeArtwork 호출됨!");
 const popup=document.getElementById('doc-pop');
 const mini=document.getElementById('doc-mini');
 const audio=document.getElementById('da');
-const cb=document.getElementById('artwork-close-btn');
-
-// 작품 이미지 팝업 닫기 (z-index:10000인 div 찾아서 제거)
-const allDivs = document.querySelectorAll('body > div');
-allDivs.forEach(div => {
-    if (div.style.zIndex === '10000') {
-        div.remove();
-    }
-});
-
 if(audio){
 audio.pause();
 audio.currentTime=0;
 }
-if(popup)popup.style.display='none';
-if(cb)cb.style.display='none';
+if(popup)popup.style.display='none';const cb=document.getElementById('artwork-close-btn');if(cb)cb.style.display='none';
 if(mini)mini.style.display='none';
 console.log('✅ 작품창 닫기');
 };
