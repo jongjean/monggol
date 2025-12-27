@@ -815,7 +815,7 @@ const artworkData = {
       <div id="docent-popup" class="docent-popup" style="display: none;">
         <div class="docent-popup-overlay"></div>
         <div class="docent-popup-content">
-          <button class="docent-close-btn">−</button>
+          <button class="docent-close-btn">✕</button>
           
           <!-- 프로필 사진 -->
           <div class="docent-profile">
@@ -1229,8 +1229,8 @@ const artworkData = {
     const html = `
       <div id="ai-docent-popup" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:200000;">
         <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);" onclick="closeDocent()"></div>
-        <div id="docent-content" style="position:absolute;top:50%;right:80px;transform:translateY(-50%);width:400px;max-height:80vh;background:rgba(20,20,20,0.95);cursor:move;border:3px solid rgba(212,175,55,0.8);border-radius:15px;padding:30px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8);">
-          <button onclick="closeDocent()" style="position:absolute;top:15px;right:15px;background:rgba(212,175,55,0.8);border:none;border-radius:50%;width:35px;height:35px;font-size:20px;color:white;cursor:pointer;">−</button>
+        <div id="docent-content" style="position:absolute;top:50%;right:80px;transform:translateY(-50%);width:400px;max-height:80vh;background:rgba(20,20,20,0.95);border:3px solid rgba(212,175,55,0.8);border-radius:15px;padding:30px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8);">
+          <button onclick="closeDocent()" style="position:absolute;top:15px;right:15px;background:rgba(212,175,55,0.8);border:none;border-radius:50%;width:35px;height:35px;font-size:20px;color:white;cursor:pointer;">✕</button>
           
           <div style="text-align:center;margin-bottom:25px;">
             <img src="images/guide_on_horse.png" style="width:120px;height:120px;border-radius:50%;border:4px solid rgba(212,175,55,0.8);object-fit:cover;margin-bottom:10px;">
@@ -1409,7 +1409,7 @@ const data={'012':{title:'한 때 한 곳을 스쳐간 사계',description:`검�
 let p=null,a=null;
 function create(){
 if(p)return;
-const h=`<div id="doc-pop" style="display:none;position:fixed;top:50%;right:80px;transform:translateY(-50%);z-index:200000;width:400px;max-height:80vh;background:rgba(20,20,20,0.95);cursor:move;border:3px solid rgba(212,175,55,0.8);border-radius:15px;padding:30px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8);"><div id="doc-drag-header" style="position:absolute;top:0;left:0;right:0;height:50px;cursor:move;z-index:0;"></div><button onclick="document.getElementById('doc-pop').style.display='none';document.getElementById('doc-mini').style.display='block';console.log('✅ 최소화');" style="position:absolute;top:15px;right:15px;background:rgba(212,175,55,0.8);border:none;border-radius:50%;width:35px;height:35px;font-size:20px;color:white;cursor:pointer;">−</button><div style="text-align:center;margin-bottom:25px;"><img src="images/author_profile_012.jpg" style="width:150px;height:150px;border-radius:15px;border:4px solid rgba(212,175,55,0.8);object-fit:cover;margin-bottom:10px;"><h3 style="font-size:18px;color:rgba(212,175,55,1);margin:0;">강종진 작가</h3></div><div style="margin-bottom:25px;"><h2 id="doc-t" style="font-size:24px;color:#fff;margin:0 0 15px 0;text-align:center;"></h2><div id="doc-d" style="font-size:15px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-line;max-height:200px;overflow-y:auto;"></div></div><button id="listen" style="width:100%;padding:15px;background:linear-gradient(135deg,rgba(212,175,55,0.9),rgba(180,150,40,0.9));border:none;border-radius:8px;color:white;font-size:18px;font-weight:bold;cursor:pointer;margin-bottom:20px;">🎧 해설 듣기</button><div id="ac" style="display:none;background:rgba(30,30,30,0.8);border-radius:8px;padding:15px;"><audio id="da"></audio><div style="margin-bottom:15px;"><input type="range" id="pb" min="0" max="100" value="0" style="width:100%;height:8px;cursor:pointer;"></div><div style="display:flex;align-items:center;gap:10px;"><button id="pl" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">▶</button><button id="pa" style="display:none;background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏸</button><button id="st" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏹</button><span id="td" style="margin-left:auto;font-size:14px;color:rgba(255,255,255,0.8);font-family:monospace;">0:00/0:00</span></div></div></div><div id="doc-mini" style="display:none;position:fixed;bottom:30px;right:30px;background:rgba(212,175,55,0.95);border-radius:50%;width:80px;height:80px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,0.5);z-index:200001;transition:transform 0.2s;" onclick="document.getElementById('doc-mini').style.display='none';document.getElementById('doc-pop').style.display='block';console.log('✅ 복원');"><span style="font-size:40px;">🎧</span></div>`;
+const h=`<div id="doc-pop" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:200000;"><div onclick="window.closeDoc()" style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);"></div><div style="position:absolute;top:50%;right:80px;transform:translateY(-50%);width:400px;max-height:80vh;background:rgba(20,20,20,0.95);border:3px solid rgba(212,175,55,0.8);border-radius:15px;padding:30px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8);"><button onclick="window.closeDoc()" style="position:absolute;top:15px;right:15px;background:rgba(212,175,55,0.8);border:none;border-radius:50%;width:35px;height:35px;font-size:20px;color:white;cursor:pointer;">✕</button><div style="text-align:center;margin-bottom:25px;"><img src="images/author_profile_012.jpg" style="width:150px;height:150px;border-radius:15px;border:4px solid rgba(212,175,55,0.8);object-fit:cover;margin-bottom:10px;"><h3 style="font-size:18px;color:rgba(212,175,55,1);margin:0;">강종진 작가</h3></div><div style="margin-bottom:25px;"><h2 id="doc-t" style="font-size:24px;color:#fff;margin:0 0 15px 0;text-align:center;"></h2><div id="doc-d" style="font-size:15px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-line;max-height:200px;overflow-y:auto;"></div></div><button id="listen" style="width:100%;padding:15px;background:linear-gradient(135deg,rgba(212,175,55,0.9),rgba(180,150,40,0.9));border:none;border-radius:8px;color:white;font-size:18px;font-weight:bold;cursor:pointer;margin-bottom:20px;">🎧 해설 듣기</button><div id="ac" style="display:none;background:rgba(30,30,30,0.8);border-radius:8px;padding:15px;"><audio id="da"></audio><div style="margin-bottom:15px;"><input type="range" id="pb" min="0" max="100" value="0" style="width:100%;height:8px;cursor:pointer;"></div><div style="display:flex;align-items:center;gap:10px;"><button id="pl" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">▶</button><button id="pa" style="display:none;background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏸</button><button id="st" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏹</button><span id="td" style="margin-left:auto;font-size:14px;color:rgba(255,255,255,0.8);font-family:monospace;">0:00/0:00</span></div></div></div></div>`;
 document.body.insertAdjacentHTML('beforeend',h);
 p=document.getElementById('doc-pop');
 a=document.getElementById('da');
@@ -1420,26 +1420,6 @@ document.getElementById('st').onclick=()=>{a.pause();a.currentTime=0;document.ge
 a.ontimeupdate=()=>{if(a.duration){document.getElementById('pb').value=(a.currentTime/a.duration)*100;const f=s=>Math.floor(s/60)+':'+(Math.floor(s%60)<10?'0':'')+Math.floor(s%60);document.getElementById('td').textContent=f(a.currentTime)+'/'+f(a.duration);}};
 document.getElementById('pb').oninput=function(){if(a.duration)a.currentTime=(this.value/100)*a.duration;};
 a.onended=()=>{document.getElementById('pa').style.display='none';document.getElementById('pl').style.display='inline-block';document.getElementById('pb').value=0;};
-let isDragging=false,dragStartX,dragStartY,popupStartLeft,popupStartTop;
-const dragHeader=document.getElementById('doc-drag-header');
-if(dragHeader){
-dragHeader.onmousedown=function(e){
-if(e.target.tagName==='BUTTON'||e.target.closest('button')||e.target.tagName==='INPUT'||e.target.closest('#ac'))return;
-isDragging=true;
-const rect=p.getBoundingClientRect();
-dragStartX=e.clientX;dragStartY=e.clientY;popupStartLeft=rect.left;popupStartTop=rect.top;
-p.style.transform='none';p.style.left=popupStartLeft+'px';p.style.top=popupStartTop+'px';
-e.preventDefault();
-};
-document.onmouseleave=function(){isDragging=false;};document.onmousemove=function(e){if(!isDragging)return;if(!isDragging)return;
-const deltaX=e.clientX-dragStartX;
-const deltaY=e.clientY-dragStartY;
-p.style.left=(popupStartLeft+deltaX)+'px';
-p.style.top=(popupStartTop+deltaY)+'px';
-};
-document.onmouseup=function(e){isDragging=false;e.stopPropagation();};window.onmouseup=function(e){isDragging=false;e.stopPropagation();};
-}
-
 console.log('✅ 012 도슨트 생성');
 }
 window.openDoc=function(id){const d=data[id];if(!d)return;if(!p)create();document.getElementById('doc-t').textContent=d.title;document.getElementById('doc-d').textContent=d.description;a.src=d.audio;document.getElementById('ac').style.display='none';document.getElementById('pl').style.display='inline-block';document.getElementById('pa').style.display='none';document.getElementById('pb').value=0;p.style.display='block';console.log('✅ 도슨트:',id);};
@@ -1497,27 +1477,3 @@ window.addEventListener('load', function() {
   }, 3000);
 });
 
-// 드래그 해제 강화
-document.addEventListener('mouseup', function() {
-  const popup = document.getElementById('doc-pop');
-  if (popup) {
-    popup.style.cursor = 'move';
-  }
-}, true);
-
-// 도슨트 닫기 함수 (작품 더블클릭 시 호출)
-window.closeDoc=function(){
-  const popup = document.getElementById('doc-pop');
-  const mini = document.getElementById('doc-mini');
-  const audio = document.getElementById('da');
-  
-  if(audio){
-    audio.pause();
-    audio.currentTime=0;
-  }
-  
-  if(popup) popup.style.display='none';
-  if(mini) mini.style.display='none';
-  
-  console.log('✅ 도슨트 닫기');
-};
