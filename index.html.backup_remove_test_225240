@@ -14,13 +14,37 @@
             height: 100%;
         }
 /* 테스트 중앙 프레임 */
+.test-frame-center {
+  display: block !important;
+  position: fixed !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100000 !important;
+  width: 400px;
+  background: rgba(0, 0, 0, 0.95);
+  border: 3px solid rgba(212, 175, 55, 0.9);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
 
+.test-section {
+  padding: 20px;
+  text-align: center;
+  color: white;
+  font-size: 16px;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.5);
+}
 
+.test-title { background: rgba(212, 175, 55, 0.2); }
+.test-video { background: rgba(100, 100, 150, 0.3); height: 250px; }
+.test-controls { background: rgba(50, 50, 50, 0.5); border-bottom: none; }
 
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>몽골,<br><span style="font-size:35px;">푸른늑대의 후예</span> - 몽골 대자연 사진전</title>
+    <title>몽골, 푸른늑대의 후예 - 몽골 대자연 사진전</title>
     <link rel="stylesheet" href="css/style.css?v=1766740086">
     <link rel="stylesheet" href="css/popup.css">
 <style>
@@ -201,43 +225,72 @@
   }
 }
 /* 테스트 중앙 프레임 */
+.test-frame-center {
+  display: block !important;
+  position: fixed !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100000 !important;
+  width: 400px;
+  background: rgba(0, 0, 0, 0.95);
+  border: 3px solid rgba(212, 175, 55, 0.9);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
 
+.test-section {
+  padding: 20px;
+  text-align: center;
+  color: white;
+  font-size: 16px;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.5);
+}
 
+.test-title { background: rgba(212, 175, 55, 0.2); }
+.test-video { background: rgba(100, 100, 150, 0.3); height: 250px; }
+.test-controls { background: rgba(50, 50, 50, 0.5); border-bottom: none; }
 
 </style>
 </head>
 <body>
-<!-- 좌상단 프레임 -->
-<div id="permanent-top-frame" style="position:fixed;top:20px;left:20px;width:290px;background:rgba(0,0,0,0.9);border:3px solid rgba(212,175,55,0.9);border-radius:10px;z-index:9999999;display:block;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,0.8);">
-  <!-- 1. 제목 블록 -->
-  <div style="padding:15px 20px;background:rgba(212,175,55,0.15);border-bottom:2px solid rgba(212,175,55,0.5);">
-    <h1 style="font-size:38px;color:white;margin:0 0 5px 0;font-weight:700;">몽골,<br><span style="font-size:35px;">푸른늑대의 후예</span></h1>
-    <p style="font-size:18px;color:rgba(255,255,255,0.8);margin:0;font-weight:300;">다큐멘터리 '몽골' 사진가 강종진</p>
-  </div>
-  <!-- 2. 동영상 -->
-  <video src="images/guide_riding.mp4" style="width:100%;height:500px;object-fit:cover;display:block;border-bottom:2px solid rgba(212,175,55,0.5);" autoplay loop muted playsinline></video>
-  <!-- 3. 컨트롤러 -->
-  <div style="padding:12px 15px;background:rgba(0,0,0,0.6);">
-    <div style="background:rgba(50,50,50,0.5);border-radius:4px;height:4px;margin-bottom:8px;overflow:hidden;">
-      <div id="perm-progress" style="width:0%;height:100%;background:rgba(212,175,55,0.8);transition:width 0.1s;"></div>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <div>
-        <span style="font-size:11px;color:white;margin-right:8px;">인사</span>
-        <button id="perm-play" style="background:rgba(212,175,55,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;">▶</button>
-        <button id="perm-pause" style="background:rgba(212,175,55,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;display:none;">⏸</button>
-        <button id="perm-stop" style="background:rgba(100,100,100,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;">⏹</button>
-      </div>
-      <span id="perm-time" style="font-size:11px;color:white;">0:00</span>
-    </div>
-  </div>
-</div>
-<audio id="perm-audio" src="audio/greeting.mp3"></audio>
+<!-- 강제 표시 프레임 -->
+<div style="position:fixed !important; top:20px !important; left:20px !important; width:300px !important; background:rgba(0,0,0,0.95) !important; border:3px solid gold !important; z-index:999999999 !important; display:block !important;">
+  <div style="padding:15px; color:white; border-bottom:2px solid gold;">타이틀</div>
   <div style="padding:15px; color:white; height:200px; background:rgba(50,50,100,0.5);">동영상</div>
   <div style="padding:15px; color:white;">컨트롤러</div>
 </div>
 
 <!-- 3D 갤러리 좌상단 UI -->
+<div class="gallery-top-left-ui">
+  <!-- 1. 제목 블록 -->
+  <div class="title-block-right">
+    <h1 class="main-title-ui">몽골, 푸른늑대의 후예</h1>
+    <p class="subtitle-ui">다큐멘터리 '몽골' 사진가 강종진</p>
+  </div>
+
+  <!-- 2. 도슨트 동영상 -->
+  <!-- 1. 도슨트 동영상 -->
+  <video src="images/guide_riding.mp4" class="docent-video-ui" autoplay loop muted playsinline title="클릭하여 인사말 듣기"></video>
+  
+  <!-- 2. 제목 블록 -->
+  
+  <!-- 3. 인사말 플레이어 -->
+  <div class="greeting-player-fixed">
+    <div class="progress-container">
+      <input type="range" id="progress-bar-fixed" class="progress-bar" min="0" max="100" value="0">
+    </div>
+
+<!-- 우측 제목 블록 -->
+    <audio id="greeting-audio-fixed" src="audio/docent_intro.mp3"></audio>
+    <div class="player-controls">
+      <div class="player-left">
+        <span class="player-title">인사</span>
+        <button id="play-btn-fixed" class="control-btn">▶</button>
+        <button id="pause-btn-fixed" class="control-btn" style="display:none;">⏸</button>
+        <button id="stop-btn-fixed" class="control-btn">⏹</button>
+      </div>
       <span id="time-display-fixed" class="time-display">0:00</span>
     </div>
   </div>
@@ -255,7 +308,7 @@
     <!-- Loading Screen -->
     <div id="loading-screen">
         <div class="loading-content">
-            <h1 style="font-size: 42px; color: rgba(255,255,255,0.95); margin: 20px 0; text-shadow: 0 4px 12px rgba(0,0,0,0.8); font-weight: 700; letter-spacing: 2px; white-space: nowrap;">몽골,<br><span style="font-size:35px;">푸른늑대의 후예</span></h1>
+            <h1 style="font-size: 48px; color: rgba(255,255,255,0.95); margin: 20px 0; text-shadow: 0 4px 12px rgba(0,0,0,0.8); font-weight: 700;">몽골, 푸른늑대의 후예</h1>
             <p style="font-size: 24px; color: rgba(255,255,255,0.8); margin: 10px 0 30px 0; text-shadow: 0 3px 10px rgba(0,0,0,0.7); font-weight: 300;">다큐멘터리 '몽골' 사진가 강종진</p>
             <p class="loading-text" style="font-size: 18px; color: rgba(255,255,255,0.7); margin-top: 40px;">전시관을 준비하고 있습니다...</p>
             </div>
@@ -354,55 +407,10 @@
     
     <!-- Main App Script -->
 <!-- 테스트: 중앙 3칸 프레임 -->
+<div class="test-frame-center">
+  <div class="test-section test-title">타이틀 칸</div>
   <div class="test-section test-video">동영상 칸</div>
   <div class="test-section test-controls">컨트롤러 칸</div>
 </div>
-<script>
-(function() {
-  const audio = document.getElementById("perm-audio");
-  const playBtn = document.getElementById("perm-play");
-  const pauseBtn = document.getElementById("perm-pause");
-  const stopBtn = document.getElementById("perm-stop");
-  const progress = document.getElementById("perm-progress");
-  const timeDisplay = document.getElementById("perm-time");
-  
-  if (!audio || !playBtn) return;
-  
-  playBtn.addEventListener("click", () => {
-    audio.play();
-    playBtn.style.display = "none";
-    pauseBtn.style.display = "inline-block";
-  });
-  
-  pauseBtn.addEventListener("click", () => {
-    audio.pause();
-    pauseBtn.style.display = "none";
-    playBtn.style.display = "inline-block";
-  });
-  
-  stopBtn.addEventListener("click", () => {
-    audio.pause();
-    audio.currentTime = 0;
-    pauseBtn.style.display = "none";
-    playBtn.style.display = "inline-block";
-  });
-  
-  audio.addEventListener("timeupdate", () => {
-    const percent = (audio.currentTime / audio.duration) * 100;
-    progress.style.width = percent + "%";
-    const mins = Math.floor(audio.currentTime / 60);
-    const secs = Math.floor(audio.currentTime % 60);
-    const totalMins = Math.floor(audio.duration / 60);
-    const totalSecs = Math.floor(audio.duration % 60);
-    timeDisplay.textContent = mins + ":" + (secs < 10 ? "0" : "") + secs + " / " + totalMins + ":" + (totalSecs < 10 ? "0" : "") + totalSecs;
-  });
-  
-  audio.addEventListener("ended", () => {
-    pauseBtn.style.display = "none";
-    playBtn.style.display = "inline-block";
-    progress.style.width = "0%";
-  });
-})();
-</script>
 </body>
 </html>

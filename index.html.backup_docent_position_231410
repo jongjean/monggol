@@ -232,7 +232,7 @@
     </div>
   </div>
 </div>
-<audio id="perm-audio" src="audio/greeting.mp3"></audio>
+<audio id="perm-audio" src="audio/docent_intro.mp3"></audio>
   <div style="padding:15px; color:white; height:200px; background:rgba(50,50,100,0.5);">동영상</div>
   <div style="padding:15px; color:white;">컨트롤러</div>
 </div>
@@ -392,9 +392,7 @@
     progress.style.width = percent + "%";
     const mins = Math.floor(audio.currentTime / 60);
     const secs = Math.floor(audio.currentTime % 60);
-    const totalMins = Math.floor(audio.duration / 60);
-    const totalSecs = Math.floor(audio.duration % 60);
-    timeDisplay.textContent = mins + ":" + (secs < 10 ? "0" : "") + secs + " / " + totalMins + ":" + (totalSecs < 10 ? "0" : "") + totalSecs;
+    timeDisplay.textContent = mins + ":" + (secs < 10 ? "0" : "") + secs;
   });
   
   audio.addEventListener("ended", () => {
