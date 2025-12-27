@@ -1413,7 +1413,7 @@ const h=`<div id="doc-pop" style="display:none;position:fixed;top:50%;right:80px
 <button id="doc-mini-close" style="position:absolute;top:-5px;right:-5px;background:rgba(255,255,255,0.95);border:none;border-radius:50%;width:20px;height:20px;font-size:12px;color:rgba(60,60,60,1);cursor:pointer;z-index:2;line-height:1;">✕</button>
 <div id="doc-mini-icon" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;">
 <span style="font-size:32px;">🎧</span>
-<span id="doc-pause-mark" style="display:none;position:absolute;font-size:48px;color:rgba(255,255,255,0.95);font-weight:300;text-shadow:0 0 10px rgba(0,0,0,0.8);">✕</span>
+<span id="doc-pause-mark" style="display:none;position:absolute;font-size:48px;color:rgba(255,50,50,0.9);text-shadow:0 0 10px rgba(0,0,0,0.8);">✕</span>
 </div>
 </div>`;
 document.body.insertAdjacentHTML('beforeend',h);
@@ -1445,34 +1445,7 @@ p.style.top=(popupStartTop+deltaY)+'px';
 };
 document.onmouseup=function(e){isDragging=false;e.stopPropagation();};window.onmouseup=function(e){isDragging=false;e.stopPropagation();};
 }
-// 미니창 이벤트 연결
-const miniClose=document.getElementById('doc-mini-close');
-const miniIcon=document.getElementById('doc-mini-icon');
-const pauseMark=document.getElementById('doc-pause-mark');
-if(miniClose && miniIcon){
-miniClose.onclick=function(e){
-e.stopPropagation();
-document.getElementById('doc-mini').style.display='none';
-p.style.display='block';
-console.log('✅ X버튼→도슨트 복원');
-};
-miniIcon.onclick=function(){
-if(!a.src)return;
-if(a.paused){
-a.play();
-pauseMark.style.display='none';
-console.log('▶ 재생');
-}else{
-a.pause();
-pauseMark.style.display='block';
-console.log('⏸ 일시정지');
-}
-};
-a.onended=function(){
-pauseMark.style.display='none';
-};
-console.log('✅ 미니창 이벤트 연결');
-}
+
 // 미니창 이벤트 연결 const miniClose=document.getElementById('doc-mini-close'); const miniIcon=document.getElementById('doc-mini-icon'); const pauseMark=document.getElementById('doc-pause-mark'); if(miniClose && miniIcon){ miniClose.onclick=function(e){ e.stopPropagation(); document.getElementById('doc-mini').style.display='none'; p.style.display='block'; console.log('✅ X버튼→도슨트 복원'); }; miniIcon.onclick=function(){ if(!a.src)return; if(a.paused){ a.play(); pauseMark.style.display='none'; console.log('▶ 재생'); }else{ a.pause(); pauseMark.style.display='block'; console.log('⏸ 일시정지'); } }; a.onended=function(){ pauseMark.style.display='none'; }; console.log('✅ 미니창 이벤트 연결'); } 
 console.log('✅ 012 도슨트 생성');
 }
