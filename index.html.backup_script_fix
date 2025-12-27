@@ -349,30 +349,12 @@
 
 
 
-
-    <script src="js/three.min.js"></script>
-    
-
-
-
-
-
-    <script src="js/main_v16.js"></script>
-    <!-- Three.js Library -->
-    
-    <!-- Scene Script -->
-    
-    
-    <!-- Main App Script -->
-  <div class="test-section test-controls">컨트롤러 칸</div>
-</div>
-<script>
 // 최소화 기능
 (function() {
   const minimizeBtn = document.getElementById("perm-minimize-btn");
   const permVideo = document.querySelector("#permanent-top-frame video");
   let isMinimized = false;
-
+  
   if (minimizeBtn && permVideo) {
     minimizeBtn.addEventListener("click", () => {
       isMinimized = !isMinimized;
@@ -387,6 +369,44 @@
   }
 })();
 
+    <script src="js/three.min.js"></script>
+    
+
+
+
+
+// 최소화 기능
+(function() {
+  const minimizeBtn = document.getElementById("perm-minimize-btn");
+  const permVideo = document.querySelector("#permanent-top-frame video");
+  let isMinimized = false;
+  
+  if (minimizeBtn && permVideo) {
+    minimizeBtn.addEventListener("click", () => {
+      isMinimized = !isMinimized;
+      if (isMinimized) {
+        permVideo.style.display = "none";
+        minimizeBtn.textContent = "▼";
+      } else {
+        permVideo.style.display = "block";
+        minimizeBtn.textContent = "▲";
+      }
+    });
+  }
+})();
+
+    <script src="js/main_v16.js"></script>
+    <!-- Three.js Library -->
+    
+    <!-- Scene Script -->
+    
+    
+    <!-- Main App Script -->
+<!-- 테스트: 중앙 3칸 프레임 -->
+  <div class="test-section test-video">동영상 칸</div>
+  <div class="test-section test-controls">컨트롤러 칸</div>
+</div>
+<script>
 (function() {
   const audio = document.getElementById("perm-audio");
   const playBtn = document.getElementById("perm-play");
@@ -436,6 +456,25 @@
 
 
 
+// 최소화 기능
+(function() {
+  const minimizeBtn = document.getElementById("perm-minimize-btn");
+  const permVideo = document.querySelector("#permanent-top-frame video");
+  let isMinimized = false;
+  
+  if (minimizeBtn && permVideo) {
+    minimizeBtn.addEventListener("click", () => {
+      isMinimized = !isMinimized;
+      if (isMinimized) {
+        permVideo.style.display = "none";
+        minimizeBtn.textContent = "▼";
+      } else {
+        permVideo.style.display = "block";
+        minimizeBtn.textContent = "▲";
+      }
+    });
+  }
+})();
 
 </script>
 </body>

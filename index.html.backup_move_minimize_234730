@@ -217,6 +217,10 @@
   <!-- 2. 동영상 -->
   <video src="images/guide_riding.mp4" style="width:100%;height:500px;object-fit:cover;display:block;border-bottom:2px solid rgba(212,175,55,0.5);" autoplay loop muted playsinline></video>
   <!-- 3. 컨트롤러 -->
+  <!-- 최소화 버튼 -->
+  <button id="perm-minimize-btn" style="width:100%;padding:8px;background:rgba(212,175,55,0.2);border:none;border-top:1px solid rgba(212,175,55,0.3);border-bottom:2px solid rgba(212,175,55,0.5);color:rgba(255,255,255,0.7);font-size:16px;cursor:pointer;transition:background 0.2s;">
+    ▲
+  </button>
   <div style="padding:12px 15px;background:rgba(0,0,0,0.6);">
     <div style="background:rgba(50,50,50,0.5);border-radius:4px;height:4px;margin-bottom:8px;overflow:hidden;">
       <div id="perm-progress" style="width:0%;height:100%;background:rgba(212,175,55,0.8);transition:width 0.1s;"></div>
@@ -227,7 +231,6 @@
         <button id="perm-play" style="background:rgba(212,175,55,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;">▶</button>
         <button id="perm-pause" style="background:rgba(212,175,55,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;display:none;">⏸</button>
         <button id="perm-stop" style="background:rgba(100,100,100,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;">⏹</button>
-        <button id="perm-minimize-btn" style="background:transparent;border:none;color:rgba(255,255,255,0.7);font-size:14px;cursor:pointer;margin-left:40px;padding:5px;">▲</button>
       </div>
       <span id="perm-time" style="font-size:11px;color:white;">0:00</span>
     </div>
@@ -346,17 +349,51 @@
 
     <!-- Scripts -->
 
-
-
-
-
+  // 최소화 기능
+  const minimizeBtn = document.getElementById("perm-minimize-btn");
+  const permVideo = document.querySelector("#permanent-top-frame video");
+  let isMinimized = false;
+  
+  if (minimizeBtn && permVideo) {
+    minimizeBtn.addEventListener("click", () => {
+      isMinimized = !isMinimized;
+      if (isMinimized) {
+        permVideo.style.display = "none";
+        minimizeBtn.textContent = "▼";
+        minimizeBtn.style.borderTop = "2px solid rgba(212,175,55,0.5)";
+        minimizeBtn.style.borderBottom = "1px solid rgba(212,175,55,0.3)";
+      } else {
+        permVideo.style.display = "block";
+        minimizeBtn.textContent = "▲";
+        minimizeBtn.style.borderTop = "1px solid rgba(212,175,55,0.3)";
+        minimizeBtn.style.borderBottom = "2px solid rgba(212,175,55,0.5)";
+      }
+    });
+  }
     <script src="js/three.min.js"></script>
     
 
-
-
-
-
+  // 최소화 기능
+  const minimizeBtn = document.getElementById("perm-minimize-btn");
+  const permVideo = document.querySelector("#permanent-top-frame video");
+  let isMinimized = false;
+  
+  if (minimizeBtn && permVideo) {
+    minimizeBtn.addEventListener("click", () => {
+      isMinimized = !isMinimized;
+      if (isMinimized) {
+        permVideo.style.display = "none";
+        minimizeBtn.textContent = "▼";
+        minimizeBtn.style.borderTop = "2px solid rgba(212,175,55,0.5)";
+        minimizeBtn.style.borderBottom = "1px solid rgba(212,175,55,0.3)";
+      } else {
+        permVideo.style.display = "block";
+        minimizeBtn.textContent = "▲";
+        minimizeBtn.style.borderTop = "1px solid rgba(212,175,55,0.3)";
+        minimizeBtn.style.borderBottom = "2px solid rgba(212,175,55,0.5)";
+      }
+    });
+  }
     <script src="js/main_v16.js"></script>
     <!-- Three.js Library -->
     
@@ -364,29 +401,11 @@
     
     
     <!-- Main App Script -->
+<!-- 테스트: 중앙 3칸 프레임 -->
+  <div class="test-section test-video">동영상 칸</div>
   <div class="test-section test-controls">컨트롤러 칸</div>
 </div>
 <script>
-// 최소화 기능
-(function() {
-  const minimizeBtn = document.getElementById("perm-minimize-btn");
-  const permVideo = document.querySelector("#permanent-top-frame video");
-  let isMinimized = false;
-
-  if (minimizeBtn && permVideo) {
-    minimizeBtn.addEventListener("click", () => {
-      isMinimized = !isMinimized;
-      if (isMinimized) {
-        permVideo.style.display = "none";
-        minimizeBtn.textContent = "▼";
-      } else {
-        permVideo.style.display = "block";
-        minimizeBtn.textContent = "▲";
-      }
-    });
-  }
-})();
-
 (function() {
   const audio = document.getElementById("perm-audio");
   const playBtn = document.getElementById("perm-play");
@@ -433,10 +452,27 @@
   });
 })();
 
-
-
-
-
+  // 최소화 기능
+  const minimizeBtn = document.getElementById("perm-minimize-btn");
+  const permVideo = document.querySelector("#permanent-top-frame video");
+  let isMinimized = false;
+  
+  if (minimizeBtn && permVideo) {
+    minimizeBtn.addEventListener("click", () => {
+      isMinimized = !isMinimized;
+      if (isMinimized) {
+        permVideo.style.display = "none";
+        minimizeBtn.textContent = "▼";
+        minimizeBtn.style.borderTop = "2px solid rgba(212,175,55,0.5)";
+        minimizeBtn.style.borderBottom = "1px solid rgba(212,175,55,0.3)";
+      } else {
+        permVideo.style.display = "block";
+        minimizeBtn.textContent = "▲";
+        minimizeBtn.style.borderTop = "1px solid rgba(212,175,55,0.3)";
+        minimizeBtn.style.borderBottom = "2px solid rgba(212,175,55,0.5)";
+      }
+    });
+  }
 </script>
 </body>
 </html>

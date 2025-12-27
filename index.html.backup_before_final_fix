@@ -364,6 +364,8 @@
     
     
     <!-- Main App Script -->
+<!-- 테스트: 중앙 3칸 프레임 -->
+  <div class="test-section test-video">동영상 칸</div>
   <div class="test-section test-controls">컨트롤러 칸</div>
 </div>
 <script>
@@ -375,7 +377,6 @@
 
   if (minimizeBtn && permVideo) {
     minimizeBtn.addEventListener("click", () => {
-      isMinimized = !isMinimized;
       if (isMinimized) {
         permVideo.style.display = "none";
         minimizeBtn.textContent = "▼";

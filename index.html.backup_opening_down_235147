@@ -346,17 +346,51 @@
 
     <!-- Scripts -->
 
-
-
-
-
+  // 최소화 기능
+  const minimizeBtn = document.getElementById("perm-minimize-btn");
+  const permVideo = document.querySelector("#permanent-top-frame video");
+  let isMinimized = false;
+  
+  if (minimizeBtn && permVideo) {
+    minimizeBtn.addEventListener("click", () => {
+      isMinimized = !isMinimized;
+      if (isMinimized) {
+        permVideo.style.display = "none";
+        minimizeBtn.textContent = "▼";
+        minimizeBtn.style.borderTop = "2px solid rgba(212,175,55,0.5)";
+        minimizeBtn.style.borderBottom = "1px solid rgba(212,175,55,0.3)";
+      } else {
+        permVideo.style.display = "block";
+        minimizeBtn.textContent = "▲";
+        minimizeBtn.style.borderTop = "1px solid rgba(212,175,55,0.3)";
+        minimizeBtn.style.borderBottom = "2px solid rgba(212,175,55,0.5)";
+      }
+    });
+  }
     <script src="js/three.min.js"></script>
     
 
-
-
-
-
+  // 최소화 기능
+  const minimizeBtn = document.getElementById("perm-minimize-btn");
+  const permVideo = document.querySelector("#permanent-top-frame video");
+  let isMinimized = false;
+  
+  if (minimizeBtn && permVideo) {
+    minimizeBtn.addEventListener("click", () => {
+      isMinimized = !isMinimized;
+      if (isMinimized) {
+        permVideo.style.display = "none";
+        minimizeBtn.textContent = "▼";
+        minimizeBtn.style.borderTop = "2px solid rgba(212,175,55,0.5)";
+        minimizeBtn.style.borderBottom = "1px solid rgba(212,175,55,0.3)";
+      } else {
+        permVideo.style.display = "block";
+        minimizeBtn.textContent = "▲";
+        minimizeBtn.style.borderTop = "1px solid rgba(212,175,55,0.3)";
+        minimizeBtn.style.borderBottom = "2px solid rgba(212,175,55,0.5)";
+      }
+    });
+  }
     <script src="js/main_v16.js"></script>
     <!-- Three.js Library -->
     
@@ -364,29 +398,11 @@
     
     
     <!-- Main App Script -->
+<!-- 테스트: 중앙 3칸 프레임 -->
+  <div class="test-section test-video">동영상 칸</div>
   <div class="test-section test-controls">컨트롤러 칸</div>
 </div>
 <script>
-// 최소화 기능
-(function() {
-  const minimizeBtn = document.getElementById("perm-minimize-btn");
-  const permVideo = document.querySelector("#permanent-top-frame video");
-  let isMinimized = false;
-
-  if (minimizeBtn && permVideo) {
-    minimizeBtn.addEventListener("click", () => {
-      isMinimized = !isMinimized;
-      if (isMinimized) {
-        permVideo.style.display = "none";
-        minimizeBtn.textContent = "▼";
-      } else {
-        permVideo.style.display = "block";
-        minimizeBtn.textContent = "▲";
-      }
-    });
-  }
-})();
-
 (function() {
   const audio = document.getElementById("perm-audio");
   const playBtn = document.getElementById("perm-play");
@@ -433,10 +449,27 @@
   });
 })();
 
-
-
-
-
+  // 최소화 기능
+  const minimizeBtn = document.getElementById("perm-minimize-btn");
+  const permVideo = document.querySelector("#permanent-top-frame video");
+  let isMinimized = false;
+  
+  if (minimizeBtn && permVideo) {
+    minimizeBtn.addEventListener("click", () => {
+      isMinimized = !isMinimized;
+      if (isMinimized) {
+        permVideo.style.display = "none";
+        minimizeBtn.textContent = "▼";
+        minimizeBtn.style.borderTop = "2px solid rgba(212,175,55,0.5)";
+        minimizeBtn.style.borderBottom = "1px solid rgba(212,175,55,0.3)";
+      } else {
+        permVideo.style.display = "block";
+        minimizeBtn.textContent = "▲";
+        minimizeBtn.style.borderTop = "1px solid rgba(212,175,55,0.3)";
+        minimizeBtn.style.borderBottom = "2px solid rgba(212,175,55,0.5)";
+      }
+    });
+  }
 </script>
 </body>
 </html>
