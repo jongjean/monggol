@@ -1409,7 +1409,40 @@ const data={'012':{title:'한 때 한 곳을 스쳐간 사계',description:`검�
 let p=null,a=null;
 function create(){
 if(p)return;
-const h=`<div id="doc-pop" style="display:none;position:fixed;top:50%;right:80px;transform:translateY(-50%);z-index:200000;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px) brightness(0.7);width:400px;max-height:80vh;background:rgba(20,20,20,0.95);cursor:move;box-shadow:0 10px 40px rgba(0,0,0,0.8);border:3px solid rgba(212,175,55,0.8);border-radius:15px;padding:30px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8);"><div id="doc-drag-header" style="position:absolute;top:0;left:0;right:0;height:50px;cursor:move;z-index:0;"></div><button onclick="document.getElementById('doc-pop').style.display='none';document.getElementById('doc-mini').style.display='block';console.log('✅ 최소화');" style="position:absolute;top:15px;right:15px;background:rgba(212,175,55,0.8);border:none;border-radius:50%;width:35px;height:35px;font-size:20px;color:white;cursor:pointer;">−</button><div style="text-align:center;margin-bottom:25px;"><img src="images/author_profile_012.jpg" style="width:150px;height:150px;border-radius:15px;border:4px solid rgba(212,175,55,0.8);object-fit:cover;margin-bottom:10px;"><h3 style="font-size:18px;color:rgba(212,175,55,1);margin:0;">강종진 작가</h3></div><div style="margin-bottom:25px;"><h2 id="doc-t" style="font-size:24px;color:#fff;margin:0 0 15px 0;text-align:center;"></h2><div id="doc-d" style="font-size:15px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-line;max-height:200px;overflow-y:auto;"></div></div><button id="listen" style="width:100%;padding:15px;background:linear-gradient(135deg,rgba(212,175,55,0.9),rgba(180,150,40,0.9));border:none;border-radius:8px;color:white;font-size:18px;font-weight:bold;cursor:pointer;margin-bottom:20px;">🎧 해설 듣기</button><div id="ac" style="display:none;background:rgba(30,30,30,0.8);border-radius:8px;padding:15px;"><audio id="da"></audio><div style="margin-bottom:15px;"><input type="range" id="pb" min="0" max="100" value="0" style="width:100%;height:8px;cursor:pointer;"></div><div style="display:flex;align-items:center;gap:10px;"><button id="pl" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">▶</button><button id="pa" style="display:none;background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏸</button><button id="st" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏹</button><span id="td" style="margin-left:auto;font-size:14px;color:rgba(255,255,255,0.8);font-family:monospace;">0:00/0:00</span></div></div></div><div id="doc-mini" style="display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(212,175,55,0.95);border-radius:50%;width:80px;height:80px;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,0.5);z-index:200001;transition:transform 0.2s;" onclick="document.getElementById('doc-mini').style.display='none';document.getElementById('doc-pop').style.display='block';console.log('✅ 복원');"><span style="font-size:40px;">🎧</span></div>`;
+const h=`<div id="doc-pop" style="display:none;position:fixed;top:50%;right:80px;transform:translateY(-50%);z-index:200000;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px) brightness(0.7);width:400px;max-height:80vh;">
+<div style="background:rgba(20,20,20,0.95);cursor:move;box-shadow:0 10px 40px rgba(0,0,0,0.8);border:3px solid rgba(212,175,55,0.8);border-radius:15px;padding:30px;overflow-y:auto;">
+<div id="doc-drag-header" style="position:absolute;top:0;left:0;right:0;height:50px;cursor:move;z-index:0;"></div>
+<button onclick="document.getElementById('doc-pop').style.display='none';document.getElementById('doc-mini').style.display='block';console.log('✅ 최소화');" style="position:absolute;top:15px;right:15px;background:rgba(212,175,55,0.8);border:none;border-radius:50%;width:35px;height:35px;font-size:20px;color:white;cursor:pointer;z-index:10;">−</button>
+<div style="text-align:center;margin-bottom:25px;">
+<img src="images/author_profile_012.jpg" style="width:150px;height:150px;border-radius:15px;border:4px solid rgba(212,175,55,0.8);object-fit:cover;margin-bottom:10px;">
+<h3 style="font-size:18px;color:rgba(212,175,55,1);margin:0;">강종진 작가</h3>
+</div>
+<div style="margin-bottom:25px;">
+<h2 id="doc-t" style="font-size:24px;color:#fff;margin:0 0 15px 0;text-align:center;"></h2>
+<div id="doc-d" style="font-size:15px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-line;max-height:200px;overflow-y:auto;"></div>
+</div>
+<button id="listen" style="width:100%;padding:15px;background:linear-gradient(135deg,rgba(212,175,55,0.9),rgba(180,150,40,0.9));border:none;border-radius:8px;color:white;font-size:18px;font-weight:bold;cursor:pointer;margin-bottom:20px;">🎧 해설 듣기</button>
+<div id="ac" style="display:none;background:rgba(30,30,30,0.8);border-radius:8px;padding:15px;">
+<audio id="da"></audio>
+<div style="margin-bottom:15px;">
+<input type="range" id="pb" min="0" max="100" value="0" style="width:100%;height:8px;cursor:pointer;">
+</div>
+<div style="display:flex;align-items:center;gap:10px;">
+<button id="pl" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">▶</button>
+<button id="pa" style="display:none;background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏸</button>
+<button id="st" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏹</button>
+<span id="td" style="margin-left:auto;font-size:14px;color:rgba(255,255,255,0.8);font-family:monospace;">0:00/0:00</span>
+</div>
+</div>
+</div>
+</div>
+<div id="doc-mini" style="display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(212,175,55,0.95);border-radius:50%;width:80px;height:80px;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,0.5);z-index:200001;">
+<button id="doc-mini-close" style="position:absolute;top:-5px;right:-5px;background:rgba(255,50,50,0.9);border:none;border-radius:50%;width:20px;height:20px;font-size:12px;color:white;cursor:pointer;z-index:2;">✕</button>
+<div id="doc-mini-icon" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;">
+<span style="font-size:40px;">🎧</span>
+<span id="doc-pause-mark" style="display:none;position:absolute;font-size:60px;color:rgba(255,50,50,0.9);text-shadow:0 0 10px rgba(0,0,0,0.8);">✕</span>
+</div>
+</div>`;
 document.body.insertAdjacentHTML('beforeend',h);
 p=document.getElementById('doc-pop');
 a=document.getElementById('da');
@@ -1521,3 +1554,100 @@ window.closeDoc=function(){
   
   console.log('✅ 도슨트 닫기');
 };
+
+// 미니창 이벤트 핸들러 추가
+(function() {
+  setTimeout(() => {
+    const miniClose = document.getElementById('doc-mini-close');
+    const miniIcon = document.getElementById('doc-mini-icon');
+    const pauseMark = document.getElementById('doc-pause-mark');
+    const audio = document.getElementById('da');
+    const mini = document.getElementById('doc-mini');
+    const popup = document.getElementById('doc-pop');
+    
+    if (!miniClose || !miniIcon || !audio) return;
+    
+    // X버튼 클릭 → 미니창 닫고 도슨트 열기
+    miniClose.addEventListener('click', function(e) {
+      e.stopPropagation();
+      mini.style.display = 'none';
+      popup.style.display = 'block';
+      console.log('✅ 미니창 X버튼 → 도슨트 복원');
+    });
+    
+    // 미니창 아이콘 클릭 → 재생/일시정지 토글
+    miniIcon.addEventListener('click', function(e) {
+      if (!audio.src) return;
+      
+      if (audio.paused) {
+        // 재생
+        audio.play();
+        pauseMark.style.display = 'none';
+        console.log('🎧 재생');
+      } else {
+        // 일시정지
+        audio.pause();
+        pauseMark.style.display = 'block';
+        console.log('⏸ 일시정지');
+      }
+    });
+    
+    // 오디오 종료 시 X 마크 숨김
+    audio.addEventListener('ended', function() {
+      pauseMark.style.display = 'none';
+      console.log('✅ 재생 완료');
+    });
+    
+    console.log('✅ 미니창 컨트롤 활성화');
+  }, 3000);
+})();
+
+
+// 미니창 컨트롤 이벤트 핸들러
+(function() {
+  setTimeout(() => {
+    const miniClose = document.getElementById('doc-mini-close');
+    const miniIcon = document.getElementById('doc-mini-icon');
+    const pauseMark = document.getElementById('doc-pause-mark');
+    const audio = document.getElementById('da');
+    const mini = document.getElementById('doc-mini');
+    const popup = document.getElementById('doc-pop');
+    
+    if (!miniClose || !miniIcon || !audio) {
+      console.log('❌ 미니창 요소 없음');
+      return;
+    }
+    
+    // X버튼: 미니창 닫고 도슨트 복원
+    miniClose.addEventListener('click', function(e) {
+      e.stopPropagation();
+      mini.style.display = 'none';
+      popup.style.display = 'block';
+      console.log('✅ 미니창 X → 도슨트 복원');
+    });
+    
+    // 미니창 아이콘: 재생/일시정지 토글
+    miniIcon.addEventListener('click', function(e) {
+      if (!audio.src) return;
+      
+      if (audio.paused) {
+        audio.play();
+        pauseMark.style.display = 'none';
+        console.log('▶ 재생');
+      } else {
+        audio.pause();
+        pauseMark.style.display = 'block';
+        console.log('⏸ 일시정지');
+      }
+    });
+    
+    // 오디오 종료 시
+    audio.addEventListener('ended', function() {
+      pauseMark.style.display = 'none';
+      console.log('✅ 재생 완료');
+    });
+    
+    console.log('✅ 미니창 컨트롤 활성화');
+  }, 3000);
+})();
+

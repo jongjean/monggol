@@ -1521,3 +1521,51 @@ window.closeDoc=function(){
   
   console.log('✅ 도슨트 닫기');
 };
+
+// 미니창 이벤트 핸들러 추가
+(function() {
+  setTimeout(() => {
+    const miniClose = document.getElementById('doc-mini-close');
+    const miniIcon = document.getElementById('doc-mini-icon');
+    const pauseMark = document.getElementById('doc-pause-mark');
+    const audio = document.getElementById('da');
+    const mini = document.getElementById('doc-mini');
+    const popup = document.getElementById('doc-pop');
+    
+    if (!miniClose || !miniIcon || !audio) return;
+    
+    // X버튼 클릭 → 미니창 닫고 도슨트 열기
+    miniClose.addEventListener('click', function(e) {
+      e.stopPropagation();
+      mini.style.display = 'none';
+      popup.style.display = 'block';
+      console.log('✅ 미니창 X버튼 → 도슨트 복원');
+    });
+    
+    // 미니창 아이콘 클릭 → 재생/일시정지 토글
+    miniIcon.addEventListener('click', function(e) {
+      if (!audio.src) return;
+      
+      if (audio.paused) {
+        // 재생
+        audio.play();
+        pauseMark.style.display = 'none';
+        console.log('🎧 재생');
+      } else {
+        // 일시정지
+        audio.pause();
+        pauseMark.style.display = 'block';
+        console.log('⏸ 일시정지');
+      }
+    });
+    
+    // 오디오 종료 시 X 마크 숨김
+    audio.addEventListener('ended', function() {
+      pauseMark.style.display = 'none';
+      console.log('✅ 재생 완료');
+    });
+    
+    console.log('✅ 미니창 컨트롤 활성화');
+  }, 3000);
+})();
+
