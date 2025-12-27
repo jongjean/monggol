@@ -131,10 +131,6 @@ function initThreeJS() {
         const imagePath = `images/artworks/${imgNum}.jpg`;
         artworkData[i] = imagePath;
         if (imgNum === "012") frameGroup.userData.artworkId = "012";
-        if (imgNum === "005") frameGroup.userData.artworkId = "005";
-        if (imgNum === "009") frameGroup.userData.artworkId = "009";
-        if (imgNum === "025") frameGroup.userData.artworkId = "025";
-        if (imgNum === "019") frameGroup.userData.artworkId = "019";
 
         const loader = new THREE.TextureLoader();
         loader.load(imagePath, (texture) => {
@@ -176,98 +172,6 @@ function initThreeJS() {
             frameGroup.add(sprite);
             
             console.log('✅ 012번 스피커 아이콘 추가');
-        // 005번 작품에 스피커 아이콘 추가
-        if (imgNum === "005") {
-            const canvas = document.createElement('canvas');
-            canvas.width = 128;
-            canvas.height = 128;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = 'rgba(212, 175, 55, 0.9)';
-            ctx.beginPath();
-            ctx.arc(64, 64, 60, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.font = 'bold 80px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = 'white';
-            ctx.fillText('🔊', 64, 64);
-            const texture = new THREE.CanvasTexture(canvas);
-            const material = new THREE.SpriteMaterial({ map: texture });
-            const sprite = new THREE.Sprite(material);
-            sprite.scale.set(0.5, 0.5, 1);
-            sprite.position.set(0, 1.3, 0);
-            frameGroup.add(sprite);
-            console.log('✅ 005번 스피커 아이콘 추가');
-        }
-        // 009번 작품에 스피커 아이콘 추가
-        if (imgNum === "009") {
-            const canvas = document.createElement('canvas');
-            canvas.width = 128;
-            canvas.height = 128;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = 'rgba(212, 175, 55, 0.9)';
-            ctx.beginPath();
-            ctx.arc(64, 64, 60, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.font = 'bold 80px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = 'white';
-            ctx.fillText('🔊', 64, 64);
-            const texture = new THREE.CanvasTexture(canvas);
-            const material = new THREE.SpriteMaterial({ map: texture });
-            const sprite = new THREE.Sprite(material);
-            sprite.scale.set(0.5, 0.5, 1);
-            sprite.position.set(0, 1.3, 0);
-            frameGroup.add(sprite);
-            console.log('✅ 009번 스피커 아이콘 추가');
-        }
-        // 025번 작품에 스피커 아이콘 추가
-        if (imgNum === "025") {
-            const canvas = document.createElement('canvas');
-            canvas.width = 128;
-            canvas.height = 128;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = 'rgba(212, 175, 55, 0.9)';
-            ctx.beginPath();
-            ctx.arc(64, 64, 60, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.font = 'bold 80px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = 'white';
-            ctx.fillText('🔊', 64, 64);
-            const texture = new THREE.CanvasTexture(canvas);
-            const material = new THREE.SpriteMaterial({ map: texture });
-            const sprite = new THREE.Sprite(material);
-            sprite.scale.set(0.5, 0.5, 1);
-            sprite.position.set(0, 1.3, 0);
-            frameGroup.add(sprite);
-            console.log('✅ 025번 스피커 아이콘 추가');
-        }
-        // 019번 작품에 스피커 아이콘 추가
-        if (imgNum === "019") {
-            const canvas = document.createElement('canvas');
-            canvas.width = 128;
-            canvas.height = 128;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = 'rgba(212, 175, 55, 0.9)';
-            ctx.beginPath();
-            ctx.arc(64, 64, 60, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.font = 'bold 80px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = 'white';
-            ctx.fillText('🔊', 64, 64);
-            const texture = new THREE.CanvasTexture(canvas);
-            const material = new THREE.SpriteMaterial({ map: texture });
-            const sprite = new THREE.Sprite(material);
-            sprite.scale.set(0.5, 0.5, 1);
-            sprite.position.set(0, 1.3, 0);
-            frameGroup.add(sprite);
-            console.log('✅ 019번 스피커 아이콘 추가');
-        }
         }
         artworks.push(frameGroup);
     }
@@ -1512,24 +1416,24 @@ const artworkData = {
 // ==================== 012번 작품 더블클릭 연결 ====================
 (function(){
 const data={'012':{title:'한 때 한 곳을 스쳐간 사계',description:`검푸르게 화창하던 하늘에서 산을 하나 넘어서자
-갑자기 눈보라가 휘몰아쳤다.
-바람이 너무도 세 눈이 수평으로 내렸다.
-흠칫 순간 무엇인가 지나가는 가 했더니
-눈보라 속을 무서운 속도로 질주하는
-징키스칸의 후예가 있었다.
-미처 카메라를 대지 못할 정도로
-눈 깜짝할 새 눈보라 속으로 사라졌다.
+갑자기 눈보라가 휘몰아쳤다. 
+바람이 너무도 세 눈이 수평으로 내렸다. 
+흠칫 순간 무엇인가 지나가는 가 했더니 
+눈보라 속을 무서운 속도로 질주하는 
+징키스칸의 후예가 있었다. 
+미처 카메라를 대지 못할 정도로 
+눈 깜짝할 새 눈보라 속으로 사라졌다. 
 셔터를 누르지 못한 것이 너무도 안타까웠다.
 
 한참 후 그가 눈보라 속에서 모습을 드러냈다.
-백여 마리의 양떼를 이끌고 돌아오고 있었다.
-갑자기 몰아친 눈보라에
-양떼들이 휩쓸려 가는 것을 구하기 위해
-전속력으로 달려갔던 것이었다.`,audio:'audio/artwork_012_commentary.mp3'},'005':{title:'야생마 생포작전',description:`지평선 위로 먼지구름이 일고 있었다. 자세히 보니 무서운 속도로 질주하는 말들이었다. 언뜻 말 탄 사람도 보였다. 우리는 핸들을 돌려 가까이 가보기로 하였다. 로프를 휘두르며 야생마를 쫓는 유목민 청년이 보였다. 말과 사람이 하나가 되어 초원을 가로지르는 모습이 마치 영화 속 한 장면 같았다. 자연다큐멘터리에서나 보던 마상쇼와 로데오가 눈앞에 펼쳐지고 있었다. 칭기즈 칸의 후예, 그 순박함 속의 용맹을 보았다. 카메라를 들고 달려가 셔터를 눌렀다. 먼지 속으로 사라지는 그들의 뒷모습이 한참 동안 잊혀지지 않았다.`,audio:'audio/docent_005.mp3'},'009':{title:'유목민의 이사',description:`푸른 호수가 보이는 초원에 낙타 행렬이 지나가고 있었다. 등에 가득 실린 것은 게르의 뼈대와 천, 그리고 살림살이 전부였다. 몽골의 유목민은 계절을 따라 일년에 많게는 30번까지도 이사를 한다. 그들에게 보금자리란 없다. 언제든지 낙타의 등에 싣고 떠날 수 있는 게르가 전부다. 하늘의 정기를 듬뿍 받으며 옹기종기 모여 사는 그들. 느릿느릿 걸어가는 낙타의 발걸음처럼 그들의 삶도 서두르지 않는다. 가축들과 함께 물과 풀을 따라 이동하는 그들의 모습에서 진정한 자유를 보았다.`,audio:'audio/docent_009.mp3'},'025':{title:'졸업을 맞은 몽골의 어린이들',description:`학교앞 길목에 아이들이 모여 있었다. 졸업식을 마치고 나온 아이들이 카메라를 보더니 일제히 환하게 웃었다. 천진함과 순수함이 개구쟁이들의 얼굴에 하나 가득 젖어있었다. "찍어주세요!" 브이자를 하고, 손을 흔들고, 서로 어깨동무를 한 채 웃는 아이들. 까르르 소리 내며 손을 흔들고 환하게 웃던 그 아이들이 내 아들처럼 사랑스러웠다. 카메라를 내리고도 한참을 바라보았다. 저 아이들이 자라 어른이 되면 이 초원을 어떻게 가꾸어갈까.`,audio:'audio/docent_025.mp3'},'019':{title:'동화속의 부족 차탄족 사람들',description:`몽골 북부 깊은 숲속에 차탄족이 살고 있다는 소문을 들었다. 협곡 지대 수심이 200미터나 된다는 얼어붙은 헙스걸 호수위를 14시간 동안 목숨걸고 달려 러시아 국경지역에 다 달았다. 타이가 지대 깊은 숲속 차탄족을 만나기 위해서다. 어릴 때부터 순록을 타고 자라며 순록과 함께 생활하는 그들은 순록의 먹이를 따라 이동한다. 러시아에서 몽골까지 숲과 산맥을 터전으로 살아가는 차탄족은 200명 남짓한 몽골의 소수 민족이다. 카메라를 들고 갑자기 나타난 이방인들을 차탄족 가족이 바짝 경계를 하면서도 오르츠 밖으로 삐죽 고개를 내밀고는 나를 보며 수줍게 웃었다. 그들의 삶이 동화 속 한 장면 같았다.`,audio:'audio/docent_019.mp3'}};
+백여 마리의 양떼를 이끌고 돌아오고 있었다. 
+갑자기 몰아친 눈보라에 
+양떼들이 휩쓸려 가는 것을 구하기 위해 
+전속력으로 달려갔던 것이었다.`,audio:'audio/artwork_012_commentary.mp3'}};
 let p=null,a=null;
 function create(){
 if(p)return;
-const h=`<div id="doc-pop" style="display:none;position:fixed;top:50%;right:80px;transform:translateY(-50%);z-index:200000;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px) brightness(0.7);width:400px;max-height:80vh;background:rgba(20,20,20,0.95);cursor:move;box-shadow:0 10px 40px rgba(0,0,0,0.8);border:3px solid rgba(212,175,55,0.8);border-radius:15px;padding:30px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8);"><div id="doc-drag-header" style="position:absolute;top:0;left:0;right:0;height:50px;cursor:move;z-index:0;"></div><button onclick="document.getElementById('doc-pop').style.display='none';document.getElementById('doc-mini').style.display='block';const pm=document.getElementById('doc-pause-mark');const da=document.getElementById('da');if(pm&&da){pm.style.display=(da.paused||!da.src)?'block':'none';}console.log('✅ 최소화');" style="position:absolute;top:15px;right:15px;background:rgba(212,175,55,0.8);border:none;border-radius:50%;width:35px;height:35px;font-size:20px;color:white;cursor:pointer;">−</button><div style="text-align:center;margin-bottom:25px;"><img id="doc-profile-img" src="images/author_profile_012.jpg" style="width:150px;height:150px;border-radius:15px;border:4px solid rgba(212,175,55,0.8);object-fit:cover;margin-bottom:10px;"><h3 style="font-size:18px;color:rgba(212,175,55,1);margin:0;">강종진 작가</h3></div><div style="margin-bottom:25px;"><h2 id="doc-t" style="font-size:24px;color:#fff;margin:0 0 15px 0;text-align:center;"></h2><div id="doc-d" style="font-size:15px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-line;max-height:200px;overflow-y:auto;"></div></div><button id="listen" style="width:100%;padding:15px;background:linear-gradient(135deg,rgba(212,175,55,0.9),rgba(180,150,40,0.9));border:none;border-radius:8px;color:white;font-size:18px;font-weight:bold;cursor:pointer;margin-bottom:20px;">🎧 해설 듣기</button><div id="ac" style="display:none;background:rgba(30,30,30,0.8);border-radius:8px;padding:15px;"><audio id="da"></audio><div style="margin-bottom:15px;"><input type="range" id="pb" min="0" max="100" value="0" style="width:100%;height:8px;cursor:pointer;"></div><div style="display:flex;align-items:center;gap:10px;"><button id="pl" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">▶</button><button id="pa" style="display:none;background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏸</button><button id="st" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏹</button><span id="td" style="margin-left:auto;font-size:14px;color:rgba(255,255,255,0.8);font-family:monospace;">0:00/0:00</span></div></div></div><div id="doc-mini" style="display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(212,175,55,0.95);border-radius:50%;width:60px;height:60px;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,0.5);z-index:200001;">
+const h=`<div id="doc-pop" style="display:none;position:fixed;top:50%;right:80px;transform:translateY(-50%);z-index:200000;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px) brightness(0.7);width:400px;max-height:80vh;background:rgba(20,20,20,0.95);cursor:move;box-shadow:0 10px 40px rgba(0,0,0,0.8);border:3px solid rgba(212,175,55,0.8);border-radius:15px;padding:30px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8);"><div id="doc-drag-header" style="position:absolute;top:0;left:0;right:0;height:50px;cursor:move;z-index:0;"></div><button onclick="document.getElementById('doc-pop').style.display='none';document.getElementById('doc-mini').style.display='block';const pm=document.getElementById('doc-pause-mark');const da=document.getElementById('da');if(pm&&da){pm.style.display=(da.paused||!da.src)?'block':'none';}console.log('✅ 최소화');" style="position:absolute;top:15px;right:15px;background:rgba(212,175,55,0.8);border:none;border-radius:50%;width:35px;height:35px;font-size:20px;color:white;cursor:pointer;">−</button><div style="text-align:center;margin-bottom:25px;"><img src="images/author_profile_012.jpg" style="width:150px;height:150px;border-radius:15px;border:4px solid rgba(212,175,55,0.8);object-fit:cover;margin-bottom:10px;"><h3 style="font-size:18px;color:rgba(212,175,55,1);margin:0;">강종진 작가</h3></div><div style="margin-bottom:25px;"><h2 id="doc-t" style="font-size:24px;color:#fff;margin:0 0 15px 0;text-align:center;"></h2><div id="doc-d" style="font-size:15px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-line;max-height:200px;overflow-y:auto;"></div></div><button id="listen" style="width:100%;padding:15px;background:linear-gradient(135deg,rgba(212,175,55,0.9),rgba(180,150,40,0.9));border:none;border-radius:8px;color:white;font-size:18px;font-weight:bold;cursor:pointer;margin-bottom:20px;">🎧 해설 듣기</button><div id="ac" style="display:none;background:rgba(30,30,30,0.8);border-radius:8px;padding:15px;"><audio id="da"></audio><div style="margin-bottom:15px;"><input type="range" id="pb" min="0" max="100" value="0" style="width:100%;height:8px;cursor:pointer;"></div><div style="display:flex;align-items:center;gap:10px;"><button id="pl" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">▶</button><button id="pa" style="display:none;background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏸</button><button id="st" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏹</button><span id="td" style="margin-left:auto;font-size:14px;color:rgba(255,255,255,0.8);font-family:monospace;">0:00/0:00</span></div></div></div><div id="doc-mini" style="display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(212,175,55,0.95);border-radius:50%;width:60px;height:60px;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,0.5);z-index:200001;">
 <button id="doc-mini-close" style="position:absolute;top:-5px;right:-5px;background:rgba(255,255,255,0.95);border:none;border-radius:50%;width:20px;height:20px;font-size:12px;color:rgba(60,60,60,1);cursor:pointer;z-index:2;line-height:1;">✕</button>
 <div id="doc-mini-icon" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;">
 <span style="font-size:32px;">🎧</span>
@@ -1605,10 +1509,10 @@ const closeBtn=document.createElement('button'); closeBtn.id='artwork-close-btn'
     
 console.log('✅ 012 도슨트 생성');
 }
-window.openDoc=function(id){const d=data[id];if(!d)return;if(!p)create();document.getElementById('doc-t').textContent=d.title;document.getElementById('doc-d').textContent=d.description;a.src=d.audio;const profileImg=document.getElementById('doc-profile-img');if(profileImg)profileImg.src='images/author_profile_'+id+'.jpg';document.getElementById('ac').style.display='none';document.getElementById('pl').style.display='inline-block';document.getElementById('pa').style.display='none';document.getElementById('pb').value=0;p.style.display='block';const cb=document.getElementById('artwork-close-btn');if(cb)cb.style.display='block';console.log('✅ 도슨트:',id);};
+window.openDoc=function(id){const d=data[id];if(!d)return;if(!p)create();document.getElementById('doc-t').textContent=d.title;document.getElementById('doc-d').textContent=d.description;a.src=d.audio;document.getElementById('ac').style.display='none';document.getElementById('pl').style.display='inline-block';document.getElementById('pa').style.display='none';document.getElementById('pb').value=0;p.style.display='block';const cb=document.getElementById('artwork-close-btn');if(cb)cb.style.display='block';console.log('✅ 도슨트:',id);};
 window.closeDoc=function(){if(a){a.pause();a.currentTime=0;}if(p)p.style.display='none';};
 const c=document.querySelector('canvas');
-if(c){let lt=0;c.addEventListener('click',e=>{const n=Date.now();if(n-lt<300){const m={x:(e.clientX/window.innerWidth)*2-1,y:-(e.clientY/window.innerHeight)*2+1};if(window.raycaster&&window.camera&&window.scene){window.raycaster.setFromCamera(m,window.camera);const i=window.raycaster.intersectObjects(window.scene.children,true);for(let j=0;j<i.length;j++){const o=i[j].object;if(o.userData&&o.userData.artworkId){console.log('🎨더블클릭:',o.userData.artworkId);if(o.userData.artworkId==='012')window.openDoc('012');if(o.userData.artworkId==='005')window.openDoc('005');if(o.userData.artworkId==='009')window.openDoc('009');if(o.userData.artworkId==='025')window.openDoc('025');if(o.userData.artworkId==='019')window.openDoc('019');break;}}}}lt=n;});console.log('✅ 012 더블클릭 연결');}
+if(c){let lt=0;c.addEventListener('click',e=>{const n=Date.now();if(n-lt<300){const m={x:(e.clientX/window.innerWidth)*2-1,y:-(e.clientY/window.innerHeight)*2+1};if(window.raycaster&&window.camera&&window.scene){window.raycaster.setFromCamera(m,window.camera);const i=window.raycaster.intersectObjects(window.scene.children,true);for(let j=0;j<i.length;j++){const o=i[j].object;if(o.userData&&o.userData.artworkId){console.log('🎨더블클릭:',o.userData.artworkId);if(o.userData.artworkId==='012')window.openDoc('012');break;}}}}lt=n;});console.log('✅ 012 더블클릭 연결');}
 })();
 
 
