@@ -233,6 +233,7 @@
 <audio id="perm-audio" src="audio/greeting.mp3"></audio>
 
 <!-- 3D 갤러리 좌상단 UI -->
+      <span id="time-display-fixed" class="time-display">0:00</span>
     </div>
   </div>
 </div>

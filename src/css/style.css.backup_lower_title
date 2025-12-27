@@ -261,7 +261,6 @@ body {
     height: 100%;
     background: rgba(0,0,0,0.9);
     backdrop-filter: blur(10px);
-    pointer-events: none;
 }
 
 .popup-content {
@@ -289,8 +288,8 @@ body {
 
 .close-btn {
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 1rem;
+    right: 1rem;
     background: var(--gold);
     color: #000;
     border: none;
@@ -814,7 +813,7 @@ h1 {
 #opening-scene {
   display: flex !important;
   justify-content: center !important;
-  align-items: center;
+  align-items: center !important;
 }
 
 #opening-scene .opening-content {
@@ -822,8 +821,7 @@ h1 {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  gap: 20px !important;
-  margin-top: 90px !important;
+  gap: 30px !important;
 }
 
 .title-sub {
@@ -859,7 +857,7 @@ h1 {
 #opening-scene {
   display: flex !important;
   justify-content: center !important;
-  align-items: center;
+  align-items: center !important;
 }
 
 #opening-scene .opening-content {
@@ -867,8 +865,7 @@ h1 {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  gap: 20px !important;
-  margin-top: 90px !important;
+  gap: 30px !important;
 }
 
 .title-sub {

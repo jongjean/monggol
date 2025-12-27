@@ -1583,12 +1583,6 @@ e.preventDefault();
 dragHeader.ontouchend=function(){
 isDragging=false;
 };
-const docText=document.getElementById('doc-d');
-if(docText){
-docText.addEventListener('touchstart',function(){
-isDragging=false;
-},false);
-}
 document.onmouseleave=function(){isDragging=false;};
 document.onmousemove=function(e){
 if(!isDragging)return;

@@ -206,7 +206,7 @@
 </head>
 <body>
 <!-- 좌상단 프레임 -->
-<div id="permanent-top-frame" style="position:fixed;top:20px;left:20px;width:290px;background:rgba(0,0,0,0.9);border:3px solid rgba(212,175,55,0.9);border-radius:10px;z-index:9999999;display:block;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,0.8);">
+<div id="permanent-top-frame" style="position:fixed;top:20px;left:20px;width:290px;background:rgba(0,0,0,0.9);border:3px solid rgba(212,175,55,0.9);border-radius:10px;z-index:9999999;display:none;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,0.8);">
   <!-- 1. 제목 블록 -->
   <div style="position:relative;padding:15px 20px;background:rgba(212,175,55,0.15);border-bottom:2px solid rgba(212,175,55,0.5);">
     <h1 style="font-size:38px;color:white;margin:0 0 5px 0;font-weight:700;">몽골,<br><span style="font-size:35px;">푸른늑대의 후예</span></h1>
@@ -230,9 +230,9 @@
       <span id="perm-time" style="font-size:11px;color:white;">0:00</span>
     </div>
 </div>
-<audio id="perm-audio" src="audio/greeting.mp3"></audio>
 
 <!-- 3D 갤러리 좌상단 UI -->
+      <span id="time-display-fixed" class="time-display">0:00</span>
     </div>
   </div>
 </div>
@@ -245,12 +245,19 @@
 </div>
     <!-- 3D 갤러리 고정 도슨트 (갤러리 내부에서만 표시) -->
     <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-content">
+            <h1 style="font-size: 42px; color: rgba(255,255,255,0.95); margin: 20px 0; text-shadow: 0 4px 12px rgba(0,0,0,0.8); font-weight: 700; letter-spacing: 2px; white-space: nowrap;">몽골,<br><span style="font-size:35px;">푸른늑대의 후예</span></h1>
+            <p style="font-size: 24px; color: rgba(255,255,255,0.8); margin: 10px 0 30px 0; text-shadow: 0 3px 10px rgba(0,0,0,0.7); font-weight: 300;">다큐멘터리 '몽골' 사진가 강종진</p>
+            <p class="loading-text" style="font-size: 18px; color: rgba(255,255,255,0.7); margin-top: 40px;">전시관을 준비하고 있습니다...</p>
+            </div>
+        </div>
     </div>
 
     <!-- Opening Scene -->
-    <div id="opening-scene">
+    <div id="opening-scene" class="hidden">
         <div class="opening-background"></div>
-        <div class="opening-content" style="margin-top:70px !important;">
+        <div class="opening-content">
             <h2 class="title-sub">Beyond the Endless Horizon</h2>
             <p class="title-desc">몽골 대자연 사진전 | Mongolian Nature Photography Exhibition</p>
             <button id="enter-btn" class="enter-button">전시관 입장</button>

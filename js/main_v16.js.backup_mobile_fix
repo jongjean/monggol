@@ -396,7 +396,7 @@ function initThreeJS() {
             const imagePath = artworkData[artworkIndex - 1];
             
             const popup = document.createElement('div');
-            popup.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:10000;display:flex;align-items:center;justify-content:center;';
+            popup.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.95);z-index:10000;display:flex;align-items:center;justify-content:center;';
             const img = document.createElement('img');
             img.src = imagePath;
             img.style.cssText = 'max-width:90vw;max-height:90vh;object-fit:contain;cursor:default;';
@@ -404,12 +404,12 @@ function initThreeJS() {
             document.body.appendChild(popup);
             
             // 배경만 클릭 시 닫기 (이미지는 제외)
-//             popup.onclick = (e) => {
-//                 if (e.target === popup) {
-//                     e.stopPropagation();
-//                     document.body.removeChild(popup);
-//                 }
-//             };
+            popup.onclick = (e) => {
+                if (e.target === popup) {
+                    e.stopPropagation();
+                    document.body.removeChild(popup);
+                }
+            };
             
             // 이미지 더블클릭으로 닫기
             let imgLastClick = 0;
@@ -969,7 +969,7 @@ const artworkData = {
 갑자기 몰아친 눈보라에 
 양떼들이 휩쓸려 가는 것을 구하기 위해 
 전속력으로 달려갔던 것이었다.`,
-    audioFile: 'audio/docent_012.mp3'
+    audioFile: 'audio/artwork_012_commentary.mp3'
   }
 };
 
@@ -1530,11 +1530,11 @@ const data={'012':{title:'한 때 한 곳을 스쳐간 사계',description:`검�
 백여 마리의 양떼를 이끌고 돌아오고 있었다.
 갑자기 몰아친 눈보라에
 양떼들이 휩쓸려 가는 것을 구하기 위해
-전속력으로 달려갔던 것이었다.`,audio:'audio/docent_012.mp3'},'005':{title:'야생마 생포작전',description:`지평선 위로 먼지구름이 일고 있었다. 자세히 보니 무서운 속도로 질주하는 말들이었다. 언뜻 말 탄 사람도 보였다. 우리는 핸들을 돌려 가까이 가보기로 하였다. 로프를 휘두르며 야생마를 쫓는 유목민 청년이 보였다. 말과 사람이 하나가 되어 초원을 가로지르는 모습이 마치 영화 속 한 장면 같았다. 자연다큐멘터리에서나 보던 마상쇼와 로데오가 눈앞에 펼쳐지고 있었다. 칭기즈 칸의 후예, 그 순박함 속의 용맹을 보았다. 카메라를 들고 달려가 셔터를 눌렀다. 먼지 속으로 사라지는 그들의 뒷모습이 한참 동안 잊혀지지 않았다.`,audio:'audio/docent_005.mp3'},'009':{title:'유목민의 이사',description:`푸른 호수가 보이는 초원에 낙타 행렬이 지나가고 있었다. 등에 가득 실린 것은 게르의 뼈대와 천, 그리고 살림살이 전부였다. 몽골의 유목민은 계절을 따라 일년에 많게는 30번까지도 이사를 한다. 그들에게 보금자리란 없다. 언제든지 낙타의 등에 싣고 떠날 수 있는 게르가 전부다. 하늘의 정기를 듬뿍 받으며 옹기종기 모여 사는 그들. 느릿느릿 걸어가는 낙타의 발걸음처럼 그들의 삶도 서두르지 않는다. 가축들과 함께 물과 풀을 따라 이동하는 그들의 모습에서 진정한 자유를 보았다.`,audio:'audio/docent_009.mp3'},'025':{title:'졸업을 맞은 몽골의 어린이들',description:`학교앞 길목에 아이들이 모여 있었다. 졸업식을 마치고 나온 아이들이 카메라를 보더니 일제히 환하게 웃었다. 천진함과 순수함이 개구쟁이들의 얼굴에 하나 가득 젖어있었다. "찍어주세요!" 브이자를 하고, 손을 흔들고, 서로 어깨동무를 한 채 웃는 아이들. 까르르 소리 내며 손을 흔들고 환하게 웃던 그 아이들이 내 아들처럼 사랑스러웠다. 카메라를 내리고도 한참을 바라보았다. 저 아이들이 자라 어른이 되면 이 초원을 어떻게 가꾸어갈까.`,audio:'audio/docent_025.mp3'},'019':{title:'동화속의 부족 차탄족 사람들',description:`몽골 북부 깊은 숲속에 차탄족이 살고 있다는 소문을 들었다. 협곡 지대 수심이 200미터나 된다는 얼어붙은 헙스걸 호수위를 14시간 동안 목숨걸고 달려 러시아 국경지역에 다 달았다. 타이가 지대 깊은 숲속 차탄족을 만나기 위해서다. 어릴 때부터 순록을 타고 자라며 순록과 함께 생활하는 그들은 순록의 먹이를 따라 이동한다. 러시아에서 몽골까지 숲과 산맥을 터전으로 살아가는 차탄족은 200명 남짓한 몽골의 소수 민족이다. 카메라를 들고 갑자기 나타난 이방인들을 차탄족 가족이 바짝 경계를 하면서도 오르츠 밖으로 삐죽 고개를 내밀고는 나를 보며 수줍게 웃었다. 그들의 삶이 동화 속 한 장면 같았다.`,audio:'audio/docent_019.mp3'}};
+전속력으로 달려갔던 것이었다.`,audio:'audio/artwork_012_commentary.mp3'},'005':{title:'야생마 생포작전',description:`지평선 위로 먼지구름이 일고 있었다. 자세히 보니 무서운 속도로 질주하는 말들이었다. 언뜻 말 탄 사람도 보였다. 우리는 핸들을 돌려 가까이 가보기로 하였다. 로프를 휘두르며 야생마를 쫓는 유목민 청년이 보였다. 말과 사람이 하나가 되어 초원을 가로지르는 모습이 마치 영화 속 한 장면 같았다. 자연다큐멘터리에서나 보던 마상쇼와 로데오가 눈앞에 펼쳐지고 있었다. 칭기즈 칸의 후예, 그 순박함 속의 용맹을 보았다. 카메라를 들고 달려가 셔터를 눌렀다. 먼지 속으로 사라지는 그들의 뒷모습이 한참 동안 잊혀지지 않았다.`,audio:'audio/docent_005.mp3'},'009':{title:'유목민의 이사',description:`푸른 호수가 보이는 초원에 낙타 행렬이 지나가고 있었다. 등에 가득 실린 것은 게르의 뼈대와 천, 그리고 살림살이 전부였다. 몽골의 유목민은 계절을 따라 일년에 많게는 30번까지도 이사를 한다. 그들에게 보금자리란 없다. 언제든지 낙타의 등에 싣고 떠날 수 있는 게르가 전부다. 하늘의 정기를 듬뿍 받으며 옹기종기 모여 사는 그들. 느릿느릿 걸어가는 낙타의 발걸음처럼 그들의 삶도 서두르지 않는다. 가축들과 함께 물과 풀을 따라 이동하는 그들의 모습에서 진정한 자유를 보았다.`,audio:'audio/docent_009.mp3'},'025':{title:'졸업을 맞은 몽골의 어린이들',description:`학교앞 길목에 아이들이 모여 있었다. 졸업식을 마치고 나온 아이들이 카메라를 보더니 일제히 환하게 웃었다. 천진함과 순수함이 개구쟁이들의 얼굴에 하나 가득 젖어있었다. "찍어주세요!" 브이자를 하고, 손을 흔들고, 서로 어깨동무를 한 채 웃는 아이들. 까르르 소리 내며 손을 흔들고 환하게 웃던 그 아이들이 내 아들처럼 사랑스러웠다. 카메라를 내리고도 한참을 바라보았다. 저 아이들이 자라 어른이 되면 이 초원을 어떻게 가꾸어갈까.`,audio:'audio/docent_025.mp3'},'019':{title:'동화속의 부족 차탄족 사람들',description:`몽골 북부 깊은 숲속에 차탄족이 살고 있다는 소문을 들었다. 협곡 지대 수심이 200미터나 된다는 얼어붙은 헙스걸 호수위를 14시간 동안 목숨걸고 달려 러시아 국경지역에 다 달았다. 타이가 지대 깊은 숲속 차탄족을 만나기 위해서다. 어릴 때부터 순록을 타고 자라며 순록과 함께 생활하는 그들은 순록의 먹이를 따라 이동한다. 러시아에서 몽골까지 숲과 산맥을 터전으로 살아가는 차탄족은 200명 남짓한 몽골의 소수 민족이다. 카메라를 들고 갑자기 나타난 이방인들을 차탄족 가족이 바짝 경계를 하면서도 오르츠 밖으로 삐죽 고개를 내밀고는 나를 보며 수줍게 웃었다. 그들의 삶이 동화 속 한 장면 같았다.`,audio:'audio/docent_019.mp3'}};
 let p=null,a=null;
 function create(){
 if(p)return;
-const h=`<div id="doc-pop" style="display:none;position:fixed;top:50%;right:0px;transform:translateY(-50%);z-index:10000000;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px) brightness(0.7);width:400px;max-height:80vh;background:rgba(20,20,20,0.95);cursor:move;box-shadow:0 10px 40px rgba(0,0,0,0.8);border:3px solid rgba(212,175,55,0.8);border-radius:15px;padding:30px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8);"><div id="doc-drag-header" style="position:absolute;top:0;left:0;right:0;height:50px;cursor:move;z-index:0;"></div><button onclick="document.getElementById('doc-pop').style.display='none';document.getElementById('doc-mini').style.display='block';const pm=document.getElementById('doc-pause-mark');const da=document.getElementById('da');if(pm&&da){pm.style.display=(da.paused||!da.src)?'block':'none';}console.log('✅ 최소화');" style="position:absolute;top:15px;right:15px;background:rgba(212,175,55,0.8);border:none;border-radius:50%;width:35px;height:35px;font-size:20px;color:white;cursor:pointer;">−</button><div style="text-align:center;margin-bottom:25px;"><img id="doc-profile-img" src="images/author_profile_012.jpg" style="width:150px;height:150px;border-radius:15px;border:4px solid rgba(212,175,55,0.8);object-fit:cover;margin-bottom:10px;"><h3 style="font-size:18px;color:rgba(212,175,55,1);margin:0;">강종진 작가</h3></div><div style="margin-bottom:25px;"><h2 id="doc-t" style="font-size:24px;color:#fff;margin:0 0 15px 0;text-align:center;"></h2><div id="doc-d" style="font-size:15px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-line;max-height:200px;overflow-y:auto;"></div></div><button id="listen" style="width:100%;padding:15px;background:linear-gradient(135deg,rgba(212,175,55,0.9),rgba(180,150,40,0.9));border:none;border-radius:8px;color:white;font-size:18px;font-weight:bold;cursor:pointer;margin-bottom:20px;">🎧 해설 듣기</button><div id="ac" style="display:none;background:rgba(30,30,30,0.8);border-radius:8px;padding:15px;"><audio id="da"></audio><div style="margin-bottom:15px;"><input type="range" id="pb" min="0" max="100" value="0" style="width:100%;height:8px;cursor:pointer;"></div><div style="display:flex;align-items:center;gap:10px;"><button id="pl" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">▶</button><button id="pa" style="display:none;background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏸</button><button id="st" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏹</button><span id="td" style="margin-left:auto;font-size:14px;color:rgba(255,255,255,0.8);font-family:monospace;">0:00/0:00</span></div></div></div><div id="doc-mini" style="display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(212,175,55,0.95);border-radius:50%;width:60px;height:60px;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,0.5);z-index:10000001;">
+const h=`<div id="doc-pop" style="display:none;position:fixed;top:50%;right:0px;transform:translateY(-50%);z-index:200000;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px) brightness(0.7);width:400px;max-height:80vh;background:rgba(20,20,20,0.95);cursor:move;box-shadow:0 10px 40px rgba(0,0,0,0.8);border:3px solid rgba(212,175,55,0.8);border-radius:15px;padding:30px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8);"><div id="doc-drag-header" style="position:absolute;top:0;left:0;right:0;height:50px;cursor:move;z-index:0;"></div><button onclick="document.getElementById('doc-pop').style.display='none';document.getElementById('doc-mini').style.display='block';const pm=document.getElementById('doc-pause-mark');const da=document.getElementById('da');if(pm&&da){pm.style.display=(da.paused||!da.src)?'block':'none';}console.log('✅ 최소화');" style="position:absolute;top:15px;right:15px;background:rgba(212,175,55,0.8);border:none;border-radius:50%;width:35px;height:35px;font-size:20px;color:white;cursor:pointer;">−</button><div style="text-align:center;margin-bottom:25px;"><img id="doc-profile-img" src="images/author_profile_012.jpg" style="width:150px;height:150px;border-radius:15px;border:4px solid rgba(212,175,55,0.8);object-fit:cover;margin-bottom:10px;"><h3 style="font-size:18px;color:rgba(212,175,55,1);margin:0;">강종진 작가</h3></div><div style="margin-bottom:25px;"><h2 id="doc-t" style="font-size:24px;color:#fff;margin:0 0 15px 0;text-align:center;"></h2><div id="doc-d" style="font-size:15px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-line;max-height:200px;overflow-y:auto;"></div></div><button id="listen" style="width:100%;padding:15px;background:linear-gradient(135deg,rgba(212,175,55,0.9),rgba(180,150,40,0.9));border:none;border-radius:8px;color:white;font-size:18px;font-weight:bold;cursor:pointer;margin-bottom:20px;">🎧 해설 듣기</button><div id="ac" style="display:none;background:rgba(30,30,30,0.8);border-radius:8px;padding:15px;"><audio id="da"></audio><div style="margin-bottom:15px;"><input type="range" id="pb" min="0" max="100" value="0" style="width:100%;height:8px;cursor:pointer;"></div><div style="display:flex;align-items:center;gap:10px;"><button id="pl" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">▶</button><button id="pa" style="display:none;background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏸</button><button id="st" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏹</button><span id="td" style="margin-left:auto;font-size:14px;color:rgba(255,255,255,0.8);font-family:monospace;">0:00/0:00</span></div></div></div><div id="doc-mini" style="display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(212,175,55,0.95);border-radius:50%;width:60px;height:60px;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,0.5);z-index:200001;">
 <button id="doc-mini-close" style="position:absolute;top:-5px;right:-5px;background:rgba(255,255,255,0.95);border:none;border-radius:50%;width:20px;height:20px;font-size:12px;color:rgba(60,60,60,1);cursor:pointer;z-index:2;line-height:1;">✕</button>
 <div id="doc-mini-icon" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;">
 <span style="font-size:32px;">🎧</span>
@@ -1558,47 +1558,19 @@ dragHeader.onmousedown=function(e){
 if(e.target.tagName==='BUTTON'||e.target.closest('button')||e.target.tagName==='INPUT'||e.target.closest('#ac'))return;
 isDragging=true;
 const rect=p.getBoundingClientRect();
-dragStartX=e.clientX;dragStartY=e.clientY;popupStartLeft=rect.left;popupStartTop=rect.top;
+dragStartX=e.clientX;dragStartY=e.clientY;popupStartLeft=window.innerWidth-rect.width;popupStartTop=(window.innerHeight-rect.height)/2;
 p.style.transform='none';p.style.left=popupStartLeft+'px';p.style.top=popupStartTop+'px';
 e.preventDefault();
 };
-dragHeader.ontouchstart=function(e){
-if(e.target.tagName==='BUTTON'||e.target.closest('button')||e.target.tagName==='INPUT'||e.target.closest('#ac'))return;
-isDragging=true;
-const touch=e.touches[0];
-const rect=p.getBoundingClientRect();
-dragStartX=touch.clientX;dragStartY=touch.clientY;popupStartLeft=rect.left;popupStartTop=rect.top;
-p.style.transform='none';p.style.left=popupStartLeft+'px';p.style.top=popupStartTop+'px';
-// e.preventDefault(); /* 터치 스크롤 허용 */
-};
-dragHeader.ontouchmove=function(e){
-if(!isDragging)return;
-const touch=e.touches[0];
-const deltaX=touch.clientX-dragStartX;
-const deltaY=touch.clientY-dragStartY;
-p.style.left=(popupStartLeft+deltaX)+'px';
-p.style.top=(popupStartTop+deltaY)+'px';
-e.preventDefault();
-};
-dragHeader.ontouchend=function(){
-isDragging=false;
-};
-const docText=document.getElementById('doc-d');
-if(docText){
-docText.addEventListener('touchstart',function(){
-isDragging=false;
-},false);
-}
-document.onmouseleave=function(){isDragging=false;};
-document.onmousemove=function(e){
-if(!isDragging)return;
+document.onmouseleave=function(){isDragging=false;};document.onmousemove=function(e){if(!isDragging)return;if(!isDragging)return;
 const deltaX=e.clientX-dragStartX;
 const deltaY=e.clientY-dragStartY;
 p.style.left=(popupStartLeft+deltaX)+'px';
 p.style.top=(popupStartTop+deltaY)+'px';
 };
-window.onmouseup=function(e){isDragging=false;e.stopPropagation();};
+document.onmouseup=function(e){isDragging=false;e.stopPropagation();};window.onmouseup=function(e){isDragging=false;e.stopPropagation();};
 }
+// 미니창 이벤트 연결
 const miniClose=document.getElementById('doc-mini-close');
 const miniIcon=document.getElementById('doc-mini-icon');
 const pauseMark=document.getElementById('doc-pause-mark');
@@ -1633,7 +1605,7 @@ pauseMark.style.display='none';
 console.log('✅ 미니창 이벤트 연결');
 }
 // 미니창 이벤트 연결 const miniClose=document.getElementById('doc-mini-close'); const miniIcon=document.getElementById('doc-mini-icon'); const pauseMark=document.getElementById('doc-pause-mark'); if(miniClose && miniIcon){ miniClose.onclick=function(e){ e.stopPropagation(); document.getElementById('doc-mini').style.display='none'; p.style.display='block';const cb=document.getElementById('artwork-close-btn');if(cb)cb.style.display='block'; console.log('✅ X버튼→도슨트 복원'); }; miniIcon.onclick=function(){ if(!a.src)return; if(a.paused){ a.play(); pauseMark.style.display='none'; console.log('▶ 재생'); }else{ a.pause(); pauseMark.style.display='block'; console.log('⏸ 일시정지'); } }; a.onended=function(){ pauseMark.style.display='none'; }; console.log('✅ 미니창 이벤트 연결'); } 
-const closeBtn=document.createElement('button'); closeBtn.id='artwork-close-btn'; closeBtn.innerHTML='✕'; closeBtn.style.cssText='display:none;position:fixed;top:10px;right:10px;background:rgba(255,255,255,0.9);border:2px solid rgba(60,60,60,0.3);border-radius:50%;width:50px;height:50px;font-size:28px;color:rgba(60,60,60,1);cursor:pointer;z-index:200002;font-weight:300;box-shadow:0 3px 10px rgba(0,0,0,0.3);'; closeBtn.onclick=function(){window.closeArtwork();}; document.body.appendChild(closeBtn); 
+const closeBtn=document.createElement('button'); closeBtn.id='artwork-close-btn'; closeBtn.innerHTML='✕'; closeBtn.style.cssText='display:none;position:fixed;top:30px;right:30px;background:rgba(255,255,255,0.9);border:2px solid rgba(60,60,60,0.3);border-radius:50%;width:50px;height:50px;font-size:28px;color:rgba(60,60,60,1);cursor:pointer;z-index:200002;font-weight:300;box-shadow:0 3px 10px rgba(0,0,0,0.3);'; closeBtn.onclick=function(){window.closeArtwork();}; document.body.appendChild(closeBtn); 
 
     
 console.log('✅ 012 도슨트 생성');

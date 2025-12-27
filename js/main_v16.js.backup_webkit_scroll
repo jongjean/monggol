@@ -1565,30 +1565,19 @@ e.preventDefault();
 dragHeader.ontouchstart=function(e){
 if(e.target.tagName==='BUTTON'||e.target.closest('button')||e.target.tagName==='INPUT'||e.target.closest('#ac'))return;
 isDragging=true;
+const docText=document.getElementById('doc-d');
+if(docText){
+docText.ontouchstart=function(e2){
+isDragging=false;
+e2.stopPropagation();
+};
+}
 const touch=e.touches[0];
 const rect=p.getBoundingClientRect();
 dragStartX=touch.clientX;dragStartY=touch.clientY;popupStartLeft=rect.left;popupStartTop=rect.top;
 p.style.transform='none';p.style.left=popupStartLeft+'px';p.style.top=popupStartTop+'px';
 // e.preventDefault(); /* 터치 스크롤 허용 */
 };
-dragHeader.ontouchmove=function(e){
-if(!isDragging)return;
-const touch=e.touches[0];
-const deltaX=touch.clientX-dragStartX;
-const deltaY=touch.clientY-dragStartY;
-p.style.left=(popupStartLeft+deltaX)+'px';
-p.style.top=(popupStartTop+deltaY)+'px';
-e.preventDefault();
-};
-dragHeader.ontouchend=function(){
-isDragging=false;
-};
-const docText=document.getElementById('doc-d');
-if(docText){
-docText.addEventListener('touchstart',function(){
-isDragging=false;
-},false);
-}
 document.onmouseleave=function(){isDragging=false;};
 document.onmousemove=function(e){
 if(!isDragging)return;
@@ -1597,7 +1586,19 @@ const deltaY=e.clientY-dragStartY;
 p.style.left=(popupStartLeft+deltaX)+'px';
 p.style.top=(popupStartTop+deltaY)+'px';
 };
+document.ontouchmove=function(e){
+if(!isDragging)return;
+const touch=e.touches[0];
+const deltaX=touch.clientX-dragStartX;
+const deltaY=touch.clientY-dragStartY;
+p.style.left=(popupStartLeft+deltaX)+'px';
+p.style.top=(popupStartTop+deltaY)+'px';
+// e.preventDefault(); /* 텍스트 스크롤 허용 */
+};
+document.onmouseup=function(e){isDragging=false;e.stopPropagation();};
 window.onmouseup=function(e){isDragging=false;e.stopPropagation();};
+document.ontouchend=function(e){isDragging=false;e.stopPropagation();};
+window.ontouchend=function(e){isDragging=false;e.stopPropagation();};
 }
 const miniClose=document.getElementById('doc-mini-close');
 const miniIcon=document.getElementById('doc-mini-icon');

@@ -1578,7 +1578,6 @@ const deltaX=touch.clientX-dragStartX;
 const deltaY=touch.clientY-dragStartY;
 p.style.left=(popupStartLeft+deltaX)+'px';
 p.style.top=(popupStartTop+deltaY)+'px';
-e.preventDefault();
 };
 dragHeader.ontouchend=function(){
 isDragging=false;

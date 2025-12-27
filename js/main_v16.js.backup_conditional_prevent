@@ -1585,8 +1585,12 @@ isDragging=false;
 };
 const docText=document.getElementById('doc-d');
 if(docText){
-docText.addEventListener('touchstart',function(){
+docText.addEventListener('touchstart',function(e){
 isDragging=false;
+e.stopPropagation();
+},false);
+docText.addEventListener('touchmove',function(e){
+e.stopPropagation();
 },false);
 }
 document.onmouseleave=function(){isDragging=false;};
