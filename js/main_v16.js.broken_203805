@@ -176,33 +176,27 @@ function initThreeJS() {
             frameGroup.add(sprite);
             
             console.log('✅ 012번 스피커 아이콘 추가');
-        }
-
         // 005번 작품에 스피커 아이콘 추가
         if (imgNum === "005") {
             const canvas = document.createElement('canvas');
             canvas.width = 128;
             canvas.height = 128;
             const ctx = canvas.getContext('2d');
-
             ctx.fillStyle = 'rgba(212, 175, 55, 0.9)';
             ctx.beginPath();
             ctx.arc(64, 64, 60, 0, Math.PI * 2);
             ctx.fill();
-
             ctx.font = 'bold 80px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillStyle = 'white';
             ctx.fillText('🔊', 64, 64);
-
             const texture = new THREE.CanvasTexture(canvas);
             const material = new THREE.SpriteMaterial({ map: texture });
             const sprite = new THREE.Sprite(material);
             sprite.scale.set(0.5, 0.5, 1);
             sprite.position.set(0, 1.3, 0);
             frameGroup.add(sprite);
-
             console.log('✅ 005번 스피커 아이콘 추가');
         }
         // 009번 작품에 스피커 아이콘 추가
@@ -273,6 +267,7 @@ function initThreeJS() {
             sprite.position.set(0, 1.3, 0);
             frameGroup.add(sprite);
             console.log('✅ 019번 스피커 아이콘 추가');
+        }
         }
         artworks.push(frameGroup);
     }
