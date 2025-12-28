@@ -227,9 +227,9 @@
         <button id="perm-play" style="background:rgba(212,175,55,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;">▶</button>
         <button id="perm-pause" style="background:rgba(212,175,55,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;display:none;">⏸</button>
         <button id="perm-stop" style="background:rgba(100,100,100,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;">⏹</button>
+        <button id="perm-controller-restore-btn" style="background:rgba(212,175,55,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;display:none;margin-left:100px;">▼ 펼침</button>
       </div>
       <span id="perm-time" style="font-size:11px;color:white;">0:00</span>
-      <button id="perm-controller-restore-btn" style="background:rgba(212,175,55,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;display:none;">▼ 펼침</button>
     </div>
 </div>
 <audio id="perm-audio" src="audio/greeting.mp3"></audio>
@@ -357,7 +357,6 @@
   const minimizeBtn = document.getElementById("perm-minimize-btn");
   const permVideo = document.querySelector("#permanent-top-frame video");
   const restoreBtn = document.getElementById("perm-restore-btn");
-  const controllerRestoreBtn = document.getElementById("perm-controller-restore-btn");
   let minimizeState = 0; // 0:전체펼침, 1:중간최소화, 2:완전최소화
 
   const titleBlock = document.querySelector("#permanent-top-frame > div:first-child");
@@ -369,14 +368,12 @@
       if (minimizeState === 0) {
         // 전체 펼침
         permVideo.style.display = "block";
-        controllerRestoreBtn.style.display = "none";
         titleBlock.style.display = "block";
         minimizeBtn.textContent = "▲";
         restoreBtn.style.display = "none";
       } else if (minimizeState === 1) {
         // 중간 최소화 (동영상 숨김)
         permVideo.style.display = "none";
-        controllerRestoreBtn.style.display = "none";
         titleBlock.style.display = "block";
         minimizeBtn.textContent = "▲";
         restoreBtn.style.display = "flex";
@@ -384,7 +381,6 @@
         // 완전 최소화 (제목도 숨김)
         permVideo.style.display = "none";
         titleBlock.style.display = "none";
-        controllerRestoreBtn.style.display = "flex";
       }
 
   // 전체 펼침 버튼 (▼) 클릭 시
@@ -398,18 +394,6 @@
     });
   }
     });
-
-  // 컨트롤러 전체 펼침 버튼 (▼ 펼침) 클릭 시
-  if (controllerRestoreBtn) {
-    controllerRestoreBtn.addEventListener("click", () => {
-      minimizeState = 0;
-      permVideo.style.display = "block";
-      titleBlock.style.display = "block";
-      minimizeBtn.textContent = "▲";
-      restoreBtn.style.display = "none";
-      controllerRestoreBtn.style.display = "none";
-    });
-  }
   }
 })();
 

@@ -227,9 +227,9 @@
         <button id="perm-play" style="background:rgba(212,175,55,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;">▶</button>
         <button id="perm-pause" style="background:rgba(212,175,55,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;display:none;">⏸</button>
         <button id="perm-stop" style="background:rgba(100,100,100,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;">⏹</button>
+        <button id="perm-controller-restore-btn" style="background:rgba(212,175,55,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;display:none;margin-left:100px;">▼ 펼침</button>
       </div>
       <span id="perm-time" style="font-size:11px;color:white;">0:00</span>
-      <button id="perm-controller-restore-btn" style="background:rgba(212,175,55,0.8);border:none;border-radius:4px;padding:5px 10px;color:white;font-size:12px;cursor:pointer;display:none;">▼ 펼침</button>
     </div>
 </div>
 <audio id="perm-audio" src="audio/greeting.mp3"></audio>
