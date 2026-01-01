@@ -281,9 +281,9 @@ function initThreeJS() {
     let isDragging = false;
     let previousMouseX = 0;
     let previousMouseY = 0;
-    let cameraAngleH = Math.atan2(-22.99, -0.40);
-    let cameraAngleV = Math.asin(19.27 / 30.5);
-    let cameraRadius = 30.5;
+    let cameraAngleH = 0;
+    let cameraAngleV = 0.1;
+    let cameraRadius = 10;
 
     function updateCameraPosition() {
         const y = Math.sin(cameraAngleV) * cameraRadius + 2;
@@ -1729,11 +1729,11 @@ window.addEventListener('load', function() {
                 console.log('🎨 더블클릭:', obj.userData.artworkId);
                 window.openDoc(obj.userData.artworkId);
                 return;
+              }
               if (obj.userData && obj.userData.type === 'furgon') {
                 console.log('🚐 더블클릭 푸르공!');
                 window.onFurgonClick();
                 return;
-              }
               }
               obj = obj.parent;
             }
