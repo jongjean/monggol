@@ -286,28 +286,40 @@ function initThreeJS() {
     let cameraRadius = 30.5;
 
     function updateCameraPosition() {
-        const y = Math.sin(cameraAngleV) * cameraRadius + 2;
-        const horizontalRadius = Math.cos(cameraAngleV) * cameraRadius;
-        const x = Math.sin(cameraAngleH) * horizontalRadius;
-        const z = Math.cos(cameraAngleH) * horizontalRadius;
+        // 작품 원형 안쪽에서 작은 원으로 회전
+        const orbitRadius = 18;  // 작품 원(25m)보다 안쪽
+        const cameraOrbitRadius = 3;  // 작은 회전 반지름
+        
+        // 회전 중심점 계산
+        const centerX = Math.sin(cameraAngleH) * orbitRadius;
+        const centerZ = Math.cos(cameraAngleH) * orbitRadius;
+        
+        // 카메라 위치 계산 (회전 중심 주변)
+        const y = Math.sin(cameraAngleV) * cameraOrbitRadius + 2;
+        const horizontalRadius = Math.cos(cameraAngleV) * cameraOrbitRadius;
+        const x = centerX + Math.sin(cameraAngleH + Math.PI) * horizontalRadius;
+        const z = centerZ + Math.cos(cameraAngleH + Math.PI) * horizontalRadius;
+        
         camera.position.set(x, y, z);
-        camera.lookAt(0, 2, 0);
-    
+        
+        // 바깥쪽 작품을 바라보도록
+        const lookAtX = Math.sin(cameraAngleH) * 25;
+        const lookAtZ = Math.cos(cameraAngleH) * 25;
+        camera.lookAt(lookAtX, 2, lookAtZ);
+
     // 초기 카메라 위치 저장
     window.initialCameraPosition = {
         x: camera.position.x,
         y: camera.position.y,
         z: camera.position.z
     };
-    console.log('✅ 초기 카메라 위치 저장:', window.initialCameraPosition);
-        
-        const minFOV = 15;
+
+        const minFOV = 45;
         const maxFOV = 75;
-        const t = Math.max(0, Math.min(1, (cameraRadius - 0.5) / 29.5));
+        const t = Math.max(0, Math.min(1, cameraOrbitRadius / 5));
         camera.fov = minFOV + (maxFOV - minFOV) * t;
         camera.updateProjectionMatrix();
     }
-
     canvas.addEventListener('mousedown', (e) => {
         isDragging = true;
         previousMouseX = e.clientX;

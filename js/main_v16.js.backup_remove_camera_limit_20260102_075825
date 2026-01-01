@@ -318,8 +318,8 @@ function initThreeJS() {
         if (!isDragging) return;
         const deltaX = e.clientX - previousMouseX;
         const deltaY = previousMouseY - e.clientY;
-        cameraAngleH -= deltaX * 0.002;
-        cameraAngleV -= deltaY * 0.001;
+        cameraAngleH += deltaX * 0.002;
+        cameraAngleV += deltaY * 0.001;
         cameraAngleV = Math.max(0, Math.min(Math.PI / 4, cameraAngleV));
         updateCameraPosition();
         previousMouseX = e.clientX;
@@ -348,8 +348,8 @@ function initThreeJS() {
             e.preventDefault();
             const deltaX = e.touches[0].clientX - previousMouseX;
             const deltaY = previousMouseY - e.touches[0].clientY;
-            cameraAngleH -= deltaX * 0.002;
-            cameraAngleV -= deltaY * 0.001;
+            cameraAngleH += deltaX * 0.002;
+            cameraAngleV += deltaY * 0.001;
             cameraAngleV = Math.max(0, Math.min(Math.PI / 4, cameraAngleV));
             updateCameraPosition();
             previousMouseX = e.touches[0].clientX;
@@ -361,7 +361,7 @@ function initThreeJS() {
             const distance = Math.sqrt(dx * dx + dy * dy);
             const delta = (initialPinchDistance - distance) * 0.05;
             cameraRadius += delta;
-            if (cameraRadius < 0) cameraRadius = 0;
+            if (cameraRadius < 0.5) cameraRadius = 0.5;
             if (cameraRadius > 30) cameraRadius = 30;
             updateCameraPosition();
             initialPinchDistance = distance;
@@ -374,7 +374,7 @@ function initThreeJS() {
     canvas.addEventListener('wheel', (e) => {
         e.preventDefault();
         cameraRadius += e.deltaY * 0.005;
-        if (cameraRadius < 0) cameraRadius = 0;
+        if (cameraRadius < 0.5) cameraRadius = 0.5;
         if (cameraRadius > 30) cameraRadius = 30;
         updateCameraPosition();
     }, { passive: false });
