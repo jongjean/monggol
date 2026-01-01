@@ -21,6 +21,8 @@ sudo cp /home/ucon/monggol/index.html /var/www/monggol/
 sudo cp /home/ucon/monggol/js/main_v16.js /var/www/monggol/js/
 sudo cp /home/ucon/monggol/js/three.min.js /var/www/monggol/js/
 
+sudo cp /home/ucon/monggol/js/furgon_system.js /var/www/monggol/js/
+sudo cp /home/ucon/monggol/js/GLTFLoader.js /var/www/monggol/js/
 # audio (모든 음성 파일)
 sudo cp /home/ucon/monggol/audio/*.mp3 /var/www/monggol/audio/
 sudo cp /home/ucon/monggol/audio/*.m4a /var/www/monggol/audio/ 2>/dev/null || true
@@ -56,3 +58,6 @@ echo "🖼️ Images:"
 ls -lh /var/www/monggol/images/ | grep -E "author_profile|guide"
 echo ""
 echo -e "${BLUE}🎯 테스트: http://172.30.1.150${NC}"
+# models (3D 모델)
+sudo mkdir -p /var/www/monggol/models
+sudo cp /home/ucon/monggol/models/*.glb /var/www/monggol/models/ 2>/dev/null || true

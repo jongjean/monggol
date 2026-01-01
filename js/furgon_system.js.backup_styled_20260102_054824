@@ -1,0 +1,66 @@
+// 푸르공 3D 시스템 (스타일링된 박스)
+let furgonModel = null;
+
+console.log('📄 furgon_system.js 로드 완료');
+
+function loadFurgon3D() {
+    console.log('🚐 푸르공 생성 시작...');
+    createStyledFurgon();
+}
+
+function createStyledFurgon() {
+    // 푸르공 바디
+    const geometry = new THREE.BoxGeometry(4.4, 2.1, 2);
+    const material = new THREE.MeshStandardMaterial({
+        color: 0x2d5016,
+        roughness: 0.8,
+        metalness: 0.2
+    });
+    
+    const furgonBody = new THREE.Mesh(geometry, material);
+    furgonBody.position.set(0, 2, 0);
+    furgonBody.castShadow = true;
+    furgonBody.receiveShadow = true;
+    
+    // 그룹으로 묶기
+    const furgonGroup = new THREE.Group();
+    furgonGroup.add(furgonBody);
+    
+    furgonGroup.userData = {
+        type: 'furgon',
+        clickable: true,
+        name: '푸르공 UAZ-452'
+    };
+    
+    if (window.scene) {
+        window.scene.add(furgonGroup);
+        furgonModel = furgonGroup;
+        console.log('✅ 푸르공 생성 완료!');
+        console.log('   위치:', furgonGroup.position);
+    }
+}
+
+function onFurgonClick() {
+    console.log('🚐 푸르공 클릭!');
+    alert('🏔️ 홉스골 호수 14시간 극한 여정\n\n몽골 최북단 홉스골 호수의 얼어붙은 얼음판 위를\n14시간 동안 질주한 생사를 건 여정...');
+}
+
+window.loadFurgon3D = loadFurgon3D;
+window.onFurgonClick = onFurgonClick;
+
+function initFurgonSystem() {
+    const checkScene = setInterval(() => {
+        if (window.scene && window.camera) {
+            clearInterval(checkScene);
+            console.log('✅ Three.js 준비, 푸르공 생성');
+            loadFurgon3D();
+        }
+    }, 100);
+    setTimeout(() => clearInterval(checkScene), 10000);
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFurgonSystem);
+} else {
+    initFurgonSystem();
+}

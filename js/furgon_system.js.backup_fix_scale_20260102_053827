@@ -1,0 +1,168 @@
+// ============================================
+// 푸르공 3D 모델 시스템
+// ============================================
+
+let furgonModel = null;
+let furgonMixer = null;
+
+console.log('📄 furgon_system.js 로드 완료');
+
+function loadFurgon3D() {
+    console.log('🚐 푸르공 3D 모델 로딩 시작...');
+    
+    // GLTFLoader 확인
+    if (!THREE.GLTFLoader) {
+        console.error('❌ GLTFLoader가 로드되지 않았습니다!');
+        createFallbackFurgon();
+        return;
+    }
+
+    const loader = new THREE.GLTFLoader();
+    
+    loader.load(
+        'models/purgon.glb',
+        function(gltf) {
+            furgonModel = gltf.scene;
+            
+            console.log('✅ 푸르공 GLB 파일 로드 성공!');
+            
+            // 모델 크기 분석
+            const box = new THREE.Box3().setFromObject(furgonModel);
+            const size = box.getSize(new THREE.Vector3());
+            const center = box.getCenter(new THREE.Vector3());
+            
+            console.log('📐 원본 크기:', size);
+            console.log('📍 원본 중심:', center);
+            
+            // 중심점 보정
+            furgonModel.position.sub(center);
+            
+            // 크기 조정 (전시관에 맞게)
+            const targetHeight = 2.5;
+            const scale = targetHeight / size.y;
+            furgonModel.scale.set(scale, scale, scale);
+            
+            const scale = 0.5; // 고정 크기 (GLTFLoader 파서 문제로 인한 임시 조치)
+            
+            // 위치: 중앙
+            furgonModel.position.set(0, 0, 0);
+            
+            // 회전: 정면
+            furgonModel.rotation.y = Math.PI;
+            
+            // 재질 설정
+            furgonModel.traverse((child) => {
+                if (child.isMesh) {
+                    child.userData = {
+                        type: 'furgon',
+                        clickable: true,
+                        name: '푸르공 UAZ-452'
+                    };
+                    
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    
+                    if (child.material) {
+                        child.material.metalness = 0.3;
+                        child.material.roughness = 0.7;
+                    }
+                }
+            });
+            
+            // 씬에 추가
+            if (window.scene) {
+                window.scene.add(furgonModel);
+                console.log('✅ 푸르공이 전시관 중앙에 배치되었습니다!');
+                console.log('   위치:', furgonModel.position);
+                console.log('   스케일:', furgonModel.scale);
+            } else {
+                console.error('❌ Three.js scene이 초기화되지 않았습니다!');
+            }
+            
+            // 애니메이션
+            if (gltf.animations && gltf.animations.length > 0) {
+                furgonMixer = new THREE.AnimationMixer(furgonModel);
+                gltf.animations.forEach((clip) => {
+                    furgonMixer.clipAction(clip).play();
+                });
+            }
+        },
+        function(xhr) {
+            const progress = (xhr.loaded / xhr.total) * 100;
+            console.log('🚐 푸르공 로딩 중: ' + progress.toFixed(0) + '%');
+        },
+        function(error) {
+            console.error('❌ 푸르공 로드 실패:', error);
+            createFallbackFurgon();
+        }
+    );
+}
+
+function createFallbackFurgon() {
+    console.log('⚠️ 폴백: 임시 푸르공 박스 생성');
+    
+    const geometry = new THREE.BoxGeometry(4.4, 2.1, 2);
+    const material = new THREE.MeshStandardMaterial({
+        color: 0x2d5016,
+        roughness: 0.7,
+        metalness: 0.3
+    });
+    
+    const fallbackFurgon = new THREE.Mesh(geometry, material);
+    fallbackFurgon.position.set(0, 1.05, 0);
+    fallbackFurgon.castShadow = true;
+    fallbackFurgon.receiveShadow = true;
+    
+    fallbackFurgon.userData = {
+        type: 'furgon',
+        clickable: true,
+        name: '푸르공 (임시)'
+    };
+    
+    if (window.scene) {
+        window.scene.add(fallbackFurgon);
+        furgonModel = fallbackFurgon;
+        console.log('⚠️ 임시 푸르공 박스 생성 완료');
+    }
+}
+
+function updateFurgon(deltaTime) {
+    if (furgonMixer) {
+        furgonMixer.update(deltaTime);
+    }
+}
+
+function onFurgonClick() {
+    console.log('🚐 푸르공 클릭됨!');
+    alert('🏔️ 홉스골 호수 14시간 극한 여정\n\n몽골 최북단 홉스골 호수의 얼어붙은 얼음판 위를\n14시간 동안 질주한 생사를 건 여정...\n\n(상세 모달 창 준비 중)');
+}
+
+window.loadFurgon3D = loadFurgon3D;
+window.updateFurgon = updateFurgon;
+window.onFurgonClick = onFurgonClick;
+
+// 초기화
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFurgonSystem);
+} else {
+    initFurgonSystem();
+}
+
+function initFurgonSystem() {
+    console.log('🚐 푸르공 시스템 초기화 시작...');
+    
+    const checkScene = setInterval(() => {
+        if (window.scene && window.camera && window.renderer) {
+            clearInterval(checkScene);
+            console.log('✅ Three.js 준비 완료, 푸르공 로드 시작');
+            loadFurgon3D();
+        }
+    }, 100);
+    
+    setTimeout(() => {
+        clearInterval(checkScene);
+        if (!furgonModel) {
+            console.error('❌ Three.js 초기화 타임아웃');
+        }
+    }, 10000);
+}

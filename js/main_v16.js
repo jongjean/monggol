@@ -20,6 +20,7 @@ window.addEventListener('DOMContentLoaded', function() {
     if (enterBtn) {
         enterBtn.addEventListener('click', function() {
             const openingScene = document.getElementById('opening-scene');
+            if (typeof createDocentPopup === 'function') createDocentPopup();
             const exhibitionSpace = document.getElementById('exhibition-space');
             if (openingScene) openingScene.style.display = 'none';
             if (exhibitionSpace) {
@@ -672,7 +673,7 @@ setTimeout(() => {
       loadingScreen.style.cssText = `
         display: flex !important;
         justify-content: center !important;
-        align-items: center !important;
+        align-items: flex-start !important;
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
@@ -693,9 +694,10 @@ setTimeout(() => {
     var openingScene = document.getElementById('opening-scene');
     if (openingScene) {
       openingScene.style.cssText = `
+  console.log("🟢 오프닝 화면 스타일 설정 시작");
         display: flex !important;
         justify-content: center !important;
-        align-items: center !important;
+        align-items: flex-start !important;
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
@@ -706,22 +708,52 @@ setTimeout(() => {
       
       var openingContent = openingScene.querySelector('.opening-content');
       if (openingContent) {
+      // 동영상 배경 스타일
+      var videoBackground = openingScene.querySelector(".video-background");
+      if (videoBackground) {
+        videoBackground.style.cssText = `
+          position: absolute !important;
+          top: 100px !important;
+          left: 50% !important;
+          transform: translateX(-50%) !important;
+          width: 90% !important;
+          max-width: 600px !important;
+          height: auto !important;
+          z-index: 2 !important;
+          margin-bottom: 20px !important;
+        `;
+        var video = videoBackground.querySelector("video");
+        if (video) {
+          video.style.cssText = `
+            width: 100% !important;
+            height: auto !important;
+            display: block !important;
+          `;
+        }
+      }
+
         openingContent.style.cssText = `
+          margin-top: 150px !important;
+          margin-top: 150px !important;
           text-align: center !important;
           display: flex !important;
+          position: relative !important;
+          z-index: 3 !important;
           flex-direction: column !important;
           align-items: center !important;
-          gap: 30px !important;
+          gap: 0px !important;
         `;
         
         var titleSub = openingContent.querySelector('.title-sub');
         if (titleSub) {
-          titleSub.style.cssText = 'font-size: 48px !important; margin: 0 !important;';
+          console.log("🔴 titleSub margin 설정:", titleSub);
+          titleSub.style.cssText = 'font-size: 48px !important; margin: 0 !important; text-align: center !important;';
         }
         
         var titleDesc = openingContent.querySelector('.title-desc');
         if (titleDesc) {
-          titleDesc.style.cssText = 'font-size: 24px !important; margin: 20px 0 !important;';
+          console.log("🔴 titleDesc margin 설정:", titleDesc);
+          titleDesc.style.cssText = 'font-size: 24px !important; margin: 0 !important;';
         }
         
         var enterBtn = openingContent.querySelector('.enter-button');
@@ -756,7 +788,7 @@ setTimeout(() => {
       loadingScreen.style.cssText = `
         display: flex !important;
         justify-content: center !important;
-        align-items: center !important;
+        align-items: flex-start !important;
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
@@ -772,7 +804,7 @@ setTimeout(() => {
           text-align: center !important;
           display: flex !important;
           flex-direction: column !important;
-          align-items: center !important;
+          align-items: flex-start !important;
           gap: 20px !important;
         `;
       }
@@ -1373,7 +1405,6 @@ const artworkData = {
   // 작품 더블클릭 이벤트 (012번만 일단 테스트)
   function attachArtworkListeners() {
     // Three.js 작품 클릭 이벤트에 추가해야 함
-    // 일단 전역 함수로 노출
     window.openDocentPopup = openDocentPopup;
     console.log('✅ 도슨트 시스템 준비 완료');
   }
@@ -1534,7 +1565,7 @@ const data={'012':{title:'한 때 한 곳을 스쳐간 사계',description:`검�
 let p=null,a=null;
 function create(){
 if(p)return;
-const h=`<div id="doc-pop" style="display:none;position:fixed;top:50%;right:0px;transform:translateY(-50%);z-index:10000000;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px) brightness(0.7);width:400px;max-height:80vh;background:rgba(20,20,20,0.95);cursor:move;box-shadow:0 10px 40px rgba(0,0,0,0.8);border:3px solid rgba(212,175,55,0.8);border-radius:15px;padding:30px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8);"><div id="doc-drag-header" style="position:absolute;top:0;left:0;right:0;height:50px;cursor:move;z-index:0;"></div><button onclick="document.getElementById('doc-pop').style.display='none';document.getElementById('doc-mini').style.display='block';const pm=document.getElementById('doc-pause-mark');const da=document.getElementById('da');if(pm&&da){pm.style.display=(da.paused||!da.src)?'block':'none';}console.log('✅ 최소화');" style="position:absolute;top:15px;right:15px;background:rgba(212,175,55,0.8);border:none;border-radius:50%;width:35px;height:35px;font-size:20px;color:white;cursor:pointer;">−</button><div style="text-align:center;margin-bottom:25px;"><img id="doc-profile-img" src="images/author_profile_012.jpg" style="width:150px;height:150px;border-radius:15px;border:4px solid rgba(212,175,55,0.8);object-fit:cover;margin-bottom:10px;"><h3 style="font-size:18px;color:rgba(212,175,55,1);margin:0;">강종진 작가</h3></div><div style="margin-bottom:25px;"><h2 id="doc-t" style="font-size:24px;color:#fff;margin:0 0 15px 0;text-align:center;"></h2><div id="doc-d" style="font-size:15px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-line;max-height:30vh;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;"></div></div><button id="listen" style="width:100%;padding:15px;background:linear-gradient(135deg,rgba(212,175,55,0.9),rgba(180,150,40,0.9));border:none;border-radius:8px;color:white;font-size:18px;font-weight:bold;cursor:pointer;margin-bottom:20px;">🎧 해설 듣기</button><div id="ac" style="display:none;background:rgba(30,30,30,0.8);border-radius:8px;padding:15px;"><audio id="da"></audio><div style="margin-bottom:15px;"><input type="range" id="pb" min="0" max="100" value="0" style="width:100%;height:8px;cursor:pointer;"></div><div style="display:flex;align-items:center;gap:10px;"><button id="pl" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">▶</button><button id="pa" style="display:none;background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏸</button><button id="st" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏹</button><span id="td" style="margin-left:auto;font-size:14px;color:rgba(255,255,255,0.8);font-family:monospace;">0:00/0:00</span></div></div></div><div id="doc-mini" style="display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(212,175,55,0.95);border-radius:50%;width:60px;height:60px;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,0.5);z-index:10000001;">
+const h=`<div id="doc-pop" style="display:none;position:fixed;top:50%;right:0px;transform:translateY(-50%);z-index:10000000;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px) brightness(0.7);width:400px;max-height:80vh;background:rgba(20,20,20,0.95);cursor:move;box-shadow:0 10px 40px rgba(0,0,0,0.8);border:3px solid rgba(212,175,55,0.8);border-radius:15px;padding:30px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8);"><div id="doc-drag-header" style="position:absolute;top:0;left:0;right:0;height:240px;cursor:move;z-index:0;"></div><button onclick="document.getElementById('doc-pop').style.display='none';document.getElementById('doc-mini').style.display='block';const pm=document.getElementById('doc-pause-mark');const da=document.getElementById('da');if(pm&&da){pm.style.display=(da.paused||!da.src)?'block':'none';}console.log('✅ 최소화');" style="position:absolute;top:15px;right:15px;background:rgba(212,175,55,0.8);border:none;border-radius:50%;width:35px;height:35px;font-size:20px;color:white;cursor:pointer;">−</button><div style="text-align:center;margin-bottom:25px;"><img id="doc-profile-img" src="images/author_profile_012.jpg" style="width:150px;height:150px;border-radius:15px;border:4px solid rgba(212,175,55,0.8);object-fit:cover;margin-bottom:10px;"><h3 style="font-size:18px;color:rgba(212,175,55,1);margin:0;">강종진 작가</h3></div><div style="margin-bottom:25px;"><h2 id="doc-t" style="font-size:24px;color:#fff;margin:0 0 15px 0;text-align:center;"></h2><div id="doc-d" style="font-size:15px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-line;max-height:30vh;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;"></div></div><button id="listen" style="width:100%;padding:15px;background:linear-gradient(135deg,rgba(212,175,55,0.9),rgba(180,150,40,0.9));border:none;border-radius:8px;color:white;font-size:18px;font-weight:bold;cursor:pointer;margin-bottom:20px;">🎧 해설 듣기</button><div id="ac" style="display:none;background:rgba(30,30,30,0.8);border-radius:8px;padding:15px;"><audio id="da"></audio><div style="margin-bottom:15px;"><input type="range" id="pb" min="0" max="100" value="0" style="width:100%;height:8px;cursor:pointer;"></div><div style="display:flex;align-items:center;gap:10px;"><button id="pl" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">▶</button><button id="pa" style="display:none;background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏸</button><button id="st" style="background:rgba(212,175,55,0.8);border:none;border-radius:5px;width:40px;height:40px;color:white;font-size:16px;cursor:pointer;">⏹</button><span id="td" style="margin-left:auto;font-size:14px;color:rgba(255,255,255,0.8);font-family:monospace;">0:00/0:00</span></div></div></div><div id="doc-mini" style="display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(212,175,55,0.95);border-radius:50%;width:60px;height:60px;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,0.5);z-index:10000001;">
 <button id="doc-mini-close" style="position:absolute;top:-5px;right:-5px;background:rgba(255,255,255,0.95);border:none;border-radius:50%;width:20px;height:20px;font-size:12px;color:rgba(60,60,60,1);cursor:pointer;z-index:2;line-height:1;">✕</button>
 <div id="doc-mini-icon" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;">
 <span style="font-size:32px;">🎧</span>
@@ -1576,9 +1607,14 @@ if(!isDragging)return;
 const touch=e.touches[0];
 const deltaX=touch.clientX-dragStartX;
 const deltaY=touch.clientY-dragStartY;
-p.style.left=(popupStartLeft+deltaX)+'px';
-p.style.top=(popupStartTop+deltaY)+'px';
-// e.preventDefault(); /* 텍스트 스크롤 허용 */
+let newLeft=popupStartLeft+deltaX;
+let newTop=popupStartTop+deltaY;
+const maxX=window.innerWidth-p.offsetWidth;
+const maxY=window.innerHeight-p.offsetHeight;
+newLeft=Math.max(0,Math.min(newLeft,maxX));
+newTop=Math.max(0,Math.min(newTop,maxY));
+p.style.left=newLeft+'px';
+p.style.top=newTop+'px';
 };
 dragHeader.ontouchend=function(){
 isDragging=false;
@@ -1594,8 +1630,14 @@ document.onmousemove=function(e){
 if(!isDragging)return;
 const deltaX=e.clientX-dragStartX;
 const deltaY=e.clientY-dragStartY;
-p.style.left=(popupStartLeft+deltaX)+'px';
-p.style.top=(popupStartTop+deltaY)+'px';
+let newLeft=popupStartLeft+deltaX;
+let newTop=popupStartTop+deltaY;
+const maxX=window.innerWidth-p.offsetWidth;
+const maxY=window.innerHeight-p.offsetHeight;
+newLeft=Math.max(0,Math.min(newLeft,maxX));
+newTop=Math.max(0,Math.min(newTop,maxY));
+p.style.left=newLeft+'px';
+p.style.top=newTop+'px';
 };
 window.onmouseup=function(e){isDragging=false;e.stopPropagation();};
 }
@@ -1641,7 +1683,7 @@ console.log('✅ 012 도슨트 생성');
 window.openDoc=function(id){const d=data[id];if(!d)return;if(!p)create();document.getElementById('doc-t').textContent=d.title;document.getElementById('doc-d').textContent=d.description;a.src=d.audio;const profileImg=document.getElementById('doc-profile-img');if(profileImg)profileImg.src='images/author_profile_'+id+'.jpg';document.getElementById('ac').style.display='none';document.getElementById('pl').style.display='inline-block';document.getElementById('pa').style.display='none';document.getElementById('pb').value=0;p.style.display='block';const cb=document.getElementById('artwork-close-btn');if(cb)cb.style.display='block';console.log('✅ 도슨트:',id);};
 window.closeDoc=function(){if(a){a.pause();a.currentTime=0;}if(p)p.style.display='none';};
 const c=document.querySelector('canvas');
-if(c){let lt=0;c.addEventListener('click',e=>{const n=Date.now();if(n-lt<300){const m={x:(e.clientX/window.innerWidth)*2-1,y:-(e.clientY/window.innerHeight)*2+1};if(window.raycaster&&window.camera&&window.scene){window.raycaster.setFromCamera(m,window.camera);const i=window.raycaster.intersectObjects(window.scene.children,true);for(let j=0;j<i.length;j++){const o=i[j].object;if(o.userData&&o.userData.artworkId){console.log('🎨더블클릭:',o.userData.artworkId);if(o.userData.artworkId==='012')window.openDoc('012');if(o.userData.artworkId==='005')window.openDoc('005');if(o.userData.artworkId==='009')window.openDoc('009');if(o.userData.artworkId==='025')window.openDoc('025');if(o.userData.artworkId==='019')window.openDoc('019');break;}}}}lt=n;});console.log('✅ 012 더블클릭 연결');}
+if(c){let lt=0;c.addEventListener('click',e=>{const n=Date.now();if(n-lt<300){const m={x:(e.clientX/window.innerWidth)*2-1,y:-(e.clientY/window.innerHeight)*2+1};if(window.raycaster&&window.camera&&window.scene){window.raycaster.setFromCamera(m,window.camera);const i=window.raycaster.intersectObjects(window.scene.children,false);for(let j=0;j<i.length;j++){const o=i[j].object;if(o.userData&&o.userData.artworkId){console.log('🎨더블클릭:',o.userData.artworkId);if(o.userData.artworkId==='012')window.openDocentPopup('012');if(o.userData.artworkId==='005')window.openDocentPopup('005');if(o.userData.artworkId==='009')window.openDocentPopup('009');if(o.userData.artworkId==='025')window.openDocentPopup('025');if(o.userData.artworkId==='019')window.openDocentPopup('019');if(o.userData.type==='furgon'){window.onFurgonClick();break;}}}}}lt=n;});console.log('✅ 012 더블클릭 연결');}
 })();
 
 
@@ -1686,6 +1728,11 @@ window.addEventListener('load', function() {
               if (obj.userData && obj.userData.artworkId) {
                 console.log('🎨 더블클릭:', obj.userData.artworkId);
                 window.openDoc(obj.userData.artworkId);
+                return;
+              }
+              if (obj.userData && obj.userData.type === 'furgon') {
+                console.log('🚐 더블클릭 푸르공!');
+                window.onFurgonClick();
                 return;
               }
               obj = obj.parent;
