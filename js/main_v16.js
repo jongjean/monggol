@@ -52,7 +52,7 @@ function initThreeJS() {
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.001, 1000);
     camera.position.set(-22.99, 21.27, -0.40);
-    camera.lookAt(0, 2, 0);
+    camera.lookAt(0, 5, 0);
     
     // 초기 카메라 위치 저장
     window.initialCameraPosition = {
@@ -291,7 +291,7 @@ function initThreeJS() {
         const x = Math.sin(cameraAngleH) * horizontalRadius;
         const z = Math.cos(cameraAngleH) * horizontalRadius;
         camera.position.set(x, y, z);
-        camera.lookAt(0, 2, 0);
+        camera.lookAt(0, 3, 0);
     
     // 초기 카메라 위치 저장
     window.initialCameraPosition = {
@@ -318,8 +318,8 @@ function initThreeJS() {
         if (!isDragging) return;
         const deltaX = e.clientX - previousMouseX;
         const deltaY = previousMouseY - e.clientY;
-        cameraAngleH -= deltaX * 0.002;
-        cameraAngleV -= deltaY * 0.001;
+        cameraAngleH += deltaX * 0.002;
+        cameraAngleV += deltaY * 0.001;
         cameraAngleV = Math.max(0, Math.min(Math.PI / 4, cameraAngleV));
         updateCameraPosition();
         previousMouseX = e.clientX;
@@ -348,8 +348,8 @@ function initThreeJS() {
             e.preventDefault();
             const deltaX = e.touches[0].clientX - previousMouseX;
             const deltaY = previousMouseY - e.touches[0].clientY;
-            cameraAngleH -= deltaX * 0.002;
-            cameraAngleV -= deltaY * 0.001;
+            cameraAngleH += deltaX * 0.002;
+            cameraAngleV += deltaY * 0.001;
             cameraAngleV = Math.max(0, Math.min(Math.PI / 4, cameraAngleV));
             updateCameraPosition();
             previousMouseX = e.touches[0].clientX;
