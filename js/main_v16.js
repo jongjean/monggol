@@ -447,6 +447,9 @@ function initThreeJS() {
     animate();
 
     console.log('✅ v13.0 완료');
+    if (typeof window.initFurgonSystem === 'function') {
+        window.initFurgonSystem();
+    }
 }
 
 console.log('✅ main.js v13.0');
@@ -1818,3 +1821,96 @@ lastClick=now;
 console.log('✅ 팝업 더블클릭 닫기 활성화');
 },3000);
 })();
+
+// 푸르공 더블클릭 이벤트 (Three.js 초기화 후 실행)
+window.initFurgonDoubleClick = function() {
+    console.log('🔵 푸르공 더블클릭 초기화');
+    
+    const canvas = document.querySelector('canvas');
+    if (!canvas) {
+        console.error('❌ Canvas 없음');
+        return;
+    }
+    
+    let lastClick = 0;
+    canvas.addEventListener('click', function(e) {
+        const now = Date.now();
+        if (now - lastClick < 300) {
+            const rect = canvas.getBoundingClientRect();
+            const mouse = {
+                x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
+                y: -((e.clientY - rect.top) / rect.height) * 2 + 1
+            };
+            
+            if (window.raycaster && window.camera && window.scene) {
+                window.raycaster.setFromCamera(mouse, window.camera);
+                const hits = window.raycaster.intersectObjects(window.scene.children, true);
+                
+                for (let i = 0; i < hits.length; i++) {
+                    const obj = hits[i].object;
+                    if (obj.userData?.type === 'furgon' || obj.parent?.userData?.type === 'furgon') {
+                        console.log('🚐 푸르공 더블클릭!');
+                        if (window.onFurgonClick) window.onFurgonClick();
+                        return;
+                    }
+                }
+            }
+        }
+        lastClick = now;
+    });
+    console.log('✅ 푸르공 더블클릭 등록 완료');
+};
+
+// 푸르공 시스템 초기화
+window.initFurgonSystem = function() {
+    console.log('🚐 푸르공 시스템 초기화 시작...');
+    
+    if (!window.THREE || !window.scene) {
+        console.log('❌ Three.js 준비 안됨');
+        return;
+    }
+    
+    console.log('✅ Three.js 준비 완료, 푸르공 로드');
+    
+    const loader = new window.THREE.GLTFLoader();
+    
+    loader.load(
+        'models/furgon.glb',
+        function(gltf) {
+            const furgon = gltf.scene;
+            furgon.userData.type = 'furgon';
+            
+            // 위치 설정
+            furgon.position.set(0, 1.5, 0);
+            
+            // 스케일 계산
+            const box = new window.THREE.Box3().setFromObject(furgon);
+            const size = new window.THREE.Vector3();
+            box.getSize(size);
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const targetSize = 2.2;
+            const scale = targetSize / maxDim;
+            furgon.scale.set(scale, scale, scale);
+            
+            window.scene.add(furgon);
+            console.log('✅ 푸르공 3D 모델 배치 완료!');
+            
+            // 더블클릭 핸들러 초기화
+            if (window.initFurgonDoubleClick) {
+                window.initFurgonDoubleClick();
+            }
+        },
+        function(xhr) {
+            console.log('🚐 푸르공 로딩: ' + (xhr.loaded / xhr.total * 100).toFixed(2) + '%');
+        },
+        function(error) {
+            console.log('❌ 푸르공 로드 실패:', error);
+        }
+    );
+};
+
+// 푸르공 클릭 핸들러
+window.onFurgonClick = function() {
+    alert('❄️ 얼어붙은 홉스골 호수 위의 극한 여정\n\n이 UAZ-452 푸르공을 타고\n영하 30도에 꽁꽁 얼어붙은 홉스골 호수 위를\n14시간 동안 목숨 걸고 달렸습니다.\n\n🧊 얼음은 쩡쩡 떵떵 괴성을 지르고\n💨 여기저기 크레바스가 수심 200미터의 협곡을 보여주고\n🚐 차는 미끄러지지만 속도를 늦출 수 없고\n그러다 만일 빠지면 익사, 나와도 동사하는 절체절명의 시간들...\n\n차탄족 사람들을 만나기 위해\n두려움을 넘어 달려갔습니다.\n\n호수 위의 얼음길,\n그 위를 달리는 14시간의 모험.\n\n- 2005년 2월, 몽골 홉스골 -');
+};
+
