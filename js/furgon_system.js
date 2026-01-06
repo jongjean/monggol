@@ -120,7 +120,7 @@ window.initFurgonSystem = function () {
             opacity: 0.9
         });
         const sprite = new THREE.Sprite(spriteMaterial);
-        sprite.position.set(0, 1.2, 0);
+        sprite.position.set(0, 1.5, 0);
         sprite.scale.set(0.8, 0.8, 1);
         sprite.userData.type = 'furgon-icon';
         sprite.userData.noRaycast = true;
@@ -130,7 +130,7 @@ window.initFurgonSystem = function () {
 
         // 애니메이션
         let time = 0;
-        const originalY = 1.2;
+        const originalY = 1.5;
         window.addEventListener('furgonIconAnimate', function () {
             time += 0.03;
             sprite.position.y = originalY + Math.sin(time) * 0.15;
