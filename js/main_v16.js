@@ -206,12 +206,32 @@ function initThreeJS() {
   let cameraAngleV = Math.asin((initialY - centerY) / cameraRadius);
 
   function updateCameraPosition() {
-    const y = Math.sin(cameraAngleV) * cameraRadius + centerY;
-    const horizontalRadius = Math.cos(cameraAngleV) * cameraRadius;
-    const x = Math.sin(cameraAngleH) * horizontalRadius;
-    const z = Math.cos(cameraAngleH) * horizontalRadius;
-    camera.position.set(x, y, z);
-    camera.lookAt(0, centerY, 0);
+    // 0.1 이하는 센터 모드 (파노라마 뷰)
+    if (cameraRadius <= 0.1) {
+      // 위치는 센터 고정
+      camera.position.set(0, centerY, 0);
+
+      // 시선 방향 계산 (360도 회전)
+      // 기존 바라보던 방향 유지 (Direction Vector)
+      // Orbit: Center - Camera = (-sin(H), -cos(H))
+      // Panorama: Center + Direction
+      const lookDist = 10;
+      const targetX = -Math.sin(cameraAngleH) * lookDist;
+      const targetZ = -Math.cos(cameraAngleH) * lookDist;
+
+      // 시선 높이는 수평(작품 높이)으로 고정하여 어지러움 방지
+      const targetY = centerY;
+
+      camera.lookAt(targetX, targetY, targetZ);
+    } else {
+      // 기존 Orbit 모드 (멀리서 중앙 바라보기)
+      const y = Math.sin(cameraAngleV) * cameraRadius + centerY;
+      const horizontalRadius = Math.cos(cameraAngleV) * cameraRadius;
+      const x = Math.sin(cameraAngleH) * horizontalRadius;
+      const z = Math.cos(cameraAngleH) * horizontalRadius;
+      camera.position.set(x, y, z);
+      camera.lookAt(0, centerY, 0);
+    }
 
     // 초기 카메라 위치 저장
     window.initialCameraPosition = {
@@ -1798,30 +1818,30 @@ window.addEventListener('load', function () {
                     imgLastClick = now;
                   };
 
-                // 도슨트 팝업 (이미지 팝업 후)
-                if (artworkId && window.openDoc) setTimeout(() => window.openDoc(artworkId), 100);
+                  // 도슨트 팝업 (이미지 팝업 후)
+                  if (artworkId && window.openDoc) setTimeout(() => window.openDoc(artworkId), 100);
 
-                lastTouchTime = 0;
-                return;
+                  lastTouchTime = 0;
+                  return;
+                }
+
+                obj = obj.parent;
               }
-
-              obj = obj.parent;
             }
           }
+
+          lastTouchTime = 0; // 리셋
+          return;
         }
 
-        lastTouchTime = 0; // 리셋
-        return;
+        // 마지막 터치 정보 저장
+        lastTouchTime = now;
+        lastTouchX = touch.clientX;
+        lastTouchY = touch.clientY;
       }
-
-      // 마지막 터치 정보 저장
-      lastTouchTime = now;
-      lastTouchX = touch.clientX;
-      lastTouchY = touch.clientY;
-    }
     }, { passive: false });
 
-}, 3000);
+  }, 3000);
 });
 
 // 드래그 해제 강화
