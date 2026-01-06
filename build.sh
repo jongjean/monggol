@@ -36,6 +36,10 @@ sudo cp -r /home/ucon/monggol/images/* /var/www/monggol/images/
 # data (있으면)
 [ -d "/home/ucon/monggol/data" ] && sudo cp /home/ucon/monggol/data/*.json /var/www/monggol/data/ 2>/dev/null || true
 
+# models (3D 모델) - Docker 동기화 전에 복사 필수!
+sudo mkdir -p /var/www/monggol/models
+sudo cp /home/ucon/monggol/models/*.glb /var/www/monggol/models/ 2>/dev/null || true
+
 # 3. Docker 컨테이너 완전 동기화
 echo -e "${GREEN}3단계: Docker 컨테이너 동기화...${NC}"
 sudo docker cp /var/www/monggol/. mongolia-gallery:/usr/share/nginx/html/
@@ -58,6 +62,3 @@ echo "🖼️ Images:"
 ls -lh /var/www/monggol/images/ | grep -E "author_profile|guide"
 echo ""
 echo -e "${BLUE}🎯 테스트: http://172.30.1.150${NC}"
-# models (3D 모델)
-sudo mkdir -p /var/www/monggol/models
-sudo cp /home/ucon/monggol/models/*.glb /var/www/monggol/models/ 2>/dev/null || true
