@@ -454,22 +454,22 @@ setTimeout(() => {
 (function () {
 
   function showUI() {
-    var ui = document.querySelector('.gallery-top-left-ui');
-    if (!ui) {
-      console.warn('⚠️ gallery-top-left-ui 없음');
-      return;
-    }
+    const checkUI = setInterval(() => {
+      var ui = document.querySelector('.gallery-top-left-ui');
+      if (!ui) return;
+      clearInterval(checkUI);
 
-    ui.style.display = 'flex';
+      ui.style.display = 'flex';
 
-    var video = document.querySelector('.docent-video-ui');
-    var player = document.getElementById('greetingPlayer');
+      var video = document.querySelector('.docent-video-ui');
+      var player = document.getElementById('greetingPlayer');
 
-    if (video && player) {
-      video.addEventListener('click', function () {
-        player.style.display = 'block';
-      });
-    }
+      if (video && player) {
+        video.addEventListener('click', function () {
+          player.style.display = 'block';
+        });
+      }
+    }, 500);
   }
 
   window.addEventListener('load', function () {
@@ -492,64 +492,64 @@ setTimeout(() => {
 // ==================== 인사말 플레이어 시스템 (안전) ====================
 (function () {
   window.addEventListener('load', function () {
-    const audio = document.getElementById('greeting-audio-fixed');
-    const playBtn = document.getElementById('play-btn-fixed');
-    const pauseBtn = document.getElementById('pause-btn-fixed');
-    const stopBtn = document.getElementById('stop-btn-fixed');
-    const progressBar = document.getElementById('progress-bar-fixed');
-    const timeDisplay = document.getElementById('time-display-fixed');
+    const checkPlayer = setInterval(() => {
+      const audio = document.getElementById('greeting-audio-fixed');
+      const playBtn = document.getElementById('play-btn-fixed');
+      const pauseBtn = document.getElementById('pause-btn-fixed');
+      const stopBtn = document.getElementById('stop-btn-fixed');
+      const progressBar = document.getElementById('progress-bar-fixed');
+      const timeDisplay = document.getElementById('time-display-fixed');
 
-    // 요소 존재 확인
-    if (!audio || !playBtn || !pauseBtn || !stopBtn || !progressBar || !timeDisplay) {
-      console.warn('⚠️ 플레이어 요소를 찾을 수 없습니다');
-      return;
-    }
+      // 요소 존재 확인
+      if (!audio || !playBtn || !pauseBtn || !stopBtn || !progressBar || !timeDisplay) return;
 
-    function formatTime(seconds) {
-      const mins = Math.floor(seconds / 60);
-      const secs = Math.floor(seconds % 60);
-      return mins + ':' + (secs < 10 ? '0' : '') + secs;
-    }
+      clearInterval(checkPlayer);
 
-    playBtn.addEventListener('click', function () {
-      audio.play();
-      playBtn.style.display = 'none';
-      pauseBtn.style.display = 'flex';
-    });
-
-    pauseBtn.addEventListener('click', function () {
-      audio.pause();
-      pauseBtn.style.display = 'none';
-      playBtn.style.display = 'flex';
-    });
-
-    stopBtn.addEventListener('click', function () {
-      audio.pause();
-      audio.currentTime = 0;
-      pauseBtn.style.display = 'none';
-      playBtn.style.display = 'flex';
-      progressBar.value = 0;
-    });
-
-    audio.addEventListener('timeupdate', function () {
-      if (audio.duration) {
-        const percent = (audio.currentTime / audio.duration) * 100;
-        progressBar.value = percent;
-        timeDisplay.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+      function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return mins + ':' + (secs < 10 ? '0' : '') + secs;
       }
-    });
 
-    progressBar.addEventListener('input', function () {
-      const time = (progressBar.value / 100) * audio.duration;
-      audio.currentTime = time;
-    });
+      playBtn.addEventListener('click', function () {
+        audio.play();
+        playBtn.style.display = 'none';
+        pauseBtn.style.display = 'flex';
+      });
 
-    audio.addEventListener('ended', function () {
-      pauseBtn.style.display = 'none';
-      playBtn.style.display = 'flex';
-      progressBar.value = 0;
-    });
+      pauseBtn.addEventListener('click', function () {
+        audio.pause();
+        pauseBtn.style.display = 'none';
+        playBtn.style.display = 'flex';
+      });
 
+      stopBtn.addEventListener('click', function () {
+        audio.pause();
+        audio.currentTime = 0;
+        pauseBtn.style.display = 'none';
+        playBtn.style.display = 'flex';
+        progressBar.value = 0;
+      });
+
+      audio.addEventListener('timeupdate', function () {
+        if (audio.duration) {
+          const percent = (audio.currentTime / audio.duration) * 100;
+          progressBar.value = percent;
+          timeDisplay.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+        }
+      });
+
+      progressBar.addEventListener('input', function () {
+        const time = (progressBar.value / 100) * audio.duration;
+        audio.currentTime = time;
+      });
+
+      audio.addEventListener('ended', function () {
+        pauseBtn.style.display = 'none';
+        playBtn.style.display = 'flex';
+        progressBar.value = 0;
+      });
+    }, 500);
   });
 })();
 
@@ -1589,12 +1589,12 @@ const artworkData = {
 
 // 안전한 더블클릭 이벤트 (페이지 로드 후 실행)
 window.addEventListener('load', function () {
-  setTimeout(() => {
+  // setTimeout 대신 setInterval로 Canvas 대기
+  const initInterval = setInterval(() => {
     const canvas = document.querySelector('canvas');
-    if (!canvas) {
-      console.error('❌ Canvas 없음');
-      return;
-    }
+    if (!canvas) return; // Canvas 없으면 대기
+    clearInterval(initInterval); // 찾았으면 반복 중단
+
 
     let lastClick = 0;
     let lastClickedObject = null;
@@ -1840,8 +1840,7 @@ window.addEventListener('load', function () {
         lastTouchY = touch.clientY;
       }
     }, { passive: false });
-
-  }, 3000);
+  }, 500);
 });
 
 // 드래그 해제 강화
